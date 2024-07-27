@@ -1,7 +1,11 @@
-import ListItem from "@/components/ListItem";
-import { FlatList, View } from "react-native";
+export interface Workout {
+    id: number;
+    title: string;
+    backgroundColor: string;
+    exercises: string[];
+}
 
-const workouts = [
+export const workouts = [
     {
         id: 1,
         title: "Legs",
@@ -10,19 +14,19 @@ const workouts = [
     },
     {
         id: 1123,
-        title: "Legs",
+        title: "Legsx",
         backgroundColor: "tomato", // Tomato red
         exercises: ["Squats", "Lunges", "Leg Press", "Hamstring Curls", "Calf Raises"],
     },
     {
         id: 123,
-        title: "Legs",
+        title: "Legsx",
         backgroundColor: "tomato", // Tomato red
         exercises: ["Squats", "Lunges", "Leg Press", "Hamstring Curls", "Calf Raises"],
     },
     {
         id: 11,
-        title: "Legs",
+        title: "Legsx",
         backgroundColor: "tomato", // Tomato red
         exercises: ["Squats", "Lunges", "Leg Press", "Hamstring Curls", "Calf Raises"],
     },
@@ -51,21 +55,3 @@ const workouts = [
         exercises: ["Crunches", "Planks", "Leg Raises", "Russian Twists", "Bicycle Crunches"],
     },
 ];
-
-export interface Workout {
-    id: number;
-    title: string;
-    backgroundColor: string;
-    exercises: string[];
-}
-
-export default function Index() {
-    return (
-        <View>
-            <FlatList
-                data={workouts}
-                renderItem={({ item }) => <ListItem {...item} />}
-            />
-        </View>
-    );
-}
