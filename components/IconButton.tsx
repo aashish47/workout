@@ -10,18 +10,17 @@ interface IconButtonProps {
     size: number;
     onPress: any;
     backgroundColor?: string;
-    height: number;
-    width: number;
 }
 
-const IconButton: React.FC<IconButtonProps & ViewProps> = ({ style, lightColor, darkColor, iconName, size, backgroundColor, height, width, onPress }) => {
+const IconButton: React.FC<IconButtonProps & ViewProps> = ({ style, lightColor, darkColor, iconName, size, backgroundColor, onPress }) => {
     const pressColor = useThemeColor({ light: lightColor, dark: darkColor }, "press");
 
     return (
         <Pressable
             onPress={onPress}
             hitSlop={36}
-            style={({ pressed }) => [style, styles.headerButton, { backgroundColor: pressed ? pressColor : backgroundColor }, { height, width }]}
+            android_ripple={{ color: pressColor, radius: size }}
+            style={[style, styles.headerButton, { height: size * 2, width: size * 2, backgroundColor }]}
         >
             <Ionicons
                 name={iconName}

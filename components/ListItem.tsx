@@ -2,18 +2,31 @@ import { ThemedText } from "@/components/ThemedText";
 import { Workout } from "@/db/data";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "expo-router";
 import React from "react";
 import { Pressable, StyleSheet, View } from "react-native";
+import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 
 interface ListItemProps {
     lightColor?: string;
     darkColor?: string;
     selected: number[];
     setSelected: React.Dispatch<React.SetStateAction<number[]>>;
+    workout: Workout;
 }
 
-const ListItem: React.FC<ListItemProps & Workout> = ({ lightColor, darkColor, id, title, backgroundColor, exercises, selected, setSelected }) => {
+type ParamList = {
+    workout: Workout;
+};
+
+type NavigationProp = NativeStackNavigationProp<ParamList, "workout">;
+
+const ListItem: React.FC<ListItemProps> = ({ lightColor, darkColor, workout, selected, setSelected }) => {
+    const { id, title, backgroundColor, exercises } = workout;
     const pressColor = useThemeColor({ light: lightColor, dark: darkColor }, "press");
+    const ripple = useThemeColor({ light: lightColor, dark: darkColor }, "ripple");
+    const float = useThemeColor({ light: lightColor, dark: darkColor }, "float");
+    const navigation = useNavigation<NavigationProp>();
 
     const handleLongPress = () => {
         setSelected([...selected, id]);
@@ -27,19 +40,20 @@ const ListItem: React.FC<ListItemProps & Workout> = ({ lightColor, darkColor, id
                 handleLongPress();
             }
         } else {
-            //Link to workout
+            navigation.navigate("workout", { ...workout });
         }
     };
 
     return (
         <Pressable
+            android_ripple={{ color: ripple, borderless: false }}
             onLongPress={handleLongPress}
             onPress={handlePress}
-            style={({ pressed }) => [styles.pressContainer, { backgroundColor: pressed ? pressColor : undefined }]}
+            style={styles.pressContainer}
         >
             <View style={[styles.container, selected.includes(id) ? { backgroundColor: pressColor } : undefined]}>
                 {selected.includes(id) ? (
-                    <View style={[styles.avatar, { backgroundColor: "thistle" }]}>
+                    <View style={[styles.avatar, { backgroundColor: float }]}>
                         <Ionicons
                             name="checkmark-sharp"
                             size={24}
@@ -48,13 +62,7 @@ const ListItem: React.FC<ListItemProps & Workout> = ({ lightColor, darkColor, id
                     </View>
                 ) : (
                     <View style={[styles.avatar, { backgroundColor }]}>
-                        <ThemedText
-                            lightColor="white"
-                            darkColor="white"
-                            style={{ textTransform: "uppercase" }}
-                        >
-                            {title.charAt(0)}
-                        </ThemedText>
+                        <ThemedText style={{ textTransform: "uppercase" }}>{title.charAt(0)}</ThemedText>
                     </View>
                 )}
                 <View style={styles.textContainer}>

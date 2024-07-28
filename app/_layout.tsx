@@ -11,6 +11,10 @@ export default function RootLayout() {
                     name="(tabs)"
                     options={{ headerShown: false }}
                 />
+                <Stack.Screen
+                    name="workout"
+                    options={{ animation: "slide_from_right" }}
+                />
                 <Stack.Screen name="+not-found" />
             </Stack>
         </ThemeProvider>

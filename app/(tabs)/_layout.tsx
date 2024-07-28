@@ -2,6 +2,7 @@ import { Tabs } from "expo-router";
 import React from "react";
 
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
+import { ThemedText } from "@/components/ThemedText";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 
@@ -13,16 +14,17 @@ export default function TabLayout() {
             screenOptions={{
                 tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
                 headerShown: false,
+                headerTitle: () => <ThemedText>Logo</ThemedText>,
             }}
         >
             <Tabs.Screen
                 name="index"
                 options={{
                     headerShown: true,
-                    title: "Home",
+                    title: "Timers",
                     tabBarIcon: ({ color, focused }) => (
                         <TabBarIcon
-                            name={focused ? "home" : "home-outline"}
+                            name={focused ? "timer" : "timer-outline"}
                             color={color}
                         />
                     ),
@@ -35,7 +37,7 @@ export default function TabLayout() {
                     title: "Statistics",
                     tabBarIcon: ({ color, focused }) => (
                         <TabBarIcon
-                            name={focused ? "code-slash" : "code-slash-outline"}
+                            name={focused ? "stats-chart" : "stats-chart-outline"}
                             color={color}
                         />
                     ),

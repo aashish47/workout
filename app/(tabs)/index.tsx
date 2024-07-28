@@ -2,6 +2,7 @@ import IconButton from "@/components/IconButton";
 import ListItem from "@/components/ListItem";
 import { ThemedText } from "@/components/ThemedText";
 import { workouts } from "@/db/data";
+import { useThemeColor } from "@/hooks/useThemeColor";
 import { useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
@@ -10,22 +11,17 @@ export default function Index() {
     const [selected, setSelected] = useState<number[]>([]);
     const navigation = useNavigation();
     const [data, setData] = useState(workouts);
+    const float = useThemeColor({ light: undefined, dark: undefined }, "float");
 
     useEffect(() => {
         if (selected.length) {
             navigation.setOptions({
-                headerTitle: () => (
-                    <View style={{ marginLeft: 12 }}>
-                        <ThemedText>{selected.length}</ThemedText>
-                    </View>
-                ),
+                headerTitle: () => <ThemedText>{selected.length}</ThemedText>,
                 headerLeft: () => (
                     <IconButton
                         onPress={() => setSelected([])}
                         iconName="arrow-back-sharp"
-                        size={20}
-                        height={42}
-                        width={42}
+                        size={24}
                     />
                 ),
                 headerRight: () => (
@@ -36,16 +32,18 @@ export default function Index() {
                                 setSelected([]);
                             }}
                             iconName="trash-sharp"
-                            size={20}
-                            height={42}
-                            width={42}
+                            size={24}
                         />
                         {/* checkbox to select all */}
                     </View>
                 ),
             });
         } else {
-            navigation.setOptions({ headerTitle: undefined, headerLeft: undefined, headerRight: undefined });
+            navigation.setOptions({
+                headerTitle: () => <ThemedText>Logo</ThemedText>,
+                headerLeft: undefined,
+                headerRight: undefined,
+            });
         }
     }, [navigation, selected]);
 
@@ -53,11 +51,9 @@ export default function Index() {
         <View style={{ flex: 1 }}>
             <IconButton
                 iconName="add"
-                size={36}
-                height={64}
-                width={64}
+                size={32}
                 onPress={undefined}
-                backgroundColor="thistle"
+                backgroundColor={float}
                 style={styles.floatBtn}
             />
 
@@ -65,7 +61,7 @@ export default function Index() {
                 data={data}
                 renderItem={({ item }) => (
                     <ListItem
-                        {...item}
+                        workout={item}
                         selected={selected}
                         setSelected={setSelected}
                     />
