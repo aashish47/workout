@@ -16,7 +16,7 @@ interface ListItemProps {
 }
 
 type ParamList = {
-    workout: Workout;
+    "workout": Workout;
 };
 
 type NavigationProp = NativeStackNavigationProp<ParamList, "workout">;

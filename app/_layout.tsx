@@ -13,7 +13,7 @@ export default function RootLayout() {
                 />
                 <Stack.Screen
                     name="workout"
-                    options={{ animation: "slide_from_right" }}
+                    options={{ animation: "slide_from_right", headerShown: false }}
                 />
                 <Stack.Screen name="+not-found" />
             </Stack>
