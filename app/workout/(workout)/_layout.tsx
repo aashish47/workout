@@ -1,7 +1,7 @@
 import { ThemedText } from "@/components/ThemedText";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { createMaterialTopTabNavigator, MaterialTopTabNavigationEventMap, MaterialTopTabNavigationOptions } from "@react-navigation/material-top-tabs";
-import { ParamListBase, TabNavigationState, useTheme } from "@react-navigation/native";
+import { ParamListBase, TabNavigationState, useRoute, useTheme } from "@react-navigation/native";
 import { withLayoutContext } from "expo-router";
 import React from "react";
 import { Pressable, StyleSheet, View } from "react-native";
@@ -19,12 +19,14 @@ const WorkoutLayout = () => {
     const btnColor = useThemeColor({}, "float");
     const ripple = useThemeColor({}, "ripple");
     const { colors } = useTheme();
+    const route = useRoute();
     return (
         <>
             <MaterialTopTabs>
                 <MaterialTopTabs.Screen
                     name="index"
                     options={{ title: "timer" }}
+                    initialParams={route.params}
                 />
                 <MaterialTopTabs.Screen name="exercises" />
             </MaterialTopTabs>
