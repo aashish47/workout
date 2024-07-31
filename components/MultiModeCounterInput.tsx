@@ -74,7 +74,10 @@ const MultiModeCounterInput: React.FC<MultiModeCounterInputProps> = ({ style, mo
             onPress={() => handleTextPress(type)}
             style={styles.textWrapper}
         >
-            <ThemedText style={[styles.timeText, highlight === type && { backgroundColor: highlightColor }]}>
+            <ThemedText
+                type="light"
+                style={[styles.timeText, highlight === type && { backgroundColor: highlightColor }]}
+            >
                 {type === "minutes" || "seconds" ? `${value < 10 ? "0" : ""}${value}` : value}
             </ThemedText>
         </Pressable>
@@ -88,12 +91,17 @@ const MultiModeCounterInput: React.FC<MultiModeCounterInputProps> = ({ style, mo
                 onPressOut={handlePressOut}
                 style={styles.button}
             >
-                <ThemedText>-</ThemedText>
+                <ThemedText type="light">-</ThemedText>
             </TouchableOpacity>
             {mode === "timer" ? (
                 <View style={styles.timeContainer}>
                     {renderText("minutes", time.minutes)}
-                    <ThemedText style={styles.colon}>:</ThemedText>
+                    <ThemedText
+                        type="light"
+                        style={styles.colon}
+                    >
+                        :
+                    </ThemedText>
                     {renderText("seconds", time.seconds)}
                 </View>
             ) : (
@@ -106,7 +114,7 @@ const MultiModeCounterInput: React.FC<MultiModeCounterInputProps> = ({ style, mo
                 onPressOut={handlePressOut}
                 style={styles.button}
             >
-                <ThemedText>+</ThemedText>
+                <ThemedText type="light">+</ThemedText>
             </TouchableOpacity>
         </View>
     );

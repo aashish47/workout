@@ -34,10 +34,19 @@ const WorkoutLayout = () => {
     const timers = Object.entries(time) as [keyof Workout["time"], number][];
     const tabActiveColor = useThemeColor({}, "tint");
     const tabIndicatorColor = useThemeColor({}, "float");
+    const tabInactiveColor = useThemeColor({}, "tabIconDefault");
+    const tabRippleColor = useThemeColor({}, "ripple");
 
     return (
         <>
-            <MaterialTopTabs screenOptions={{ tabBarActiveTintColor: tabActiveColor, tabBarIndicatorStyle: { backgroundColor: tabIndicatorColor } }}>
+            <MaterialTopTabs
+                screenOptions={{
+                    tabBarInactiveTintColor: tabInactiveColor,
+                    tabBarActiveTintColor: tabActiveColor,
+                    tabBarIndicatorStyle: { backgroundColor: tabIndicatorColor },
+                    tabBarAndroidRipple: { color: tabRippleColor },
+                }}
+            >
                 <MaterialTopTabs.Screen
                     name="index"
                     options={{ title: "timer" }}
@@ -63,5 +72,13 @@ const WorkoutLayout = () => {
 export default WorkoutLayout;
 
 const styles = StyleSheet.create({
-    button: { height: 64, backgroundColor: "purple", padding: 8, margin: 16, borderRadius: 10, alignItems: "center", justifyContent: "center" },
+    button: {
+        height: 64,
+        backgroundColor: "purple",
+        padding: 8,
+        margin: 12,
+        borderRadius: 10,
+        alignItems: "center",
+        justifyContent: "center",
+    },
 });

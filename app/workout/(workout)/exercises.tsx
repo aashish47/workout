@@ -3,7 +3,7 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 import { ParamList } from "@/types/routeParams";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 
 const exercises = () => {
     const route = useRoute<RouteProp<ParamList, "exercises">>();
@@ -12,14 +12,17 @@ const exercises = () => {
 
     return (
         <View style={styles.container}>
-            {exercises.map((exercise, index) => (
-                <ThemedText
-                    style={[styles.exerciseContainer, { backgroundColor }]}
-                    key={index}
-                >
-                    {exercise}
-                </ThemedText>
-            ))}
+            <FlatList
+                data={exercises}
+                renderItem={({ item }) => (
+                    <ThemedText
+                        type="light"
+                        style={[styles.exerciseContainer, { backgroundColor }]}
+                    >
+                        {item}
+                    </ThemedText>
+                )}
+            />
         </View>
     );
 };
@@ -29,11 +32,9 @@ export default exercises;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 8,
     },
     exerciseContainer: {
-        padding: 8,
-        marginBottom: 8,
-        borderRadius: 5,
+        padding: 16,
+        marginTop: 8,
     },
 });

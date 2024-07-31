@@ -16,7 +16,7 @@ const Index = () => {
                     key={index}
                     style={styles.input}
                 >
-                    <ThemedText style={{ flex: 2, textTransform: "capitalize" }}>{timer}</ThemedText>
+                    <ThemedText style={{ flex: 1, textTransform: "capitalize" }}>{timer}</ThemedText>
 
                     <MultiModeCounterInput
                         style={{ flex: 1 }}
@@ -34,7 +34,8 @@ const styles = StyleSheet.create({
     input: {
         flexDirection: "row",
         justifyContent: "space-between",
-        marginHorizontal: 24,
-        marginTop: 12,
+        alignItems: "center",
+        marginHorizontal: 12,
+        marginTop: 24,
     },
 });

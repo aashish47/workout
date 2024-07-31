@@ -20,41 +20,36 @@ export default function Index() {
     const float = useThemeColor({ light: undefined, dark: undefined }, "float");
 
     useEffect(() => {
-        const handleSelect = () => {
-            if (selected.length) {
-                navigation.setOptions({
-                    headerTitle: () => <ThemedText>{selected.length}</ThemedText>,
-                    headerLeft: () => (
+        if (selected.length) {
+            navigation.setOptions({
+                headerTitle: () => <ThemedText>{selected.length}</ThemedText>,
+                headerLeft: () => (
+                    <IconButton
+                        onPress={() => setSelected([])}
+                        iconName="arrow-back-sharp"
+                        size={24}
+                    />
+                ),
+                headerRight: () => (
+                    <View style={{ flexDirection: "row", gap: 2 }}>
                         <IconButton
-                            onPress={() => setSelected([])}
-                            iconName="arrow-back-sharp"
+                            onPress={() => {
+                                setData(data.filter(({ id }) => !selected.includes(id)));
+                                setSelected([]);
+                            }}
+                            iconName="trash-sharp"
                             size={24}
                         />
-                    ),
-                    headerRight: () => (
-                        <View style={{ flexDirection: "row", gap: 2 }}>
-                            <IconButton
-                                onPress={() => {
-                                    setData(data.filter(({ id }) => !selected.includes(id)));
-                                    setSelected([]);
-                                }}
-                                iconName="trash-sharp"
-                                size={24}
-                            />
-                            {/* checkbox to select all */}
-                        </View>
-                    ),
-                });
-            } else {
-                navigation.setOptions({
-                    headerTitle: () => <ThemedText>Logo</ThemedText>,
-                    headerLeft: undefined,
-                    headerRight: undefined,
-                });
-            }
-        };
-        if (false) {
-            handleSelect();
+                        {/* checkbox to select all */}
+                    </View>
+                ),
+            });
+        } else {
+            navigation.setOptions({
+                headerTitle: () => <ThemedText>Logo</ThemedText>,
+                headerLeft: undefined,
+                headerRight: undefined,
+            });
         }
     }, [navigation, selected]);
 
