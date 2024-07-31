@@ -1,7 +1,10 @@
 import { ThemedText } from "@/components/ThemedText";
+import { Workout } from "@/db/data";
+import useDataContext from "@/hooks/useDataContext";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { ParamList } from "@/types/routeParams";
 import { createMaterialTopTabNavigator, MaterialTopTabNavigationEventMap, MaterialTopTabNavigationOptions } from "@react-navigation/material-top-tabs";
-import { ParamListBase, TabNavigationState, useRoute, useTheme } from "@react-navigation/native";
+import { ParamListBase, RouteProp, TabNavigationState, useRoute, useTheme } from "@react-navigation/native";
 import { withLayoutContext } from "expo-router";
 import React from "react";
 import { Pressable, StyleSheet, View } from "react-native";
@@ -19,16 +22,31 @@ const WorkoutLayout = () => {
     const btnColor = useThemeColor({}, "float");
     const ripple = useThemeColor({}, "ripple");
     const { colors } = useTheme();
-    const route = useRoute();
+    const route = useRoute<RouteProp<ParamList, "(workout)">>();
+    const { id } = route.params;
+    const { data } = useDataContext() ?? {};
+    if (!data) {
+        throw Error("Data doesn't exsit");
+    }
+
+    const workout = data.filter((d) => d.id == id)[0];
+    const { time, exercises } = workout;
+    const timers = Object.entries(time) as [keyof Workout["time"], number][];
+    const tabActiveColor = useThemeColor({}, "tint");
+    const tabIndicatorColor = useThemeColor({}, "float");
+
     return (
         <>
-            <MaterialTopTabs>
+            <MaterialTopTabs screenOptions={{ tabBarActiveTintColor: tabActiveColor, tabBarIndicatorStyle: { backgroundColor: tabIndicatorColor } }}>
                 <MaterialTopTabs.Screen
                     name="index"
                     options={{ title: "timer" }}
-                    initialParams={route.params}
+                    initialParams={{ timers }}
                 />
-                <MaterialTopTabs.Screen name="exercises" />
+                <MaterialTopTabs.Screen
+                    name="exercises"
+                    initialParams={{ exercises }}
+                />
             </MaterialTopTabs>
             <View style={{ backgroundColor: colors.card }}>
                 <Pressable

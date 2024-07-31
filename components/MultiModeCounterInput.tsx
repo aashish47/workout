@@ -5,9 +5,10 @@ import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 
 interface MultiModeCounterInputProps {
     mode: "timer" | "counter";
+    style?: {};
 }
 
-const MultiModeCounterInput: React.FC<MultiModeCounterInputProps> = ({ mode }) => {
+const MultiModeCounterInput: React.FC<MultiModeCounterInputProps> = ({ style, mode }) => {
     const backgroundColor = useThemeColor({}, "press");
     const highlightColor = useThemeColor({}, "ripple");
     const [time, setTime] = useState({ minutes: 0, seconds: 40 });
@@ -80,7 +81,7 @@ const MultiModeCounterInput: React.FC<MultiModeCounterInputProps> = ({ mode }) =
     );
 
     return (
-        <View style={[styles.container, { backgroundColor }]}>
+        <View style={[styles.container, { backgroundColor }, style]}>
             <TouchableOpacity
                 onPress={() => handlePress(mode === "timer" ? decrementTime : decrementCounter)}
                 onLongPress={() => handleLongPress(mode === "timer" ? decrementTime : decrementCounter)}

@@ -1,14 +1,39 @@
+import { ThemedText } from "@/components/ThemedText";
+import { useThemeColor } from "@/hooks/useThemeColor";
+import { ParamList } from "@/types/routeParams";
+import { RouteProp, useRoute } from "@react-navigation/native";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 const exercises = () => {
+    const route = useRoute<RouteProp<ParamList, "exercises">>();
+    const { exercises } = route.params;
+    const backgroundColor = useThemeColor({}, "press");
+
     return (
-        <View>
-            <Text>exercises</Text>
+        <View style={styles.container}>
+            {exercises.map((exercise, index) => (
+                <ThemedText
+                    style={[styles.exerciseContainer, { backgroundColor }]}
+                    key={index}
+                >
+                    {exercise}
+                </ThemedText>
+            ))}
         </View>
     );
 };
 
 export default exercises;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 8,
+    },
+    exerciseContainer: {
+        padding: 8,
+        marginBottom: 8,
+        borderRadius: 5,
+    },
+});

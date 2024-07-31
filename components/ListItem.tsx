@@ -16,7 +16,7 @@ interface ListItemProps {
 }
 
 type ParamList = {
-    "workout": Workout & { timer: string };
+    "workout": Workout;
 };
 
 type NavigationProp = NativeStackNavigationProp<ParamList, "workout">;
@@ -40,7 +40,7 @@ const ListItem: React.FC<ListItemProps> = ({ lightColor, darkColor, workout, sel
                 handleLongPress();
             }
         } else {
-            navigation.navigate("workout", { ...workout, timer: JSON.stringify(workout.time) });
+            navigation.navigate("workout", { ...workout });
         }
     };
 
