@@ -1,16 +1,11 @@
-import { Workout } from "@/db/data";
+import { Workouts } from "@/db/schema";
 import { createContext } from "react";
 
-interface ContextType {
-    data: Workout[];
-    setData: React.Dispatch<React.SetStateAction<Workout[]>>;
-}
-
-export const DataContext = createContext<ContextType | null>(null);
+export const DataContext = createContext<Workouts[] | null>(null);
 
 import React from "react";
 
-const DataProvider = ({ children, value }: { children: any; value: ContextType }) => {
+const DataProvider = ({ children, value }: { children: any; value: Workouts[] | null }) => {
     return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };
 
