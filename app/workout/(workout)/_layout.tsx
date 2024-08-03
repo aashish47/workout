@@ -1,5 +1,5 @@
 import { ThemedText } from "@/components/ThemedText";
-import { Workout } from "@/db/data";
+import { Workouts } from "@/db/schema";
 import useDataContext from "@/hooks/useDataContext";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { ParamList } from "@/types/routeParams";
@@ -24,14 +24,14 @@ const WorkoutLayout = () => {
     const { colors } = useTheme();
     const route = useRoute<RouteProp<ParamList, "(workout)">>();
     const { id } = route.params;
-    const { data } = useDataContext() ?? {};
+    const data = useDataContext();
     if (!data) {
         throw Error("Data doesn't exsit");
     }
 
     const workout = data.filter((d) => d.id == id)[0];
     const { time, exercises } = workout;
-    const timers = Object.entries(time) as [keyof Workout["time"], number][];
+    const timers = Object.entries(time) as [keyof Workouts["time"], number][];
     const tabActiveColor = useThemeColor({}, "tint");
     const tabIndicatorColor = useThemeColor({}, "float");
     const tabInactiveColor = useThemeColor({}, "tabIconDefault");

@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "333c620b-c242-4b60-8151-ddfd28ec609a",
+  "id": "576c0dcb-1338-4dc3-a6fd-01d6f861a5ef",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "workouts": {
@@ -32,14 +32,14 @@
           "name": "exercises",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "time": {
           "name": "time",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         }
       },

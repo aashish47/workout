@@ -1,5 +1,5 @@
 import { ThemedText } from "@/components/ThemedText";
-import { Workout } from "@/db/data";
+import { Workouts } from "@/db/schema";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "expo-router";
@@ -12,11 +12,11 @@ interface ListItemProps {
     darkColor?: string;
     selected: number[];
     setSelected: React.Dispatch<React.SetStateAction<number[]>>;
-    workout: Workout;
+    workout: Workouts;
 }
 
 type ParamList = {
-    "workout": Workout;
+    "workout": Workouts;
 };
 
 type NavigationProp = NativeStackNavigationProp<ParamList, "workout">;
@@ -73,7 +73,7 @@ const ListItem: React.FC<ListItemProps> = ({ lightColor, darkColor, workout, sel
                         type="light"
                         darkColor="darkgrey"
                     >
-                        {exercises.join(", ")}
+                        {exercises?.join(", ")}
                     </ThemedText>
                 </View>
             </View>

@@ -1,8 +1,11 @@
 import IconButton from "@/components/IconButton";
 import ListItem from "@/components/ListItem";
 import { ThemedText } from "@/components/ThemedText";
+import { db } from "@/db/drizzle";
+import { workouts } from "@/db/schema";
 import useDataContext from "@/hooks/useDataContext";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { inArray } from "drizzle-orm";
 import { useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
@@ -10,12 +13,10 @@ import { FlatList, StyleSheet, View } from "react-native";
 export default function Index() {
     const [selected, setSelected] = useState<number[]>([]);
     const navigation = useNavigation();
-    const dataContext = useDataContext();
-    if (!dataContext) {
+    const data = useDataContext();
+    if (!data) {
         throw Error("Data doesn't exist");
     }
-
-    const { data, setData } = dataContext;
 
     const float = useThemeColor({ light: undefined, dark: undefined }, "float");
 
@@ -33,8 +34,9 @@ export default function Index() {
                 headerRight: () => (
                     <View style={{ flexDirection: "row", gap: 2 }}>
                         <IconButton
-                            onPress={() => {
-                                setData(data.filter(({ id }) => !selected.includes(id)));
+                            onPress={async () => {
+                                // setData(data.filter(({ id }) => !selected.includes(id)));
+                                await db.delete(workouts).where(inArray(workouts.id, selected));
                                 setSelected([]);
                             }}
                             iconName="trash-sharp"
@@ -58,7 +60,25 @@ export default function Index() {
             <IconButton
                 iconName="add"
                 size={32}
-                onPress={undefined}
+                onPress={async () =>
+                    await db.insert(workouts).values({
+                        title: "Legs",
+                        backgroundColor: "tomato", // Tomato red
+                        exercises: [
+                            "Squats",
+                            "Lunges",
+                            "Leg Press",
+                            "Hamstring Curls",
+                            "Calf Raises",
+                            "Leg Extensions",
+                            "Leg Curls",
+                            "Step-Ups",
+                            "Glute Bridges",
+                            "Bulgarian Split Squats",
+                        ],
+                        time: { "work": 40, "rest": 20, "intervals": 4, "get ready": 10, "cycles": 8, "break": 80, "warm up": 10, "cool down": 10 },
+                    })
+                }
                 backgroundColor={float}
                 style={styles.floatBtn}
             />

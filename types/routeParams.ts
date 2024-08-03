@@ -1,13 +1,13 @@
-import { Workout } from "@/db/data";
+import { Workouts } from "@/db/schema";
 
 export type ParamList = {
-    "(workout)": Workout;
+    "(workout)": Workouts;
 
     index: {
-        timers: [keyof Workout["time"], number][];
+        timers: [keyof Workouts["time"], number][];
     };
 
     exercises: {
-        exercises: Workout["exercises"];
+        exercises: Workouts["exercises"];
     };
 };
