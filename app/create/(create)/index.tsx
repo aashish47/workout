@@ -1,4 +1,4 @@
-import { WorkoutContext } from "@/app/workout/(workout)/_layout";
+import { WorkoutContext, WorkoutState } from "@/app/create/(create)/_layout";
 import MultiModeCounterInput from "@/components/MultiModeCounterInput";
 import { ThemedText } from "@/components/ThemedText";
 import { Workouts } from "@/db/schema";
@@ -26,10 +26,10 @@ const Index = () => {
                 >
                     <ThemedText style={{ flex: 1, textTransform: "capitalize" }}>{timer}</ThemedText>
 
-                    <MultiModeCounterInput<Workouts>
+                    <MultiModeCounterInput<WorkoutState>
+                        style={{ flex: 1 }}
                         timer={timer}
                         timerValue={value}
-                        style={{ flex: 1 }}
                         mode={timer === "intervals" || timer === "cycles" ? "counter" : "timer"}
                         setWorkout={setWorkout}
                     />

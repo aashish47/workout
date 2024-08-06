@@ -1,9 +1,9 @@
-import { Workout } from "@/db/data";
+import { Workouts } from "@/db/schema";
 import { Stack, useLocalSearchParams } from "expo-router";
 import React from "react";
 
 const WorkoutLayout = () => {
-    const params: Partial<Workout> = useLocalSearchParams();
+    const params: Partial<Workouts> = useLocalSearchParams();
     const { title } = params;
 
     return (

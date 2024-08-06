@@ -36,6 +36,10 @@ export default function RootLayout() {
                         name="workout"
                         options={{ animation: "slide_from_right", headerShown: false }}
                     />
+                    <Stack.Screen
+                        name="create"
+                        options={{ animation: "slide_from_right", headerShown: false }}
+                    />
                     <Stack.Screen name="+not-found" />
                 </Stack>
             </DataProvider>

@@ -1,14 +1,14 @@
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { Pressable, StyleSheet, ViewProps } from "react-native";
+import { Pressable, PressableProps, StyleSheet, ViewProps } from "react-native";
 
 interface IconButtonProps {
     lightColor?: string;
     darkColor?: string;
     iconName: keyof typeof Ionicons.glyphMap;
     size: number;
-    onPress: any;
+    onPress: PressableProps["onPress"];
     backgroundColor?: string;
 }
 

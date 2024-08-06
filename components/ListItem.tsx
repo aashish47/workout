@@ -1,6 +1,7 @@
 import { ThemedText } from "@/components/ThemedText";
 import { Workouts } from "@/db/schema";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { ParamList } from "@/types/routeParams";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "expo-router";
 import React from "react";
@@ -14,10 +15,6 @@ interface ListItemProps {
     setSelected: React.Dispatch<React.SetStateAction<number[]>>;
     workout: Workouts;
 }
-
-type ParamList = {
-    "workout": Workouts;
-};
 
 type NavigationProp = NativeStackNavigationProp<ParamList, "workout">;
 

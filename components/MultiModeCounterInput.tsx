@@ -1,27 +1,57 @@
 import { ThemedText } from "@/components/ThemedText";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 
-interface MultiModeCounterInputProps {
-    mode: "timer" | "counter";
-    style?: {};
+interface Time {
+    time: {
+        [key: string]: number; // Or a more specific type depending on your use case
+    };
 }
 
-const MultiModeCounterInput: React.FC<MultiModeCounterInputProps> = ({ style, mode }) => {
+interface MultiModeCounterInputProps<T extends Time> {
+    mode: "timer" | "counter";
+    timer: string;
+    timerValue: number;
+    style?: {};
+    setWorkout: (updateFn: (prevWorkout: T) => T) => void;
+}
+
+const MultiModeCounterInput = <T extends Time>({ style, mode, timer, timerValue, setWorkout }: MultiModeCounterInputProps<T>) => {
     const backgroundColor = useThemeColor({}, "press");
     const highlightColor = useThemeColor({}, "ripple");
-    const [time, setTime] = useState({ minutes: 0, seconds: 40 });
-    const [counter, setCounter] = useState(1);
+    const [time, setTime] = useState({ minutes: Math.floor(timerValue / 60), seconds: timerValue % 60 });
+    const [counter, setCounter] = useState(timerValue);
     const [highlight, setHighlight] = useState<"minutes" | "seconds" | "counter" | null>(null);
 
     const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+    useEffect(() => {
+        setWorkout((prev) => ({
+            ...prev,
+            time: {
+                ...prev.time,
+                [timer]: time.minutes * 60 + time.seconds,
+            },
+        }));
+    }, [time]);
+
+    useEffect(() => {
+        setWorkout((prev) => ({
+            ...prev,
+            time: {
+                ...prev.time,
+                [timer]: counter,
+            },
+        }));
+    }, [counter]);
 
     const incrementTime = () => {
         setTime((prevTime) => {
             const newSeconds = highlight === "minutes" ? prevTime.seconds : prevTime.seconds + 1;
             const newMinutes =
                 highlight === "seconds" ? prevTime.minutes : highlight === "minutes" ? prevTime.minutes + 1 : prevTime.minutes + (newSeconds === 60 ? 1 : 0);
+
             return {
                 minutes: newMinutes,
                 seconds: newSeconds % 60,
@@ -34,6 +64,7 @@ const MultiModeCounterInput: React.FC<MultiModeCounterInputProps> = ({ style, mo
             const newSeconds = highlight === "minutes" ? prevTime.seconds : prevTime.seconds - 1;
             const newMinutes =
                 highlight === "seconds" ? prevTime.minutes : highlight === "minutes" ? prevTime.minutes - 1 : prevTime.minutes - (newSeconds === -1 ? 1 : 0);
+
             return {
                 minutes: newMinutes < 0 ? 0 : newMinutes,
                 seconds: newSeconds === -1 ? 59 : newSeconds,

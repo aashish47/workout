@@ -1,4 +1,4 @@
-import { WorkoutContext } from "@/app/workout/(workout)/_layout";
+import { WorkoutContext } from "@/app/create/(create)/_layout";
 import { ThemedText } from "@/components/ThemedText";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import React, { useContext } from "react";
