@@ -1,61 +1,34 @@
 import TopTabsLayout from "@/components/TopTabsLayout";
 import TopTabsLayoutButton from "@/components/TopTabsLayoutButton";
+import WorkoutRefProvider from "@/contexts/WorkoutRefProvider";
+import { Workouts } from "@/db/schema";
+import React, { useRef } from "react";
 
-import React, { createContext, useCallback, useRef } from "react";
-import { StyleSheet } from "react-native";
-
-export interface WorkoutState {
-    title: string;
-    backgroundColor: string;
-    exercises: string[];
-    time: {
-        work: number;
-        rest: number;
-        intervals: number;
-        "get ready": number;
-        cycles: number;
-        break: number;
-        "warm up": number;
-        "cool down": number;
-    };
-}
-
-export interface WorkoutContextType {
-    workoutRef: React.RefObject<WorkoutState>;
-    setWorkout: (updateFn: (prevWorkout: WorkoutState) => WorkoutState) => void;
-}
-
-export const WorkoutContext = createContext<WorkoutContextType | null>(null);
+export type WorkoutsWithoutId = Omit<Workouts, "id">;
 
 const CreateLayout = () => {
-    const workoutRef = useRef<WorkoutState>({
+    const workoutRef = useRef<WorkoutsWithoutId>({
         title: "timer",
         backgroundColor: "plum",
         exercises: [],
         time: {
-            work: 100,
+            work: 40,
             rest: 20,
-            intervals: 4,
+            intervals: 3,
             "get ready": 10,
-            cycles: 8,
+            cycles: 10,
             break: 80,
             "warm up": 10,
             "cool down": 10,
         },
     });
 
-    const setWorkout = useCallback((updateFn: (prevWorkout: WorkoutState) => WorkoutState) => {
-        workoutRef.current = updateFn(workoutRef.current);
-    }, []);
-
     return (
-        <WorkoutContext.Provider value={{ workoutRef, setWorkout }}>
+        <WorkoutRefProvider workoutRef={workoutRef}>
             <TopTabsLayout />
             <TopTabsLayoutButton name={"create"} />
-        </WorkoutContext.Provider>
+        </WorkoutRefProvider>
     );
 };
 
 export default CreateLayout;
-
-const styles = StyleSheet.create({});

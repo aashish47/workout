@@ -1,29 +1,24 @@
 import { ThemedText } from "@/components/ThemedText";
+import { WorkoutContext } from "@/contexts/WorkoutRefProvider";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import useWorkoutRefContext from "@/hooks/useWorkoutRefContext";
 import React, { useEffect, useRef, useState } from "react";
-import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 
-interface Time {
-    time: {
-        [key: string]: number; // Or a more specific type depending on your use case
-    };
-}
-
-interface MultiModeCounterInputProps<T extends Time> {
+interface MultiModeCounterInputProps {
     mode: "timer" | "counter";
     timer: string;
     timerValue: number;
     style?: {};
-    setWorkout: (updateFn: (prevWorkout: T) => T) => void;
 }
 
-const MultiModeCounterInput = <T extends Time>({ style, mode, timer, timerValue, setWorkout }: MultiModeCounterInputProps<T>) => {
+const MultiModeCounterInput = ({ style, mode, timer, timerValue }: MultiModeCounterInputProps) => {
+    const { setWorkout } = useWorkoutRefContext(WorkoutContext);
     const backgroundColor = useThemeColor({}, "press");
     const highlightColor = useThemeColor({}, "ripple");
     const [time, setTime] = useState({ minutes: Math.floor(timerValue / 60), seconds: timerValue % 60 });
     const [counter, setCounter] = useState(timerValue);
     const [highlight, setHighlight] = useState<"minutes" | "seconds" | "counter" | null>(null);
-
     const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
@@ -31,20 +26,10 @@ const MultiModeCounterInput = <T extends Time>({ style, mode, timer, timerValue,
             ...prev,
             time: {
                 ...prev.time,
-                [timer]: time.minutes * 60 + time.seconds,
+                [timer]: mode === "timer" ? time.minutes * 60 + time.seconds : counter,
             },
         }));
-    }, [time]);
-
-    useEffect(() => {
-        setWorkout((prev) => ({
-            ...prev,
-            time: {
-                ...prev.time,
-                [timer]: counter,
-            },
-        }));
-    }, [counter]);
+    }, [time, counter]);
 
     const incrementTime = () => {
         setTime((prevTime) => {
@@ -64,10 +49,21 @@ const MultiModeCounterInput = <T extends Time>({ style, mode, timer, timerValue,
             const newSeconds = highlight === "minutes" ? prevTime.seconds : prevTime.seconds - 1;
             const newMinutes =
                 highlight === "seconds" ? prevTime.minutes : highlight === "minutes" ? prevTime.minutes - 1 : prevTime.minutes - (newSeconds === -1 ? 1 : 0);
+            const finalSeconds = newSeconds === -1 ? (newMinutes === -1 ? 0 : 59) : newSeconds;
+            const finalMinutes = newSeconds === -1 ? (newMinutes < 0 ? 0 : newMinutes) : newMinutes;
+
+            const totalSeconds = finalMinutes * 60 + finalSeconds;
+            const minAllowedSeconds = 10; // Minimum allowed time in seconds
+            if (totalSeconds < minAllowedSeconds) {
+                return {
+                    minutes: 0,
+                    seconds: minAllowedSeconds,
+                };
+            }
 
             return {
-                minutes: newMinutes < 0 ? 0 : newMinutes,
-                seconds: newSeconds === -1 ? 59 : newSeconds,
+                minutes: finalMinutes < 0 ? 0 : finalMinutes,
+                seconds: finalSeconds === -1 ? (finalMinutes === -1 ? 0 : 59) : finalSeconds,
             };
         });
     };
@@ -116,14 +112,15 @@ const MultiModeCounterInput = <T extends Time>({ style, mode, timer, timerValue,
 
     return (
         <View style={[styles.container, { backgroundColor }, style]}>
-            <TouchableOpacity
+            <Pressable
+                android_ripple={{ color: highlightColor }}
                 onPress={() => handlePress(mode === "timer" ? decrementTime : decrementCounter)}
                 onLongPress={() => handleLongPress(mode === "timer" ? decrementTime : decrementCounter)}
                 onPressOut={handlePressOut}
                 style={styles.button}
             >
                 <ThemedText type="light">-</ThemedText>
-            </TouchableOpacity>
+            </Pressable>
             {mode === "timer" ? (
                 <View style={styles.timeContainer}>
                     {renderText("minutes", time.minutes)}
@@ -139,14 +136,15 @@ const MultiModeCounterInput = <T extends Time>({ style, mode, timer, timerValue,
                 renderText("counter", counter)
             )}
 
-            <TouchableOpacity
+            <Pressable
+                android_ripple={{ color: highlightColor }}
                 onPress={() => handlePress(mode === "timer" ? incrementTime : incrementCounter)}
                 onLongPress={() => handleLongPress(mode === "timer" ? incrementTime : incrementCounter)}
                 onPressOut={handlePressOut}
                 style={styles.button}
             >
                 <ThemedText type="light">+</ThemedText>
-            </TouchableOpacity>
+            </Pressable>
         </View>
     );
 };
@@ -154,11 +152,11 @@ const MultiModeCounterInput = <T extends Time>({ style, mode, timer, timerValue,
 const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
-        alignItems: "center",
+        alignItems: "stretch",
         justifyContent: "space-between",
         borderRadius: 10,
     },
-    button: { width: 50, alignItems: "center" },
+    button: { width: 50, alignItems: "center", justifyContent: "center" },
     timeText: {
         padding: 5,
     },

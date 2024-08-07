@@ -15,7 +15,7 @@ const TabLayoutButton: React.FC<TabLayoutButtonProps> = ({ name }) => {
     return (
         <View style={{ backgroundColor: colors.card }}>
             <Pressable
-                android_ripple={{ color: ripple, borderless: false }}
+                android_ripple={{ color: ripple }}
                 style={[styles.button, { backgroundColor: btnColor }]}
             >
                 <ThemedText style={{ textTransform: "capitalize" }}>{name}</ThemedText>

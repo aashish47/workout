@@ -16,10 +16,6 @@ export default function Index() {
     const [selected, setSelected] = useState<number[]>([]);
     const navigation = useNavigation<NavigationProp<ParamList, "create">>();
     const data = useDataContext();
-    if (!data) {
-        throw Error("Data doesn't exist");
-    }
-
     const float = useThemeColor({ light: undefined, dark: undefined }, "float");
 
     useEffect(() => {
