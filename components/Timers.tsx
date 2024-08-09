@@ -1,13 +1,12 @@
 import MultiModeCounterInput from "@/components/MultiModeCounterInput";
 import { ThemedText } from "@/components/ThemedText";
-import { WorkoutContext } from "@/contexts/WorkoutRefProvider";
 import { Workouts } from "@/db/schema";
 import useWorkoutRefContext from "@/hooks/useWorkoutRefContext";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
 const Timers = () => {
-    const { time } = useWorkoutRefContext(WorkoutContext);
+    const { time } = useWorkoutRefContext();
     const timers = Object.entries(time) as [keyof Workouts["time"], number][];
 
     return (

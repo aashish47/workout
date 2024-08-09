@@ -1,12 +1,11 @@
 import { ThemedText } from "@/components/ThemedText";
-import { WorkoutContext } from "@/contexts/WorkoutRefProvider";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import useWorkoutRefContext from "@/hooks/useWorkoutRefContext";
 import React from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 
 const Exercises = () => {
-    const { exercises } = useWorkoutRefContext(WorkoutContext);
+    const { exercises } = useWorkoutRefContext();
     const backgroundColor = useThemeColor({}, "press");
 
     return (

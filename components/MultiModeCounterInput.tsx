@@ -1,5 +1,4 @@
 import { ThemedText } from "@/components/ThemedText";
-import { WorkoutContext } from "@/contexts/WorkoutRefProvider";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import useWorkoutRefContext from "@/hooks/useWorkoutRefContext";
 import React, { useEffect, useRef, useState } from "react";
@@ -13,7 +12,7 @@ interface MultiModeCounterInputProps {
 }
 
 const MultiModeCounterInput = ({ style, mode, timer, timerValue }: MultiModeCounterInputProps) => {
-    const { setWorkout } = useWorkoutRefContext(WorkoutContext);
+    const { setWorkout } = useWorkoutRefContext();
     const backgroundColor = useThemeColor({}, "press");
     const highlightColor = useThemeColor({}, "ripple");
     const [time, setTime] = useState({ minutes: Math.floor(timerValue / 60), seconds: timerValue % 60 });
@@ -21,6 +20,7 @@ const MultiModeCounterInput = ({ style, mode, timer, timerValue }: MultiModeCoun
     const [highlight, setHighlight] = useState<"minutes" | "seconds" | "counter" | null>(null);
     const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
 
+    // this will also run on inital render meaning the 8 timers on inital render will each run this once
     useEffect(() => {
         setWorkout((prev) => ({
             ...prev,

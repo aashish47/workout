@@ -1,7 +1,7 @@
-import { WorkoutContextType } from "@/contexts/WorkoutRefProvider";
+import { WorkoutContext } from "@/contexts/WorkoutRefProvider";
 import { useContext } from "react";
 
-const useWorkoutRefContext = (WorkoutContext: React.Context<WorkoutContextType | null>) => {
+const useWorkoutRefContext = () => {
     const context = useContext(WorkoutContext);
     if (context === null) {
         throw Error("Null context create Workout");
@@ -10,7 +10,7 @@ const useWorkoutRefContext = (WorkoutContext: React.Context<WorkoutContextType |
     if (workoutRef.current === null) {
         throw Error("null workoutref in create index");
     }
-    return { ...workoutRef.current, setWorkout };
+    return { ...workoutRef.current, workoutRef, setWorkout };
 };
 
 export default useWorkoutRefContext;

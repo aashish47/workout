@@ -8,7 +8,7 @@ export type WorkoutsWithoutId = Omit<Workouts, "id">;
 
 const CreateLayout = () => {
     const workoutRef = useRef<WorkoutsWithoutId>({
-        title: "timer",
+        title: "Timer",
         backgroundColor: "plum",
         exercises: [],
         time: {
