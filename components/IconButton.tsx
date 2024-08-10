@@ -14,18 +14,19 @@ interface IconButtonProps {
 
 const IconButton: React.FC<IconButtonProps & ViewProps> = ({ style, lightColor, darkColor, iconName, size, backgroundColor, onPress }) => {
     const ripple = useThemeColor({ light: lightColor, dark: darkColor }, "ripple");
+    const text = useThemeColor({ light: lightColor, dark: darkColor }, "text");
 
     return (
         <Pressable
             onPress={onPress}
-            hitSlop={36}
+            // hitSlop={36}
             android_ripple={{ color: ripple, radius: size }}
             style={[style, styles.headerButton, { height: size * 2, width: size * 2, backgroundColor }]}
         >
             <Ionicons
                 name={iconName}
                 size={size}
-                color="black"
+                color={text}
             />
         </Pressable>
     );

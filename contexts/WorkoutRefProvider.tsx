@@ -4,18 +4,18 @@ import { createContext, useCallback } from "react";
 export type WorkoutsWithoutId = Omit<Workouts, "id">;
 
 export interface WorkoutContextType {
-    workoutRef: React.RefObject<Workouts | WorkoutsWithoutId>;
-    setWorkout: (updateFn: (prevWorkout: Workouts | WorkoutsWithoutId) => Workouts | WorkoutsWithoutId) => void;
+    workoutRef: React.RefObject<Workouts>;
+    setWorkout: (updateFn: (prevWorkout: Workouts) => Workouts) => void;
 }
 
 export const WorkoutContext = createContext<WorkoutContextType | null>(null);
 
 interface WorkoutRefProviderProps {
-    workoutRef: React.MutableRefObject<Workouts | WorkoutsWithoutId>;
+    workoutRef: React.MutableRefObject<Workouts>;
     children: any;
 }
 const WorkoutRefProvider: React.FC<WorkoutRefProviderProps> = ({ workoutRef, children }) => {
-    const setWorkout = useCallback((updateFn: (prevWorkout: WorkoutsWithoutId | Workouts) => WorkoutsWithoutId | Workouts) => {
+    const setWorkout = useCallback((updateFn: (prevWorkout: Workouts) => Workouts) => {
         workoutRef.current = updateFn(workoutRef.current);
     }, []);
 

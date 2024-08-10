@@ -29,20 +29,22 @@ export default function Index() {
                         size={24}
                     />
                 ),
-                headerRight: () => (
-                    <View style={{ flexDirection: "row", gap: 2 }}>
-                        <IconButton
-                            onPress={async () => {
-                                // setData(data.filter(({ id }) => !selected.includes(id)));
-                                await db.delete(workouts).where(inArray(workouts.id, selected));
-                                setSelected([]);
-                            }}
-                            iconName="trash-sharp"
-                            size={24}
-                        />
-                        {/* checkbox to select all */}
-                    </View>
-                ),
+                headerRight: () => {
+                    const deleteWorkouts = async () => {
+                        await db.delete(workouts).where(inArray(workouts.id, selected));
+                        setSelected([]);
+                    };
+                    return (
+                        <View style={{ flexDirection: "row", gap: 2 }}>
+                            <IconButton
+                                onPress={deleteWorkouts}
+                                iconName="trash-sharp"
+                                size={24}
+                            />
+                            {/* checkbox to select all */}
+                        </View>
+                    );
+                },
             });
         } else {
             navigation.setOptions({

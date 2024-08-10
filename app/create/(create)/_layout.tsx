@@ -4,10 +4,11 @@ import WorkoutRefProvider from "@/contexts/WorkoutRefProvider";
 import { Workouts } from "@/db/schema";
 import React, { useRef } from "react";
 
-export type WorkoutsWithoutId = Omit<Workouts, "id">;
+// export type WorkoutsWithoutId = Omit<Workouts, "id">;
 
 const CreateLayout = () => {
-    const workoutRef = useRef<WorkoutsWithoutId>({
+    const workoutRef = useRef<Workouts>({
+        id: 0,
         title: "Timer",
         backgroundColor: "plum",
         exercises: [],
