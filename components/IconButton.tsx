@@ -9,10 +9,9 @@ interface IconButtonProps {
     iconName: keyof typeof Ionicons.glyphMap;
     size: number;
     onPress: PressableProps["onPress"];
-    backgroundColor?: string;
 }
 
-const IconButton: React.FC<IconButtonProps & ViewProps> = ({ style, lightColor, darkColor, iconName, size, backgroundColor, onPress }) => {
+const IconButton: React.FC<IconButtonProps & ViewProps> = ({ style, lightColor, darkColor, iconName, size, onPress }) => {
     const ripple = useThemeColor({ light: lightColor, dark: darkColor }, "ripple");
     const text = useThemeColor({ light: lightColor, dark: darkColor }, "text");
 
@@ -21,7 +20,7 @@ const IconButton: React.FC<IconButtonProps & ViewProps> = ({ style, lightColor, 
             onPress={onPress}
             // hitSlop={36}
             android_ripple={{ color: ripple, radius: size }}
-            style={[style, styles.headerButton, { height: size * 2, width: size * 2, backgroundColor }]}
+            style={[style, styles.headerButton, { height: size * 2, width: size * 2 }]}
         >
             <Ionicons
                 name={iconName}

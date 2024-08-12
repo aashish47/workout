@@ -60,8 +60,7 @@ export default function Index() {
             <IconButton
                 iconName="add"
                 size={32}
-                backgroundColor={float}
-                style={styles.floatBtn}
+                style={[styles.floatBtn, { backgroundColor: float }]}
                 onPress={() => navigation.navigate("create")}
             />
 
