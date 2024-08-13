@@ -16,7 +16,7 @@ export default function Index() {
     const [selected, setSelected] = useState<number[]>([]);
     const navigation = useNavigation<NavigationProp<ParamList, "create">>();
     const data = useDataContext();
-    const float = useThemeColor({ light: undefined, dark: undefined }, "float");
+    const float = useThemeColor({ light: undefined, dark: undefined }, "primary");
 
     useEffect(() => {
         if (selected.length) {

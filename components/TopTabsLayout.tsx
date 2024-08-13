@@ -16,7 +16,7 @@ export const MaterialTopTabs = withLayoutContext<
 
 const TopTabsLayout = () => {
     const tabActiveColor = useThemeColor({}, "tint");
-    const tabIndicatorColor = useThemeColor({}, "float");
+    const tabIndicatorColor = useThemeColor({}, "primary");
     const tabInactiveColor = useThemeColor({}, "tabIconDefault");
     const tabRippleColor = useThemeColor({}, "ripple");
 

@@ -8,12 +8,12 @@ interface MultiModeCounterInputProps {
     mode: "timer" | "counter";
     timer: string;
     timerValue: number;
-    style?: {};
 }
 
-const MultiModeCounterInput = ({ style, mode, timer, timerValue }: MultiModeCounterInputProps) => {
+const MultiModeCounterInput = ({ mode, timer, timerValue }: MultiModeCounterInputProps) => {
+    console.log(`${timer} ${timerValue} rendered at: ${new Date().toLocaleTimeString()}`);
     const { setWorkout } = useWorkoutRefContext();
-    const backgroundColor = useThemeColor({}, "press");
+    const backgroundColor = useThemeColor({}, "secondary");
     const highlightColor = useThemeColor({}, "ripple");
     const [time, setTime] = useState({ minutes: Math.floor(timerValue / 60), seconds: timerValue % 60 });
     const [counter, setCounter] = useState(timerValue);
@@ -46,25 +46,28 @@ const MultiModeCounterInput = ({ style, mode, timer, timerValue }: MultiModeCoun
 
     const decrementTime = () => {
         setTime((prevTime) => {
-            const newSeconds = highlight === "minutes" ? prevTime.seconds : prevTime.seconds - 1;
-            const newMinutes =
-                highlight === "seconds" ? prevTime.minutes : highlight === "minutes" ? prevTime.minutes - 1 : prevTime.minutes - (newSeconds === -1 ? 1 : 0);
-            const finalSeconds = newSeconds === -1 ? (newMinutes === -1 ? 0 : 59) : newSeconds;
-            const finalMinutes = newSeconds === -1 ? (newMinutes < 0 ? 0 : newMinutes) : newMinutes;
+            let { seconds, minutes } = prevTime;
 
-            const totalSeconds = finalMinutes * 60 + finalSeconds;
-            const minAllowedSeconds = 10; // Minimum allowed time in seconds
-            if (totalSeconds < minAllowedSeconds) {
-                return {
-                    minutes: 0,
-                    seconds: minAllowedSeconds,
-                };
+            // Determine the decrement value based on the highlight
+            const decrementSeconds = highlight === "seconds" || !highlight;
+            const decrementMinutes = highlight === "minutes";
+
+            // Decrement seconds or minutes based on the highlight
+            seconds -= decrementSeconds ? 1 : 0;
+            minutes -= decrementMinutes ? 1 : 0;
+
+            // Wrap seconds around and adjust minutes if seconds go below 0
+            if (seconds < 0) {
+                seconds = 59;
+                if (highlight !== "seconds") {
+                    minutes -= 1;
+                }
             }
 
-            return {
-                minutes: finalMinutes < 0 ? 0 : finalMinutes,
-                seconds: finalSeconds === -1 ? (finalMinutes === -1 ? 0 : 59) : finalSeconds,
-            };
+            // Ensure minutes do not go below 0
+            minutes = Math.max(minutes, 0);
+
+            return { minutes, seconds };
         });
     };
 
@@ -111,7 +114,7 @@ const MultiModeCounterInput = ({ style, mode, timer, timerValue }: MultiModeCoun
     );
 
     return (
-        <View style={[styles.container, { backgroundColor }, style]}>
+        <View style={[styles.container, { backgroundColor }]}>
             <Pressable
                 android_ripple={{ color: highlightColor }}
                 onPress={() => handlePress(mode === "timer" ? decrementTime : decrementCounter)}
@@ -151,6 +154,7 @@ const MultiModeCounterInput = ({ style, mode, timer, timerValue }: MultiModeCoun
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         flexDirection: "row",
         alignItems: "stretch",
         justifyContent: "space-between",

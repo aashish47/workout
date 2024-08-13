@@ -20,9 +20,9 @@ type NavigationProp = NativeStackNavigationProp<ParamList, "workout">;
 
 const ListItem: React.FC<ListItemProps> = ({ lightColor, darkColor, workout, selected, setSelected }) => {
     const { id, title, backgroundColor, exercises } = workout;
-    const pressColor = useThemeColor({ light: lightColor, dark: darkColor }, "press");
+    const pressColor = useThemeColor({ light: lightColor, dark: darkColor }, "secondary");
     const ripple = useThemeColor({ light: lightColor, dark: darkColor }, "ripple");
-    const float = useThemeColor({ light: lightColor, dark: darkColor }, "float");
+    const float = useThemeColor({ light: lightColor, dark: darkColor }, "primary");
     const navigation = useNavigation<NavigationProp>();
 
     const handleLongPress = () => {

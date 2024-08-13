@@ -12,15 +12,13 @@ const Timers = () => {
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={{ flex: 1 }}>
-                {timers.map(([timer, value], index: any) => (
+                {timers.map(([timer, value], index: number) => (
                     <View
                         key={index}
                         style={styles.input}
                     >
-                        <ThemedText style={{ flex: 1, textTransform: "capitalize" }}>{timer}</ThemedText>
-
+                        <ThemedText style={styles.label}>{timer}</ThemedText>
                         <MultiModeCounterInput
-                            style={{ flex: 1 }}
                             timer={timer}
                             timerValue={value}
                             mode={timer === "intervals" || timer === "cycles" ? "counter" : "timer"}
@@ -41,5 +39,9 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginHorizontal: 12,
         marginTop: 24,
+    },
+    label: {
+        flex: 1,
+        textTransform: "capitalize",
     },
 });

@@ -8,9 +8,9 @@ import { FlatList, Pressable, StyleSheet, TextInput, View } from "react-native";
 const Exercises = () => {
     const { exercises: data, setWorkout } = useWorkoutRefContext();
     const [exercises, setExercises] = useState(data);
-    const backgroundColor = useThemeColor({}, "press");
+    const backgroundColor = useThemeColor({}, "secondary");
     const ripple = useThemeColor({}, "ripple");
-    const border = useThemeColor({}, "float");
+    const border = useThemeColor({}, "primary");
 
     useEffect(() => {
         setWorkout((prev) => ({ ...prev, exercises }));
