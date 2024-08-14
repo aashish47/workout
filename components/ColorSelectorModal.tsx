@@ -1,16 +1,17 @@
 import IconButton from "@/components/IconButton";
+import { Workouts } from "@/db/schema";
 import { Ionicons } from "@expo/vector-icons";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, memo, SetStateAction } from "react";
 import { Modal, Pressable, StyleSheet, View } from "react-native";
 
 interface ColorSelectorModalProps {
     modalVisible: boolean;
     setModalVisible: Dispatch<SetStateAction<boolean>>;
     backgroundColor: string;
-    setBackgroundColor: Dispatch<SetStateAction<string>>;
+    setWorkout: Dispatch<SetStateAction<Workouts>>;
 }
 
-const ColorSelectorModal = ({ modalVisible, setModalVisible, backgroundColor, setBackgroundColor }: ColorSelectorModalProps) => {
+const ColorSelectorModal = memo(({ modalVisible, setModalVisible, backgroundColor, setWorkout }: ColorSelectorModalProps) => {
     const colorOptions = [
         "coral",
         "tomato",
@@ -50,7 +51,7 @@ const ColorSelectorModal = ({ modalVisible, setModalVisible, backgroundColor, se
                             <Pressable
                                 key={color}
                                 style={[styles.colorOption, { backgroundColor: color }]}
-                                onPress={() => setBackgroundColor(color)}
+                                onPress={() => setWorkout((prev) => ({ ...prev, backgroundColor: color }))}
                             >
                                 {color === backgroundColor && (
                                     <Ionicons
@@ -66,7 +67,7 @@ const ColorSelectorModal = ({ modalVisible, setModalVisible, backgroundColor, se
             </View>
         </Modal>
     );
-};
+});
 
 export default ColorSelectorModal;
 

@@ -2,9 +2,10 @@ import { ThemedText } from "@/components/ThemedText";
 import { Workouts } from "@/db/schema";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { ParamList } from "@/types/routeParams";
+import getTotalTime from "@/utils/getTotalTime";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "expo-router";
-import React from "react";
+import React, { useMemo } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 
@@ -19,11 +20,12 @@ interface ListItemProps {
 type NavigationProp = NativeStackNavigationProp<ParamList, "workout">;
 
 const ListItem: React.FC<ListItemProps> = ({ lightColor, darkColor, workout, selected, setSelected }) => {
-    const { id, title, backgroundColor, exercises } = workout;
+    const { id, title, backgroundColor, exercises, time } = workout;
     const pressColor = useThemeColor({ light: lightColor, dark: darkColor }, "secondary");
     const ripple = useThemeColor({ light: lightColor, dark: darkColor }, "ripple");
     const float = useThemeColor({ light: lightColor, dark: darkColor }, "primary");
     const navigation = useNavigation<NavigationProp>();
+    const totalTime = useMemo(() => getTotalTime(time), [time]);
 
     const handleLongPress = () => {
         setSelected([...selected, id]);
@@ -62,8 +64,11 @@ const ListItem: React.FC<ListItemProps> = ({ lightColor, darkColor, workout, sel
                         <ThemedText style={{ textTransform: "uppercase" }}>{title.charAt(0)}</ThemedText>
                     </View>
                 )}
-                <View style={styles.textContainer}>
-                    <ThemedText>{title}</ThemedText>
+                <View style={styles.metaData}>
+                    <View style={styles.titleContainer}>
+                        <ThemedText>{title}</ThemedText>
+                        <ThemedText type="light">{totalTime}</ThemedText>
+                    </View>
                     <ThemedText
                         ellipsizeMode="tail"
                         numberOfLines={2}
@@ -100,7 +105,11 @@ const styles = StyleSheet.create({
         height: 48,
         borderRadius: 100,
     },
-    textContainer: {
+    metaData: {
         flex: 1,
+    },
+    titleContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
     },
 });

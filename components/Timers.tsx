@@ -1,14 +1,16 @@
 import MultiModeCounterInput from "@/components/MultiModeCounterInput";
 import { ThemedText } from "@/components/ThemedText";
 import { Workouts } from "@/db/schema";
-import useWorkoutRefContext from "@/hooks/useWorkoutRefContext";
-import React from "react";
+import useWorkoutContext from "@/hooks/useWorkoutContext";
+import React, { Dispatch, memo, SetStateAction, useMemo } from "react";
 import { Keyboard, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 
-const Timers = () => {
-    const { time } = useWorkoutRefContext();
-    const timers = Object.entries(time) as [keyof Workouts["time"], number][];
+interface TimersComponentProps {
+    timers: ["work" | "rest" | "intervals" | "get ready" | "cycles" | "break" | "warm up" | "cool down", number][];
+    setWorkout: Dispatch<SetStateAction<Workouts>>;
+}
 
+const TimersComponent = memo(({ timers, setWorkout }: TimersComponentProps) => {
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={{ flex: 1 }}>
@@ -19,6 +21,7 @@ const Timers = () => {
                     >
                         <ThemedText style={styles.label}>{timer}</ThemedText>
                         <MultiModeCounterInput
+                            setWorkout={setWorkout}
                             timer={timer}
                             timerValue={value}
                             mode={timer === "intervals" || timer === "cycles" ? "counter" : "timer"}
@@ -28,7 +31,19 @@ const Timers = () => {
             </View>
         </TouchableWithoutFeedback>
     );
-};
+});
+
+const Timers = memo(() => {
+    const { setWorkout, timersRef } = useWorkoutContext();
+    const timers = useMemo(() => Object.entries(timersRef.current) as [keyof Workouts["time"], number][], []);
+
+    return (
+        <TimersComponent
+            setWorkout={setWorkout}
+            timers={timers}
+        />
+    );
+});
 
 export default Timers;
 

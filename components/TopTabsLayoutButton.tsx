@@ -1,26 +1,29 @@
 import { ThemedText } from "@/components/ThemedText";
 import TopTabsLayoutHeader from "@/components/TopTabsLayoutHeader";
 import { db } from "@/db/drizzle";
-import { workouts } from "@/db/schema";
+import { Workouts, workouts } from "@/db/schema";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import useWorkoutRefContext from "@/hooks/useWorkoutRefContext";
+import useWorkoutContext from "@/hooks/useWorkoutContext";
 import { ParamList } from "@/types/routeParams";
+import getTotalTime from "@/utils/getTotalTime";
 import { NavigationProp, useTheme } from "@react-navigation/native";
 import { eq } from "drizzle-orm";
 import { useNavigation } from "expo-router";
-import React from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 
-interface TabLayoutButtonProps {
+interface TopTabsLayoutButtonProps {
     name: "create" | "start";
 }
 
-const TabLayoutButton: React.FC<TabLayoutButtonProps> = ({ name }) => {
+const Button = memo(({ name, workout }: TopTabsLayoutButtonProps & { workout: Workouts }) => {
     const btnColor = useThemeColor({}, "primary");
     const ripple = useThemeColor({}, "ripple");
     const { colors } = useTheme();
-    const { workoutRef } = useWorkoutRefContext();
+    const { id, ...rest } = workout;
+    const times = workout["time"];
     const navigation = useNavigation<NavigationProp<ParamList, "index">>();
+    const totalTime = useMemo(() => getTotalTime(times), [times]);
 
     const handlePress = async () => {
         if (name === "create") {
@@ -32,27 +35,28 @@ const TabLayoutButton: React.FC<TabLayoutButtonProps> = ({ name }) => {
     };
 
     const createWorkout = async () => {
-        const { title, backgroundColor, exercises, time } = workoutRef.current!;
-        await db.insert(workouts).values({ title, backgroundColor, exercises, time });
+        await db.insert(workouts).values({ ...rest });
     };
 
     const updateWorkout = async () => {
-        const { id, title, backgroundColor, exercises, time } = workoutRef.current!;
-        await db.update(workouts).set({ title, backgroundColor, exercises, time }).where(eq(workouts.id, id));
+        await db
+            .update(workouts)
+            .set({ ...rest })
+            .where(eq(workouts.id, id));
     };
 
     const navigateBack = () => {
         navigation.navigate("index");
     };
 
-    const handleBackPress = () => {
+    const handleBackPress = useCallback(() => {
         if (name === "create") {
             createWorkout();
         } else {
             updateWorkout();
         }
         navigateBack();
-    };
+    }, [workout]);
 
     return (
         <>
@@ -64,15 +68,27 @@ const TabLayoutButton: React.FC<TabLayoutButtonProps> = ({ name }) => {
                         style={[styles.button, { backgroundColor: btnColor }]}
                         onPress={handlePress}
                     >
-                        <ThemedText style={styles.text}>{name}</ThemedText>
+                        <ThemedText style={styles.text}>{`${name} ${totalTime}`}</ThemedText>
                     </Pressable>
                 </View>
             </View>
         </>
     );
-};
+});
 
-export default TabLayoutButton;
+const TopTabsLayoutButton: React.FC<TopTabsLayoutButtonProps> = memo(({ name }) => {
+    const { workout: data } = useWorkoutContext();
+    const workout = useMemo(() => data, [data]);
+
+    return (
+        <Button
+            name={name}
+            workout={workout}
+        />
+    );
+});
+
+export default TopTabsLayoutButton;
 
 const styles = StyleSheet.create({
     container: {

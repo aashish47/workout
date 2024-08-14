@@ -1,24 +1,22 @@
 import TopTabsLayout from "@/components/TopTabsLayout";
 import TopTabsLayoutButton from "@/components/TopTabsLayoutButton";
-import WorkoutRefProvider from "@/contexts/WorkoutRefProvider";
-import { Workouts } from "@/db/schema";
+import WorkoutProvider from "@/contexts/WorkoutProvider";
 import useDataContext from "@/hooks/useDataContext";
 import { ParamList } from "@/types/routeParams";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import React, { useRef } from "react";
+import React from "react";
 
 const WorkoutLayout = () => {
     const route = useRoute<RouteProp<ParamList, "(workout)">>();
     const { id } = route.params;
     const data = useDataContext();
     const workout = data.filter((d) => d.id == id)[0];
-    const workoutRef = useRef<Workouts>(workout);
 
     return (
-        <WorkoutRefProvider workoutRef={workoutRef}>
+        <WorkoutProvider workout={workout}>
             <TopTabsLayout />
             <TopTabsLayoutButton name={"start"} />
-        </WorkoutRefProvider>
+        </WorkoutProvider>
     );
 };
 

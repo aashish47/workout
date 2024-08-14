@@ -2,7 +2,7 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 import { createMaterialTopTabNavigator, MaterialTopTabNavigationEventMap, MaterialTopTabNavigationOptions } from "@react-navigation/material-top-tabs";
 import { ParamListBase, TabNavigationState } from "@react-navigation/native";
 import { withLayoutContext } from "expo-router";
-import React from "react";
+import React, { memo } from "react";
 import { StyleSheet } from "react-native";
 
 const { Navigator } = createMaterialTopTabNavigator();
@@ -14,7 +14,7 @@ export const MaterialTopTabs = withLayoutContext<
     MaterialTopTabNavigationEventMap
 >(Navigator);
 
-const TopTabsLayout = () => {
+const TopTabsLayout = memo(() => {
     const tabActiveColor = useThemeColor({}, "tint");
     const tabIndicatorColor = useThemeColor({}, "primary");
     const tabInactiveColor = useThemeColor({}, "tabIconDefault");
@@ -36,7 +36,7 @@ const TopTabsLayout = () => {
             <MaterialTopTabs.Screen name="exercises" />
         </MaterialTopTabs>
     );
-};
+});
 
 export default TopTabsLayout;
 

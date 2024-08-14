@@ -1,13 +1,10 @@
 import TopTabsLayout from "@/components/TopTabsLayout";
 import TopTabsLayoutButton from "@/components/TopTabsLayoutButton";
-import WorkoutRefProvider from "@/contexts/WorkoutRefProvider";
-import { Workouts } from "@/db/schema";
-import React, { useRef } from "react";
-
-// export type WorkoutsWithoutId = Omit<Workouts, "id">;
+import WorkoutProvider from "@/contexts/WorkoutProvider";
+import React from "react";
 
 const CreateLayout = () => {
-    const workoutRef = useRef<Workouts>({
+    const workout = {
         id: 0,
         title: "Timer",
         backgroundColor: "plum",
@@ -22,13 +19,13 @@ const CreateLayout = () => {
             "warm up": 10,
             "cool down": 10,
         },
-    });
+    };
 
     return (
-        <WorkoutRefProvider workoutRef={workoutRef}>
+        <WorkoutProvider workout={workout}>
             <TopTabsLayout />
             <TopTabsLayoutButton name={"create"} />
-        </WorkoutRefProvider>
+        </WorkoutProvider>
     );
 };
 

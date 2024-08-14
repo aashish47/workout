@@ -1,25 +1,26 @@
 import ColorSelectorModal from "@/components/ColorSelectorModal";
 import IconButton from "@/components/IconButton";
+import { Workouts } from "@/db/schema";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import useWorkoutRefContext from "@/hooks/useWorkoutRefContext";
+import useWorkoutContext from "@/hooks/useWorkoutContext";
 import { Stack } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, memo, SetStateAction, useState } from "react";
 import { Pressable, StyleSheet, TextInput } from "react-native";
 
-interface HeaderProps {
+interface TopTabsHeaderProps {
     handleBackPress: () => void;
 }
 
-const TopTabsLayoutHeader = ({ handleBackPress }: HeaderProps) => {
+interface HeaderProps {
+    title: string;
+    backgroundColor: string;
+    setWorkout: Dispatch<SetStateAction<Workouts>>;
+}
+
+const Header = memo(({ title, backgroundColor, setWorkout, handleBackPress }: HeaderProps & TopTabsHeaderProps) => {
     const text = useThemeColor({}, "text");
     const ripple = useThemeColor({}, "ripple");
-    const { setWorkout, title, backgroundColor: background } = useWorkoutRefContext();
-    const [backgroundColor, setBackgroundColor] = useState(background);
     const [modalVisible, setModalVisible] = useState(false);
-    useEffect(() => {
-        setWorkout((prev) => ({ ...prev, backgroundColor }));
-    }, [backgroundColor]);
-
     return (
         <>
             <Stack.Screen
@@ -60,11 +61,25 @@ const TopTabsLayoutHeader = ({ handleBackPress }: HeaderProps) => {
                 modalVisible={modalVisible}
                 setModalVisible={setModalVisible}
                 backgroundColor={backgroundColor}
-                setBackgroundColor={setBackgroundColor}
+                setWorkout={setWorkout}
             />
         </>
     );
-};
+});
+
+const TopTabsLayoutHeader = memo(({ handleBackPress }: TopTabsHeaderProps) => {
+    const { workout, setWorkout } = useWorkoutContext();
+    const { title, backgroundColor } = workout;
+
+    return (
+        <Header
+            title={title}
+            backgroundColor={backgroundColor}
+            setWorkout={setWorkout}
+            handleBackPress={handleBackPress}
+        />
+    );
+});
 
 export default TopTabsLayoutHeader;
 

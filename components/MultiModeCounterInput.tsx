@@ -1,18 +1,18 @@
 import { ThemedText } from "@/components/ThemedText";
+import { Workouts } from "@/db/schema";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import useWorkoutRefContext from "@/hooks/useWorkoutRefContext";
-import React, { useEffect, useRef, useState } from "react";
+import getFormatedTime from "@/utils/getFormatedTime";
+import React, { Dispatch, memo, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 
 interface MultiModeCounterInputProps {
     mode: "timer" | "counter";
     timer: string;
     timerValue: number;
+    setWorkout: Dispatch<SetStateAction<Workouts>>;
 }
 
-const MultiModeCounterInput = ({ mode, timer, timerValue }: MultiModeCounterInputProps) => {
-    console.log(`${timer} ${timerValue} rendered at: ${new Date().toLocaleTimeString()}`);
-    const { setWorkout } = useWorkoutRefContext();
+const MultiModeCounterInput = memo(({ mode, timer, timerValue, setWorkout }: MultiModeCounterInputProps) => {
     const backgroundColor = useThemeColor({}, "secondary");
     const highlightColor = useThemeColor({}, "ripple");
     const [time, setTime] = useState({ minutes: Math.floor(timerValue / 60), seconds: timerValue % 60 });
@@ -31,20 +31,19 @@ const MultiModeCounterInput = ({ mode, timer, timerValue }: MultiModeCounterInpu
         }));
     }, [time, counter]);
 
-    const incrementTime = () => {
+    const incrementTime = useCallback(() => {
         setTime((prevTime) => {
             const newSeconds = highlight === "minutes" ? prevTime.seconds : prevTime.seconds + 1;
             const newMinutes =
                 highlight === "seconds" ? prevTime.minutes : highlight === "minutes" ? prevTime.minutes + 1 : prevTime.minutes + (newSeconds === 60 ? 1 : 0);
-
             return {
                 minutes: newMinutes,
                 seconds: newSeconds % 60,
             };
         });
-    };
+    }, [highlight]);
 
-    const decrementTime = () => {
+    const decrementTime = useCallback(() => {
         setTime((prevTime) => {
             let { seconds, minutes } = prevTime;
 
@@ -69,35 +68,35 @@ const MultiModeCounterInput = ({ mode, timer, timerValue }: MultiModeCounterInpu
 
             return { minutes, seconds };
         });
-    };
+    }, [highlight]);
 
-    const incrementCounter = () => {
+    const incrementCounter = useCallback(() => {
         setCounter((prevCounter) => (prevCounter < 99 ? prevCounter + 1 : prevCounter));
-    };
+    }, []);
 
-    const decrementCounter = () => {
+    const decrementCounter = useCallback(() => {
         setCounter((prevCounter) => (prevCounter > 1 ? prevCounter - 1 : prevCounter));
-    };
+    }, []);
 
-    const handleLongPress = (action: () => void) => {
+    const handleLongPress = useCallback((action: () => void) => {
         longPressTimerRef.current = setInterval(action, 100);
-    };
+    }, []);
 
-    const handlePressOut = () => {
+    const handlePressOut = useCallback(() => {
         if (longPressTimerRef.current) {
             clearInterval(longPressTimerRef.current);
             longPressTimerRef.current = null;
         }
-    };
+    }, []);
 
-    const handlePress = (action: () => void) => {
+    const handlePress = useCallback((action: () => void) => {
         action();
         handlePressOut(); // Ensure interval is cleared if any existing
-    };
+    }, []);
 
-    const handleTextPress = (type: "minutes" | "seconds" | "counter") => {
+    const handleTextPress = useCallback((type: "minutes" | "seconds" | "counter") => {
         setHighlight((prevHighlight) => (prevHighlight === type ? null : type));
-    };
+    }, []);
 
     const renderText = (type: "minutes" | "seconds" | "counter", value: number) => (
         <Pressable
@@ -108,22 +107,24 @@ const MultiModeCounterInput = ({ mode, timer, timerValue }: MultiModeCounterInpu
                 type="light"
                 style={[styles.timeText, highlight === type && { backgroundColor: highlightColor }]}
             >
-                {type === "minutes" || "seconds" ? `${value < 10 ? "0" : ""}${value}` : value}
+                {type === "minutes" || "seconds" ? getFormatedTime(value) : value}
             </ThemedText>
         </Pressable>
     );
 
     return (
         <View style={[styles.container, { backgroundColor }]}>
-            <Pressable
-                android_ripple={{ color: highlightColor }}
-                onPress={() => handlePress(mode === "timer" ? decrementTime : decrementCounter)}
-                onLongPress={() => handleLongPress(mode === "timer" ? decrementTime : decrementCounter)}
-                onPressOut={handlePressOut}
-                style={styles.button}
-            >
-                <ThemedText type="light">-</ThemedText>
-            </Pressable>
+            <View style={[styles.wrapper, styles.minusWrapper]}>
+                <Pressable
+                    android_ripple={{ color: highlightColor }}
+                    onPress={() => handlePress(mode === "timer" ? decrementTime : decrementCounter)}
+                    onLongPress={() => handleLongPress(mode === "timer" ? decrementTime : decrementCounter)}
+                    onPressOut={handlePressOut}
+                    style={styles.button}
+                >
+                    <ThemedText type="light">-</ThemedText>
+                </Pressable>
+            </View>
             {mode === "timer" ? (
                 <View style={styles.timeContainer}>
                     {renderText("minutes", time.minutes)}
@@ -138,29 +139,46 @@ const MultiModeCounterInput = ({ mode, timer, timerValue }: MultiModeCounterInpu
             ) : (
                 renderText("counter", counter)
             )}
-
-            <Pressable
-                android_ripple={{ color: highlightColor }}
-                onPress={() => handlePress(mode === "timer" ? incrementTime : incrementCounter)}
-                onLongPress={() => handleLongPress(mode === "timer" ? incrementTime : incrementCounter)}
-                onPressOut={handlePressOut}
-                style={styles.button}
-            >
-                <ThemedText type="light">+</ThemedText>
-            </Pressable>
+            <View style={[styles.wrapper, styles.plusWrapper]}>
+                <Pressable
+                    android_ripple={{ color: highlightColor }}
+                    onPress={() => handlePress(mode === "timer" ? incrementTime : incrementCounter)}
+                    onLongPress={() => handleLongPress(mode === "timer" ? incrementTime : incrementCounter)}
+                    onPressOut={handlePressOut}
+                    style={styles.button}
+                >
+                    <ThemedText type="light">+</ThemedText>
+                </Pressable>
+            </View>
         </View>
     );
-};
+});
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: "row",
-        alignItems: "stretch",
         justifyContent: "space-between",
         borderRadius: 10,
     },
-    button: { width: 50, alignItems: "center", justifyContent: "center" },
+    wrapper: {
+        width: 50,
+        overflow: "hidden",
+    },
+    minusWrapper: {
+        borderTopLeftRadius: 10,
+        borderBottomLeftRadius: 10,
+    },
+    plusWrapper: {
+        borderTopRightRadius: 10,
+        borderBottomRightRadius: 10,
+    },
+    button: {
+        flex: 1,
+        width: 50,
+        alignItems: "center",
+        justifyContent: "center",
+    },
     timeText: {
         padding: 5,
     },
