@@ -17,7 +17,7 @@ const ExercisesComponent = memo(({ exercises, setWorkout }: ExercisesComponentPr
     const border = useThemeColor({}, "primary");
 
     const handleEndEditing = (e: NativeSyntheticEvent<TextInputEndEditingEventData>, currIndex: number) => {
-        setWorkout((prev) => ({ ...prev, exercises: exercises.map((exercise, index) => (index === currIndex ? e.nativeEvent.text : exercise)) }));
+        setWorkout((prev) => ({ ...prev, exercises: exercises.map((exercise, index) => (index === currIndex ? e.nativeEvent.text.trim() : exercise)) }));
     };
 
     const handleDelete = (currIndex: number) => {

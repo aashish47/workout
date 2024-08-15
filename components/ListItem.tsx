@@ -25,7 +25,7 @@ const ListItem: React.FC<ListItemProps> = ({ lightColor, darkColor, workout, sel
     const ripple = useThemeColor({ light: lightColor, dark: darkColor }, "ripple");
     const float = useThemeColor({ light: lightColor, dark: darkColor }, "primary");
     const navigation = useNavigation<NavigationProp>();
-    const totalTime = useMemo(() => getTotalTime(time), [time]);
+    const totalTime = useMemo(() => getTotalTime(time, exercises.length), [time, exercises]);
 
     const handleLongPress = () => {
         setSelected([...selected, id]);

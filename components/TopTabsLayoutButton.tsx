@@ -21,9 +21,9 @@ const Button = memo(({ name, workout }: TopTabsLayoutButtonProps & { workout: Wo
     const ripple = useThemeColor({}, "ripple");
     const { colors } = useTheme();
     const { id, ...rest } = workout;
-    const times = workout["time"];
+    const { time, exercises } = workout;
     const navigation = useNavigation<NavigationProp<ParamList, "index">>();
-    const totalTime = useMemo(() => getTotalTime(times), [times]);
+    const totalTime = useMemo(() => getTotalTime(time, exercises.length), [time, exercises]);
 
     const handlePress = async () => {
         if (name === "create") {

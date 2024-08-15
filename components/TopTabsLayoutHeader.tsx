@@ -33,9 +33,9 @@ const Header = memo(({ title, backgroundColor, setWorkout, handleBackPress }: He
 
                             selectTextOnFocus
                             style={[styles.title, { color: text }]}
-                            onChangeText={(text) =>
+                            onEndEditing={(e) =>
                                 setWorkout((prev) => {
-                                    return { ...prev, title: text };
+                                    return { ...prev, title: e.nativeEvent.text.trim() };
                                 })
                             }
                         />

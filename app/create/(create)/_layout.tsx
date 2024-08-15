@@ -8,16 +8,16 @@ const CreateLayout = () => {
         id: 0,
         title: "Timer",
         backgroundColor: "plum",
-        exercises: [],
+        exercises: new Array(10).fill(""),
         time: {
             work: 40,
             rest: 20,
             intervals: 3,
             "get ready": 10,
-            cycles: 10,
+            cycles: 1,
             break: 80,
-            "warm up": 10,
-            "cool down": 10,
+            "warm up": 590,
+            "cool down": 80,
         },
     };
 
