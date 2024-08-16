@@ -4,11 +4,10 @@ import { db } from "@/db/drizzle";
 import { Workouts, workouts } from "@/db/schema";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import useWorkoutContext from "@/hooks/useWorkoutContext";
-import { ParamList } from "@/types/routeParams";
 import getTotalTime from "@/utils/getTotalTime";
-import { NavigationProp, useTheme } from "@react-navigation/native";
+import { useTheme } from "@react-navigation/native";
 import { eq } from "drizzle-orm";
-import { useNavigation } from "expo-router";
+import { router } from "expo-router";
 import React, { memo, useCallback, useMemo } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 
@@ -22,15 +21,15 @@ const Button = memo(({ name, workout }: TopTabsLayoutButtonProps & { workout: Wo
     const { colors } = useTheme();
     const { id, ...rest } = workout;
     const { time, exercises } = workout;
-    const navigation = useNavigation<NavigationProp<ParamList, "index">>();
     const totalTime = useMemo(() => getTotalTime(time, exercises.length), [time, exercises]);
 
     const handlePress = async () => {
         if (name === "create") {
             createWorkout();
-            navigateBack();
+            router.back();
         } else {
-            // start with update if data updated else start
+            updateWorkout();
+            router.navigate(`workout/${id}/start`);
         }
     };
 
@@ -45,17 +44,13 @@ const Button = memo(({ name, workout }: TopTabsLayoutButtonProps & { workout: Wo
             .where(eq(workouts.id, id));
     };
 
-    const navigateBack = () => {
-        navigation.navigate("index");
-    };
-
     const handleBackPress = useCallback(() => {
         if (name === "create") {
             createWorkout();
         } else {
             updateWorkout();
         }
-        navigateBack();
+        router.back();
     }, [workout]);
 
     return (

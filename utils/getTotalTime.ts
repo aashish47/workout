@@ -4,12 +4,11 @@ import getFormatedTime from "@/utils/getFormatedTime";
 const getTotalTime = (times: Workouts["time"], exercises: number) => {
     const totalTime =
         exercises && times["work"]
-            ? (((times["work"] + times["rest"]) * times["intervals"] - times["rest"] + times["break"]) * exercises -
-                  times["break"] +
-                  times["warm up"] +
-                  times["cool down"] +
-                  times["get ready"]) *
-              times["cycles"]
+            ? ((times["work"] + times["rest"]) * times["intervals"] - times["rest"] + times["break"]) * exercises * times["cycles"] -
+              times["break"] +
+              times["warm up"] +
+              times["cool down"] +
+              times["get ready"]
             : 0;
 
     const min = Math.floor(totalTime / 60);

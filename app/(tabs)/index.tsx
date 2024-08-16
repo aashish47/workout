@@ -5,16 +5,14 @@ import { db } from "@/db/drizzle";
 import { workouts } from "@/db/schema";
 import useDataContext from "@/hooks/useDataContext";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { ParamList } from "@/types/routeParams";
-import { NavigationProp } from "@react-navigation/native";
 import { inArray } from "drizzle-orm";
-import { useNavigation } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 
 export default function Index() {
     const [selected, setSelected] = useState<number[]>([]);
-    const navigation = useNavigation<NavigationProp<ParamList, "create">>();
+    const navigation = useNavigation();
     const data = useDataContext();
     const float = useThemeColor({ light: undefined, dark: undefined }, "primary");
 
@@ -61,7 +59,7 @@ export default function Index() {
                 iconName="add"
                 size={32}
                 style={[styles.floatBtn, { backgroundColor: float }]}
-                onPress={() => navigation.navigate("create")}
+                onPress={() => router.navigate("create")}
             />
 
             <FlatList

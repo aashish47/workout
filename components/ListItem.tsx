@@ -1,13 +1,11 @@
 import { ThemedText } from "@/components/ThemedText";
 import { Workouts } from "@/db/schema";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { ParamList } from "@/types/routeParams";
 import getTotalTime from "@/utils/getTotalTime";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "expo-router";
+import { router } from "expo-router";
 import React, { useMemo } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
-import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 
 interface ListItemProps {
     lightColor?: string;
@@ -17,14 +15,11 @@ interface ListItemProps {
     workout: Workouts;
 }
 
-type NavigationProp = NativeStackNavigationProp<ParamList, "workout">;
-
 const ListItem: React.FC<ListItemProps> = ({ lightColor, darkColor, workout, selected, setSelected }) => {
     const { id, title, backgroundColor, exercises, time } = workout;
     const pressColor = useThemeColor({ light: lightColor, dark: darkColor }, "secondary");
     const ripple = useThemeColor({ light: lightColor, dark: darkColor }, "ripple");
     const float = useThemeColor({ light: lightColor, dark: darkColor }, "primary");
-    const navigation = useNavigation<NavigationProp>();
     const totalTime = useMemo(() => getTotalTime(time, exercises.length), [time, exercises]);
 
     const handleLongPress = () => {
@@ -39,7 +34,7 @@ const ListItem: React.FC<ListItemProps> = ({ lightColor, darkColor, workout, sel
                 handleLongPress();
             }
         } else {
-            navigation.navigate("workout", { ...workout });
+            router.navigate(`workout/${id}`);
         }
     };
 

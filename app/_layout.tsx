@@ -33,7 +33,7 @@ export default function RootLayout() {
                         options={{ headerShown: false }}
                     />
                     <Stack.Screen
-                        name="workout"
+                        name="workout/[id]"
                         options={{ animation: "slide_from_right", headerShown: false }}
                     />
                     <Stack.Screen
