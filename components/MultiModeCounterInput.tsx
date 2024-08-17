@@ -1,7 +1,7 @@
 import { ThemedText } from "@/components/ThemedText";
 import { Workouts } from "@/db/schema";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import getFormatedTime from "@/utils/getFormatedTime";
+import getFormatedDigit from "@/utils/getFormatedDigit";
 import React, { Dispatch, memo, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 
@@ -107,7 +107,7 @@ const MultiModeCounterInput = memo(({ mode, timer, timerValue, setWorkout }: Mul
                 type="light"
                 style={[styles.timeText, highlight === type && { backgroundColor: highlightColor }]}
             >
-                {type === "minutes" || "seconds" ? getFormatedTime(value) : value}
+                {type === "minutes" || "seconds" ? getFormatedDigit(value) : value}
             </ThemedText>
         </Pressable>
     );

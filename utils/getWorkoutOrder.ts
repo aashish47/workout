@@ -26,8 +26,8 @@ const getWorkoutOrder = (times: Workouts["time"], exercises: Workouts["exercises
         start += times[timer];
     };
 
-    if (times["get ready"]) addTimer("get ready");
     if (times["warm up"]) addTimer("warm up");
+    if (times["get ready"]) addTimer("get ready");
 
     for (let cycle = 1; cycle <= times["cycles"]; cycle++) {
         exercises.forEach((exercise, exerciseIndex) => {

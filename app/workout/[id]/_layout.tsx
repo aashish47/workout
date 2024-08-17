@@ -1,7 +1,9 @@
+import IconButton from "@/components/IconButton";
 import WorkoutProvider from "@/contexts/WorkoutProvider";
 import { Workouts } from "@/db/schema";
 import useDataContext from "@/hooks/useDataContext";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { useTheme } from "@react-navigation/native";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import React, { memo, useMemo } from "react";
 
 interface LayoutProps {
@@ -9,7 +11,9 @@ interface LayoutProps {
     data: Workouts[];
 }
 const WorkoutLayoutComponent = memo(({ id, data }: LayoutProps) => {
-    const workout = data.filter((d) => d.id === id)[0];
+    const workout = data.find((d) => d.id === id);
+    const { colors } = useTheme();
+    if (!workout) throw Error("Workout undefined");
     const { title } = workout;
     return (
         <WorkoutProvider workout={workout}>
@@ -18,7 +22,22 @@ const WorkoutLayoutComponent = memo(({ id, data }: LayoutProps) => {
                     name="(workout)"
                     options={{ title, headerShadowVisible: false }}
                 />
-                <Stack.Screen name="start" />
+                <Stack.Screen
+                    name="start"
+                    options={{
+                        headerBackVisible: false,
+                        headerStyle: { backgroundColor: colors.background },
+                        headerShadowVisible: false,
+                        headerTitle: "",
+                        headerRight: () => (
+                            <IconButton
+                                iconName={"close"}
+                                size={24}
+                                onPress={() => router.navigate("/")}
+                            />
+                        ),
+                    }}
+                />
             </Stack>
         </WorkoutProvider>
     );

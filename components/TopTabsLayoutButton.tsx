@@ -29,7 +29,7 @@ const Button = memo(({ name, workout }: TopTabsLayoutButtonProps & { workout: Wo
             router.back();
         } else {
             updateWorkout();
-            router.navigate(`workout/${id}/start`);
+            router.replace(`workout/${id}/start?duration=${totalTime}`);
         }
     };
 

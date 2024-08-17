@@ -11,12 +11,7 @@ const getTotalTime = (times: Workouts["time"], exercises: number) => {
               times["get ready"]
             : 0;
 
-    const min = Math.floor(totalTime / 60);
-    const hours = Math.floor(min / 60);
-    const minutes = hours ? min % 60 : min;
-    const seconds = totalTime % 60;
-
-    return `${getFormatedTime(hours)}:${getFormatedTime(minutes)}:${getFormatedTime(seconds)}`;
+    return getFormatedTime(totalTime);
 };
 
 export default getTotalTime;
