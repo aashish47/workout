@@ -21,7 +21,7 @@ const Button = memo(({ name, workout }: TopTabsLayoutButtonProps & { workout: Wo
     const { colors } = useTheme();
     const { id, ...rest } = workout;
     const { time, exercises } = workout;
-    const totalTime = useMemo(() => getTotalTime(time, exercises.length), [time, exercises]);
+    const { formatedDuration, totalSeconds } = useMemo(() => getTotalTime(time, exercises.length), [time, exercises]);
 
     const handlePress = async () => {
         if (name === "create") {
@@ -29,7 +29,7 @@ const Button = memo(({ name, workout }: TopTabsLayoutButtonProps & { workout: Wo
             router.back();
         } else {
             updateWorkout();
-            router.replace(`workout/${id}/start?duration=${totalTime}`);
+            router.replace(`workout/${id}/start?totalSeconds=${totalSeconds}&formatedDuration=${formatedDuration}`);
         }
     };
 
@@ -63,7 +63,7 @@ const Button = memo(({ name, workout }: TopTabsLayoutButtonProps & { workout: Wo
                         style={[styles.button, { backgroundColor: btnColor }]}
                         onPress={handlePress}
                     >
-                        <ThemedText style={styles.text}>{`${name} ${totalTime}`}</ThemedText>
+                        <ThemedText style={styles.text}>{`${name} ${formatedDuration}`}</ThemedText>
                     </Pressable>
                 </View>
             </View>

@@ -20,7 +20,7 @@ const ListItem: React.FC<ListItemProps> = ({ lightColor, darkColor, workout, sel
     const pressColor = useThemeColor({ light: lightColor, dark: darkColor }, "secondary");
     const ripple = useThemeColor({ light: lightColor, dark: darkColor }, "ripple");
     const float = useThemeColor({ light: lightColor, dark: darkColor }, "primary");
-    const totalTime = useMemo(() => getTotalTime(time, exercises.length), [time, exercises]);
+    const { formatedDuration } = useMemo(() => getTotalTime(time, exercises.length), [time, exercises]);
 
     const handleLongPress = () => {
         setSelected([...selected, id]);
@@ -62,7 +62,7 @@ const ListItem: React.FC<ListItemProps> = ({ lightColor, darkColor, workout, sel
                 <View style={styles.metaData}>
                     <View style={styles.titleContainer}>
                         <ThemedText>{title}</ThemedText>
-                        <ThemedText type="light">{totalTime}</ThemedText>
+                        <ThemedText type="light">{formatedDuration}</ThemedText>
                     </View>
                     <ThemedText
                         ellipsizeMode="tail"

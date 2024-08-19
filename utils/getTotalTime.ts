@@ -2,7 +2,7 @@ import { Workouts } from "@/db/schema";
 import getFormatedTime from "@/utils/getFormatedTime";
 
 const getTotalTime = (times: Workouts["time"], exercises: number) => {
-    const totalTime =
+    const totalSeconds =
         exercises && times["work"]
             ? ((times["work"] + times["rest"]) * times["intervals"] - times["rest"] + times["break"]) * exercises * times["cycles"] -
               times["break"] +
@@ -11,7 +11,7 @@ const getTotalTime = (times: Workouts["time"], exercises: number) => {
               times["get ready"]
             : 0;
 
-    return getFormatedTime(totalTime);
+    return { totalSeconds, formatedDuration: getFormatedTime(totalSeconds) };
 };
 
 export default getTotalTime;
