@@ -28,7 +28,6 @@ const WorkoutLayoutComponent = memo(({ id, data }: LayoutProps) => {
                         headerBackVisible: false,
                         headerStyle: { backgroundColor: colors.background },
                         headerShadowVisible: false,
-                        headerTitle: "",
                         headerRight: () => (
                             <IconButton
                                 iconName={"close"}
