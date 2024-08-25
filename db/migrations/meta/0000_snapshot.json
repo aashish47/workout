@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "576c0dcb-1338-4dc3-a6fd-01d6f861a5ef",
+  "id": "c3a08d3c-d364-4322-a256-39ec57a8903a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "workouts": {
@@ -21,8 +21,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "background_color": {
-          "name": "background_color",
+        "avatarColor": {
+          "name": "avatarColor",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -35,8 +35,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "time": {
-          "name": "time",
+        "timers": {
+          "name": "timers",
           "type": "text",
           "primaryKey": false,
           "notNull": true,

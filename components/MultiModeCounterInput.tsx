@@ -1,5 +1,5 @@
 import { ThemedText } from "@/components/ThemedText";
-import { Workouts } from "@/db/schema";
+import { Workout } from "@/db/schema";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import getFormatedDigit from "@/utils/getFormatedDigit";
 import React, { Dispatch, memo, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
@@ -9,10 +9,10 @@ interface MultiModeCounterInputProps {
     mode: "timer" | "counter";
     timer: string;
     timerValue: number;
-    setWorkout: Dispatch<SetStateAction<Workouts>>;
+    setWorkoutData: Dispatch<SetStateAction<Workout>>;
 }
 
-const MultiModeCounterInput = memo(({ mode, timer, timerValue, setWorkout }: MultiModeCounterInputProps) => {
+const MultiModeCounterInput = memo(({ mode, timer, timerValue, setWorkoutData }: MultiModeCounterInputProps) => {
     const backgroundColor = useThemeColor({}, "secondary");
     const highlightColor = useThemeColor({}, "ripple");
     const [time, setTime] = useState({ minutes: Math.floor(timerValue / 60), seconds: timerValue % 60 });
@@ -22,10 +22,10 @@ const MultiModeCounterInput = memo(({ mode, timer, timerValue, setWorkout }: Mul
 
     // this will also run on inital render meaning the 8 timers on inital render will each run this once
     useEffect(() => {
-        setWorkout((prev) => ({
+        setWorkoutData((prev) => ({
             ...prev,
-            time: {
-                ...prev.time,
+            timers: {
+                ...prev["timers"],
                 [timer]: mode === "timer" ? time.minutes * 60 + time.seconds : counter,
             },
         }));

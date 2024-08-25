@@ -1,6 +1,6 @@
 import IconButton from "@/components/IconButton";
 import WorkoutProvider from "@/contexts/WorkoutProvider";
-import { Workouts } from "@/db/schema";
+import { Workout } from "@/db/schema";
 import useDataContext from "@/hooks/useDataContext";
 import { useTheme } from "@react-navigation/native";
 import { router, Stack, useLocalSearchParams } from "expo-router";
@@ -8,15 +8,15 @@ import React, { memo, useMemo } from "react";
 
 interface LayoutProps {
     id: number;
-    data: Workouts[];
+    data: Workout[];
 }
 const WorkoutLayoutComponent = memo(({ id, data }: LayoutProps) => {
-    const workout = data.find((d) => d.id === id);
+    const workoutData = data.find((d) => d.id === id);
     const { colors } = useTheme();
-    if (!workout) throw Error("Workout undefined");
-    const { title } = workout;
+    if (!workoutData) throw Error("Workout undefined");
+    const { title } = workoutData;
     return (
-        <WorkoutProvider workout={workout}>
+        <WorkoutProvider workoutData={workoutData}>
             <Stack>
                 <Stack.Screen
                     name="(workout)"

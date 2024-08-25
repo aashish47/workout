@@ -1,16 +1,18 @@
 import MultiModeCounterInput from "@/components/MultiModeCounterInput";
 import { ThemedText } from "@/components/ThemedText";
-import { Workouts } from "@/db/schema";
+import { Workout } from "@/db/schema";
 import useWorkoutContext from "@/hooks/useWorkoutContext";
 import React, { Dispatch, memo, SetStateAction, useMemo } from "react";
 import { Keyboard, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 
+export type Timers = [keyof Workout["timers"], number][];
+
 interface TimersComponentProps {
-    timers: ["work" | "rest" | "intervals" | "get ready" | "cycles" | "break" | "warm up" | "cool down", number][];
-    setWorkout: Dispatch<SetStateAction<Workouts>>;
+    timers: Timers;
+    setWorkoutData: Dispatch<SetStateAction<Workout>>;
 }
 
-const TimersComponent = memo(({ timers, setWorkout }: TimersComponentProps) => {
+const TimersComponent = memo(({ timers, setWorkoutData }: TimersComponentProps) => {
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={{ flex: 1 }}>
@@ -21,10 +23,10 @@ const TimersComponent = memo(({ timers, setWorkout }: TimersComponentProps) => {
                     >
                         <ThemedText style={styles.label}>{timer}</ThemedText>
                         <MultiModeCounterInput
-                            setWorkout={setWorkout}
+                            setWorkoutData={setWorkoutData}
                             timer={timer}
                             timerValue={value}
-                            mode={timer === "intervals" || timer === "cycles" ? "counter" : "timer"}
+                            mode={timer === "sets" || timer === "cycles" ? "counter" : "timer"}
                         />
                     </View>
                 ))}
@@ -34,12 +36,12 @@ const TimersComponent = memo(({ timers, setWorkout }: TimersComponentProps) => {
 });
 
 const Timers = memo(() => {
-    const { setWorkout, timersRef } = useWorkoutContext();
-    const timers = useMemo(() => Object.entries(timersRef.current) as [keyof Workouts["time"], number][], []);
+    const { setWorkoutData, timersRef } = useWorkoutContext();
+    const timers = useMemo(() => Object.entries(timersRef.current) as [keyof Workout["timers"], number][], []);
 
     return (
         <TimersComponent
-            setWorkout={setWorkout}
+            setWorkoutData={setWorkoutData}
             timers={timers}
         />
     );

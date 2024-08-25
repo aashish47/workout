@@ -13,7 +13,7 @@ interface IconButtonProps {
 
 const IconButton: React.FC<IconButtonProps & ViewProps> = ({ style, lightColor, darkColor, iconName, size, onPress }) => {
     const ripple = useThemeColor({ light: lightColor, dark: darkColor }, "ripple");
-    const text = useThemeColor({ light: lightColor, dark: darkColor }, "text");
+    const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
 
     return (
         <Pressable
@@ -25,7 +25,7 @@ const IconButton: React.FC<IconButtonProps & ViewProps> = ({ style, lightColor, 
             <Ionicons
                 name={iconName}
                 size={size}
-                color={text}
+                color={color}
             />
         </Pressable>
     );

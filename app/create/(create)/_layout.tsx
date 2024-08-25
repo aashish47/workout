@@ -4,25 +4,25 @@ import WorkoutProvider from "@/contexts/WorkoutProvider";
 import React from "react";
 
 const CreateLayout = () => {
-    const workout = {
+    const workoutData = {
         id: 0,
         title: "Timer",
-        backgroundColor: "plum",
+        avatarColor: "plum",
         exercises: new Array(10).fill(""),
-        time: {
+        timers: {
+            "warm up": 590,
+            "get ready": 10,
             work: 40,
             rest: 20,
-            intervals: 3,
-            "get ready": 10,
-            cycles: 1,
+            sets: 3,
             break: 80,
-            "warm up": 590,
+            cycles: 1,
             "cool down": 80,
         },
     };
 
     return (
-        <WorkoutProvider workout={workout}>
+        <WorkoutProvider workoutData={workoutData}>
             <TopTabsLayout />
             <TopTabsLayoutButton name={"create"} />
         </WorkoutProvider>

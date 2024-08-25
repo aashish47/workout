@@ -1,7 +1,7 @@
 import { ThemedText } from "@/components/ThemedText";
 import TopTabsLayoutHeader from "@/components/TopTabsLayoutHeader";
 import { db } from "@/db/drizzle";
-import { Workouts, workouts } from "@/db/schema";
+import { Workout, workout } from "@/db/schema";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import useWorkoutContext from "@/hooks/useWorkoutContext";
 import getTotalTime from "@/utils/getTotalTime";
@@ -15,33 +15,37 @@ interface TopTabsLayoutButtonProps {
     name: "create" | "start";
 }
 
-const Button = memo(({ name, workout }: TopTabsLayoutButtonProps & { workout: Workouts }) => {
+const Button = memo(({ name, workoutData }: TopTabsLayoutButtonProps & { workoutData: Workout }) => {
     const btnColor = useThemeColor({}, "primary");
     const ripple = useThemeColor({}, "ripple");
     const { colors } = useTheme();
-    const { id, ...rest } = workout;
-    const { time, exercises } = workout;
-    const { formatedDuration, totalSeconds } = useMemo(() => getTotalTime(time, exercises.length), [time, exercises]);
+    const { id, ...rest } = workoutData;
+    0;
+    const { timers, exercises } = workoutData;
+    const { formatedDuration, totalSeconds } = useMemo(() => getTotalTime(timers, exercises.length), [timers, exercises]);
 
     const handlePress = async () => {
         if (name === "create") {
             createWorkout();
-            router.back();
+            router.navigate("/");
         } else {
             updateWorkout();
-            router.replace(`workout/${id}/start?totalSeconds=${totalSeconds}&formatedDuration=${formatedDuration}`);
+            router.replace({
+                pathname: "/workout/[id]/start",
+                params: { id, totalSeconds, formatedDuration },
+            });
         }
     };
 
     const createWorkout = async () => {
-        await db.insert(workouts).values({ ...rest });
+        await db.insert(workout).values({ ...rest });
     };
 
     const updateWorkout = async () => {
         await db
-            .update(workouts)
+            .update(workout)
             .set({ ...rest })
-            .where(eq(workouts.id, id));
+            .where(eq(workout.id, id));
     };
 
     const handleBackPress = useCallback(() => {
@@ -51,7 +55,7 @@ const Button = memo(({ name, workout }: TopTabsLayoutButtonProps & { workout: Wo
             updateWorkout();
         }
         router.back();
-    }, [workout]);
+    }, [workoutData]);
 
     return (
         <>
@@ -72,13 +76,13 @@ const Button = memo(({ name, workout }: TopTabsLayoutButtonProps & { workout: Wo
 });
 
 const TopTabsLayoutButton: React.FC<TopTabsLayoutButtonProps> = memo(({ name }) => {
-    const { workout: data } = useWorkoutContext();
-    const workout = useMemo(() => data, [data]);
+    const { workoutData: data } = useWorkoutContext();
+    const workoutData = useMemo(() => data, [data]);
 
     return (
         <Button
             name={name}
-            workout={workout}
+            workoutData={workoutData}
         />
     );
 });

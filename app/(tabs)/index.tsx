@@ -2,7 +2,7 @@ import IconButton from "@/components/IconButton";
 import ListItem from "@/components/ListItem";
 import { ThemedText } from "@/components/ThemedText";
 import { db } from "@/db/drizzle";
-import { workouts } from "@/db/schema";
+import { workout } from "@/db/schema";
 import useDataContext from "@/hooks/useDataContext";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { inArray } from "drizzle-orm";
@@ -29,7 +29,7 @@ export default function Index() {
                 ),
                 headerRight: () => {
                     const deleteWorkouts = async () => {
-                        await db.delete(workouts).where(inArray(workouts.id, selected));
+                        await db.delete(workout).where(inArray(workout.id, selected));
                         setSelected([]);
                     };
                     return (
@@ -59,7 +59,7 @@ export default function Index() {
                 iconName="add"
                 size={32}
                 style={[styles.floatBtn, { backgroundColor: float }]}
-                onPress={() => router.navigate("create")}
+                onPress={() => router.navigate("/create")}
             />
 
             <FlatList

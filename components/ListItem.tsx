@@ -1,5 +1,5 @@
 import { ThemedText } from "@/components/ThemedText";
-import { Workouts } from "@/db/schema";
+import { Workout } from "@/db/schema";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import getTotalTime from "@/utils/getTotalTime";
 import { Ionicons } from "@expo/vector-icons";
@@ -12,15 +12,15 @@ interface ListItemProps {
     darkColor?: string;
     selected: number[];
     setSelected: React.Dispatch<React.SetStateAction<number[]>>;
-    workout: Workouts;
+    workout: Workout;
 }
 
 const ListItem: React.FC<ListItemProps> = ({ lightColor, darkColor, workout, selected, setSelected }) => {
-    const { id, title, backgroundColor, exercises, time } = workout;
+    const { id, title, avatarColor, exercises, timers } = workout;
     const pressColor = useThemeColor({ light: lightColor, dark: darkColor }, "secondary");
     const ripple = useThemeColor({ light: lightColor, dark: darkColor }, "ripple");
     const float = useThemeColor({ light: lightColor, dark: darkColor }, "primary");
-    const { formatedDuration } = useMemo(() => getTotalTime(time, exercises.length), [time, exercises]);
+    const { formatedDuration } = useMemo(() => getTotalTime(timers, exercises.length), [timers, exercises]);
 
     const handleLongPress = () => {
         setSelected([...selected, id]);
@@ -34,7 +34,7 @@ const ListItem: React.FC<ListItemProps> = ({ lightColor, darkColor, workout, sel
                 handleLongPress();
             }
         } else {
-            router.navigate(`workout/${id}`);
+            router.navigate(`/workout/${id}`);
         }
     };
 
@@ -55,7 +55,7 @@ const ListItem: React.FC<ListItemProps> = ({ lightColor, darkColor, workout, sel
                         />
                     </View>
                 ) : (
-                    <View style={[styles.avatar, { backgroundColor }]}>
+                    <View style={[styles.avatar, { backgroundColor: avatarColor }]}>
                         <ThemedText style={{ textTransform: "uppercase" }}>{title.charAt(0)}</ThemedText>
                     </View>
                 )}

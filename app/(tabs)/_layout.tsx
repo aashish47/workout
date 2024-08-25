@@ -1,16 +1,18 @@
-import { TabBarIcon } from "@/components/navigation/TabBarIcon";
+import { TabBarIcon } from "@/components/TabBarIcon";
 import { ThemedText } from "@/components/ThemedText";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { Tabs } from "expo-router";
 import React from "react";
 
 export default function TabLayout() {
-    const tabActiveColor = useThemeColor({}, "tint");
+    const tabBarActiveTintColor = useThemeColor({}, "tabIconSelected");
+    const tabBarInactiveTintColor = useThemeColor({}, "tabIconDefault");
 
     return (
         <Tabs
             screenOptions={{
-                tabBarActiveTintColor: tabActiveColor,
+                tabBarActiveTintColor,
+                tabBarInactiveTintColor,
                 headerShown: false,
                 headerTitle: () => <ThemedText>Logo</ThemedText>,
             }}

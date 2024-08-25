@@ -1,34 +1,34 @@
 import IconButton from "@/components/IconButton";
 import { ThemedText } from "@/components/ThemedText";
-import { Workouts } from "@/db/schema";
+import { Workout } from "@/db/schema";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import useWorkoutContext from "@/hooks/useWorkoutContext";
 import React, { Dispatch, memo, SetStateAction } from "react";
 import { FlatList, NativeSyntheticEvent, Pressable, StyleSheet, TextInput, TextInputEndEditingEventData, View } from "react-native";
 
 interface ExercisesComponentProps {
-    exercises: Workouts["exercises"];
-    setWorkout: Dispatch<SetStateAction<Workouts>>;
+    exercises: Workout["exercises"];
+    setWorkoutData: Dispatch<SetStateAction<Workout>>;
 }
 
-const ExercisesComponent = memo(({ exercises, setWorkout }: ExercisesComponentProps) => {
+const ExercisesComponent = memo(({ exercises, setWorkoutData }: ExercisesComponentProps) => {
     const backgroundColor = useThemeColor({}, "secondary");
     const ripple = useThemeColor({}, "ripple");
     const border = useThemeColor({}, "primary");
 
     const handleEndEditing = (e: NativeSyntheticEvent<TextInputEndEditingEventData>, currIndex: number) => {
-        setWorkout((prev) => ({ ...prev, exercises: exercises.map((exercise, index) => (index === currIndex ? e.nativeEvent.text.trim() : exercise)) }));
+        setWorkoutData((prev) => ({ ...prev, exercises: exercises.map((exercise, index) => (index === currIndex ? e.nativeEvent.text.trim() : exercise)) }));
     };
 
     const handleDelete = (currIndex: number) => {
-        setWorkout((prev) => ({
+        setWorkoutData((prev) => ({
             ...prev,
             exercises: exercises.filter((_, index) => index !== currIndex),
         }));
     };
 
     const addExercise = () => {
-        setWorkout((prev) => ({
+        setWorkoutData((prev) => ({
             ...prev,
             exercises: [...exercises, ""],
         }));
@@ -38,6 +38,9 @@ const ExercisesComponent = memo(({ exercises, setWorkout }: ExercisesComponentPr
         <View style={styles.container}>
             <FlatList
                 data={exercises}
+                initialNumToRender={10}
+                maxToRenderPerBatch={10}
+                windowSize={10}
                 renderItem={({ item, index }) => {
                     const currIndex = index;
                     return (
@@ -71,13 +74,13 @@ const ExercisesComponent = memo(({ exercises, setWorkout }: ExercisesComponentPr
 });
 
 const Exercises = memo(() => {
-    const { workout, setWorkout } = useWorkoutContext();
-    const exercises = workout["exercises"];
+    const { workoutData, setWorkoutData } = useWorkoutContext();
+    const exercises = workoutData["exercises"];
 
     return (
         <ExercisesComponent
             exercises={exercises}
-            setWorkout={setWorkout}
+            setWorkoutData={setWorkoutData}
         />
     );
 });

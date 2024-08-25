@@ -1,5 +1,5 @@
 import IconButton from "@/components/IconButton";
-import { Workouts } from "@/db/schema";
+import { Workout } from "@/db/schema";
 import { Ionicons } from "@expo/vector-icons";
 import React, { Dispatch, memo, SetStateAction } from "react";
 import { Modal, Pressable, StyleSheet, View } from "react-native";
@@ -8,10 +8,10 @@ interface ColorSelectorModalProps {
     modalVisible: boolean;
     setModalVisible: Dispatch<SetStateAction<boolean>>;
     backgroundColor: string;
-    setWorkout: Dispatch<SetStateAction<Workouts>>;
+    setWorkoutData: Dispatch<SetStateAction<Workout>>;
 }
 
-const ColorSelectorModal = memo(({ modalVisible, setModalVisible, backgroundColor, setWorkout }: ColorSelectorModalProps) => {
+const ColorSelectorModal = memo(({ modalVisible, setModalVisible, backgroundColor, setWorkoutData }: ColorSelectorModalProps) => {
     const colorOptions = [
         "coral",
         "tomato",
@@ -51,7 +51,7 @@ const ColorSelectorModal = memo(({ modalVisible, setModalVisible, backgroundColo
                             <Pressable
                                 key={color}
                                 style={[styles.colorOption, { backgroundColor: color }]}
-                                onPress={() => setWorkout((prev) => ({ ...prev, backgroundColor: color }))}
+                                onPress={() => setWorkoutData((prev) => ({ ...prev, avatarColor: color }))}
                             >
                                 {color === backgroundColor && (
                                     <Ionicons

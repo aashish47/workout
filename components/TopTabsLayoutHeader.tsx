@@ -1,6 +1,6 @@
 import ColorSelectorModal from "@/components/ColorSelectorModal";
 import IconButton from "@/components/IconButton";
-import { Workouts } from "@/db/schema";
+import { Workout } from "@/db/schema";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import useWorkoutContext from "@/hooks/useWorkoutContext";
 import { Stack } from "expo-router";
@@ -14,10 +14,10 @@ interface TopTabsHeaderProps {
 interface HeaderProps {
     title: string;
     backgroundColor: string;
-    setWorkout: Dispatch<SetStateAction<Workouts>>;
+    setWorkoutData: Dispatch<SetStateAction<Workout>>;
 }
 
-const Header = memo(({ title, backgroundColor, setWorkout, handleBackPress }: HeaderProps & TopTabsHeaderProps) => {
+const Header = memo(({ title, backgroundColor, setWorkoutData, handleBackPress }: HeaderProps & TopTabsHeaderProps) => {
     const text = useThemeColor({}, "text");
     const ripple = useThemeColor({}, "ripple");
     const [modalVisible, setModalVisible] = useState(false);
@@ -34,7 +34,7 @@ const Header = memo(({ title, backgroundColor, setWorkout, handleBackPress }: He
                             selectTextOnFocus
                             style={[styles.title, { color: text }]}
                             onEndEditing={(e) =>
-                                setWorkout((prev) => {
+                                setWorkoutData((prev) => {
                                     return { ...prev, title: e.nativeEvent.text.trim() };
                                 })
                             }
@@ -61,21 +61,21 @@ const Header = memo(({ title, backgroundColor, setWorkout, handleBackPress }: He
                 modalVisible={modalVisible}
                 setModalVisible={setModalVisible}
                 backgroundColor={backgroundColor}
-                setWorkout={setWorkout}
+                setWorkoutData={setWorkoutData}
             />
         </>
     );
 });
 
 const TopTabsLayoutHeader = memo(({ handleBackPress }: TopTabsHeaderProps) => {
-    const { workout, setWorkout } = useWorkoutContext();
-    const { title, backgroundColor } = workout;
+    const { workoutData, setWorkoutData } = useWorkoutContext();
+    const { title, avatarColor } = workoutData;
 
     return (
         <Header
             title={title}
-            backgroundColor={backgroundColor}
-            setWorkout={setWorkout}
+            backgroundColor={avatarColor}
+            setWorkoutData={setWorkoutData}
             handleBackPress={handleBackPress}
         />
     );

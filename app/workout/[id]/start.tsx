@@ -1,163 +1,118 @@
+import CountdownTimer from "@/components/CountdownTimer";
 import IconButton from "@/components/IconButton";
+import Status from "@/components/Status";
 import { ThemedText } from "@/components/ThemedText";
-import { Workouts } from "@/db/schema";
-import { useThemeColor } from "@/hooks/useThemeColor";
+import { namedColors } from "@/constants/Colors";
+import { Workout } from "@/db/schema";
 import useWorkoutContext from "@/hooks/useWorkoutContext";
 import getFormatedTime from "@/utils/getFormatedTime";
-import getWorkoutOrder from "@/utils/getWorkoutOrder";
+import getWorkoutOrder, { CountdownTimerType } from "@/utils/getWorkoutOrder";
 import { useLocalSearchParams, useNavigation } from "expo-router";
-import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
-import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
+import { ColorFormat } from "react-native-countdown-circle-timer";
 
 interface StartComponentProps {
-    workout: Workouts;
+    workoutData: Workout;
 }
 
-const StartComponent = memo(({ workout }: StartComponentProps) => {
+type CountdownColors = { [key in CountdownTimerType]: string };
+
+const countdownColors: CountdownColors = {
+    "warm up": namedColors["orange"],
+    "get ready": namedColors["grey"],
+    work: namedColors["tomato"],
+    rest: namedColors["lightseagreen"],
+    break: namedColors["mediumorchid"],
+    "cool down": namedColors["steelblue"],
+};
+
+const StartComponent = memo(({ workoutData }: StartComponentProps) => {
     const screenWidth = Dimensions.get("window").width;
     const navigation = useNavigation();
-    const progressColor = useThemeColor({}, "primary");
-    const { formatedDuration, totalSeconds = 0 } = useLocalSearchParams<{ formatedDuration: string; totalSeconds: string }>();
-    const { time, exercises } = workout;
-    const workoutOrder = useMemo(() => getWorkoutOrder(time, exercises), [time, exercises]);
+    const { totalSeconds = 0 } = useLocalSearchParams<{ formatedDuration: string; totalSeconds: string }>();
+    const targetTime = Number(totalSeconds);
+
+    const { timers, exercises } = workoutData;
+    const workoutOrder = useMemo(() => getWorkoutOrder(timers, exercises), [timers, exercises]);
 
     const [index, setIndex] = useState(0);
-    const { start, timer, timerValue, cycleNumber, exercise, exerciseNumber, timerNumber } = workoutOrder[index];
-    const [timeElapsed, setTimeElapsed] = useState(start);
     const [pause, setPause] = useState(false);
+    const [mute, setMute] = useState(false);
+    const [reset, setReset] = useState(Date.now());
+    const [timeElapsed, setTimeElapsed] = useState(0);
 
-    const currentTime = Date.now();
-    const startTimeRef = useRef<number>(currentTime);
-    const frameRef = useRef<number>(0);
-    const lastUpdateTimeRef = useRef(currentTime);
-    const restartCountdownRef = useRef(currentTime);
-    const elapsedSinceLastUpdate = useRef(0);
-    const elapsedSinceCurrentStart = useRef(0);
-
-    const targetTime = Number(totalSeconds);
-    const timeLeft = getFormatedTime(timerValue - (timeElapsed - start));
-    const formatedTimeElapsed = getFormatedTime(Math.floor(timeElapsed));
+    const { start, timer, timerValue, cycleNumber, exercise, exerciseNumber, timerNumber } = workoutOrder[index];
+    const formatedTimeElapsed = getFormatedTime(timeElapsed);
+    const formatedTimeRemaining = getFormatedTime(targetTime - timeElapsed);
     const progressWidth = timeElapsed * (screenWidth / targetTime);
 
+    const countDownColor = countdownColors[timer] as ColorFormat;
+
     useEffect(() => {
-        navigation.setOptions({ title: timer.toUpperCase(), headerTitleAlign: "center" });
+        navigation.setOptions({ title: timer.toUpperCase(), headerTitleAlign: "center", headerTitleStyle: { color: countDownColor } });
     }, [timer, navigation]);
-
-    useEffect(() => {
-        const updateTimer = () => {
-            if (!pause) {
-                const currentTime = Date.now();
-                const elapsed = (currentTime - startTimeRef.current) / 1000 + start;
-                // console.log(currentTime - startTimeRef.current);
-
-                if (elapsed >= targetTime) {
-                    setTimeElapsed(targetTime);
-                } else if (currentTime - lastUpdateTimeRef.current >= 1000) {
-                    if (Math.floor(elapsed) === start + timerValue) {
-                        setIndex((prevIndex) => {
-                            const newIndex = prevIndex + 1;
-                            resetStart(workoutOrder[newIndex].start);
-                            return newIndex;
-                        });
-                    } else {
-                        setTimeElapsed(elapsed);
-                        lastUpdateTimeRef.current = currentTime;
-                    }
-                }
-
-                if (elapsed < targetTime) {
-                    frameRef.current = requestAnimationFrame(updateTimer);
-                }
-            }
-        };
-
-        frameRef.current = requestAnimationFrame(updateTimer);
-
-        return () => cancelAnimationFrame(frameRef.current);
-    }, [start, totalSeconds, timerValue, pause]);
-
-    const resetStart = useCallback((newStart: number) => {
-        const currentTime = Date.now();
-        restartCountdownRef.current = currentTime;
-        setTimeElapsed(newStart);
-        startTimeRef.current = currentTime;
-        lastUpdateTimeRef.current = currentTime;
-
-        // console.log(currentTime, timerValue);
-    }, []);
-
-    const handlePause = useCallback(() => {
-        const currentTime = Date.now();
-        elapsedSinceLastUpdate.current = Date.now() - lastUpdateTimeRef.current;
-        elapsedSinceCurrentStart.current = currentTime - startTimeRef.current;
-        // console.log(elapsedSinceCurrentStart.current);
-        setPause(true);
-    }, [lastUpdateTimeRef]);
-
-    // const handlePlay = useCallback(() => {
-    //     startTimeRef.current = Date.now() - (timeElapsed - start) * 1000;
-    //     lastUpdateTimeRef.current = Date.now();
-    //     setPause(false);
-    // }, [timeElapsed, start]);
-    const handlePlay = useCallback(() => {
-        const currentTime = Date.now();
-        const elapsedWhilePaused = currentTime - lastUpdateTimeRef.current;
-        startTimeRef.current = currentTime - elapsedSinceCurrentStart.current;
-        lastUpdateTimeRef.current = currentTime - elapsedSinceLastUpdate.current;
-        setPause(false);
-        // console.log(currentTime - lastUpdateTimeRef.current);
-        // console.log(currentTime - startTimeRef.current);
-    }, [startTimeRef, lastUpdateTimeRef, timeElapsed, start]);
 
     const handleBack = useCallback(() => {
         if (timeElapsed - start > 1) {
-            resetStart(start);
+            setReset(Date.now());
         } else {
-            setIndex((prevIndex) => {
-                const newIndex = Math.max(prevIndex - 1, 0);
-                resetStart(workoutOrder[newIndex].start);
-                return newIndex;
-            });
+            setIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+            setReset(Date.now());
         }
     }, [timeElapsed, start]);
 
     const handleForward = useCallback(() => {
-        setIndex((prevIndex) => {
-            const newIndex = Math.min(prevIndex + 1, workoutOrder.length - 1);
-            resetStart(workoutOrder[newIndex].start);
-            return newIndex;
-        });
-    }, []);
+        setIndex((prevIndex) => Math.min(prevIndex + 1, workoutOrder.length - 1));
+        setReset(Date.now());
+    }, [workoutOrder]);
 
     return (
         <View style={styles.container}>
             <View style={styles.number}>
-                {time["cycles"] > 1 && cycleNumber && <ThemedText>{`Cycle: ${cycleNumber}/${time["cycles"]}`}</ThemedText>}
-                {exerciseNumber && <ThemedText>{`Exercise: ${exerciseNumber}/${exercises.length}`}</ThemedText>}
-                {time["intervals"] > 1 && timerNumber && <ThemedText>{`Set: ${timerNumber}/${time["intervals"]}`}</ThemedText>}
+                {timers["cycles"] > 1 && cycleNumber && (
+                    <Status
+                        name={"Cycle"}
+                        current={cycleNumber}
+                        total={timers["cycles"]}
+                    />
+                )}
+                {exerciseNumber && (
+                    <Status
+                        name={"Exercise"}
+                        current={exerciseNumber}
+                        total={exercises.length}
+                    />
+                )}
+                {timers["sets"] > 1 && timerNumber && (
+                    <Status
+                        name={"Set"}
+                        current={timerNumber}
+                        total={timers["sets"]}
+                    />
+                )}
             </View>
             <View style={styles.timerValue}>
-                {/* <ThemedText
-                    style={[styles.text, { fontSize: 64 }]}
-                    type="title"
-                >
-                    {timeLeft}
-                </ThemedText> */}
-                <CountdownCircleTimer
-                    size={screenWidth - 96}
-                    isPlaying={!pause}
-                    key={restartCountdownRef.current}
-                    duration={timerValue}
-                    colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
-                    colorsTime={[7, 5, 2, 0]}
-                >
-                    {({ remainingTime }) => <ThemedText style={[styles.text, { fontSize: 64 }]}>{getFormatedTime(remainingTime)}</ThemedText>}
-                </CountdownCircleTimer>
+                <CountdownTimer
+                    key={reset}
+                    countDownColor={countDownColor}
+                    setTimeElapsed={setTimeElapsed}
+                    pause={pause}
+                    timerValue={timerValue}
+                    start={start}
+                    screenWidth={screenWidth}
+                    index={index}
+                    workoutOrder={workoutOrder}
+                    setIndex={setIndex}
+                    setReset={setReset}
+                />
             </View>
 
             <View style={styles.message}>
-                <ThemedText style={styles.text}>
+                <ThemedText
+                    type="light"
+                    style={styles.text}
+                >
                     {timer === "get ready" ? "get ready for" : timer === "break" || timer === "rest" ? "next" : undefined}
                 </ThemedText>
             </View>
@@ -170,10 +125,10 @@ const StartComponent = memo(({ workout }: StartComponentProps) => {
                 </ThemedText>
             </View>
             <View>
-                <View style={{ width: progressWidth, height: 8, backgroundColor: progressColor }} />
+                <View style={{ width: progressWidth, height: 8, backgroundColor: countDownColor }} />
                 <View style={styles.duration}>
                     <ThemedText type="light">{formatedTimeElapsed}</ThemedText>
-                    <ThemedText type="light">{formatedDuration}</ThemedText>
+                    <ThemedText type="light">{formatedTimeRemaining}</ThemedText>
                 </View>
                 <View style={styles.control}>
                     <IconButton
@@ -191,13 +146,13 @@ const StartComponent = memo(({ workout }: StartComponentProps) => {
                         <IconButton
                             iconName={"play-sharp"}
                             size={64}
-                            onPress={handlePlay}
+                            onPress={() => setPause(false)}
                         />
                     ) : (
                         <IconButton
                             iconName={"pause-sharp"}
                             size={64}
-                            onPress={handlePause}
+                            onPress={() => setPause(true)}
                         />
                     )}
                     <IconButton
@@ -205,11 +160,19 @@ const StartComponent = memo(({ workout }: StartComponentProps) => {
                         size={32}
                         onPress={handleForward}
                     />
-                    <IconButton
-                        iconName={"volume-high-sharp"}
-                        size={32}
-                        onPress={undefined}
-                    />
+                    {mute ? (
+                        <IconButton
+                            iconName={"volume-mute-sharp"}
+                            size={32}
+                            onPress={() => setMute(false)}
+                        />
+                    ) : (
+                        <IconButton
+                            iconName={"volume-high-sharp"}
+                            size={32}
+                            onPress={() => setMute(true)}
+                        />
+                    )}
                 </View>
             </View>
         </View>
@@ -217,8 +180,8 @@ const StartComponent = memo(({ workout }: StartComponentProps) => {
 });
 
 const Start = memo(() => {
-    const { workout } = useWorkoutContext();
-    return <StartComponent workout={workout} />;
+    const { workoutData } = useWorkoutContext();
+    return <StartComponent workoutData={workoutData} />;
 });
 
 export default Start;
@@ -235,30 +198,18 @@ const styles = StyleSheet.create({
     number: {
         flexDirection: "row",
         justifyContent: "space-between",
-        alignItems: "center",
         paddingHorizontal: 8,
         flex: 1,
-        // backgroundColor: "blue",
     },
     timerValue: {
         flex: 10,
         justifyContent: "center",
         alignItems: "center",
-        // backgroundColor: "red",
-    },
-    timer: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        // backgroundColor: "violet",
     },
     message: {
-        // backgroundColor: "pink",
         justifyContent: "center",
-        // flex: 1,
     },
     exercise: {
-        // backgroundColor: "green",
         flex: 3,
         justifyContent: "center",
         alignItems: "center",
@@ -266,18 +217,13 @@ const styles = StyleSheet.create({
         textAlign: "center",
         paddingHorizontal: 8,
     },
-    progress: {
-        height: 8,
-    },
     duration: {
-        // backgroundColor: "olive",
         alignItems: "center",
         justifyContent: "space-between",
         flexDirection: "row",
         paddingHorizontal: 8,
     },
     control: {
-        // backgroundColor: "orange",
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-evenly",

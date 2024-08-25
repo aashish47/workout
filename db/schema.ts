@@ -1,20 +1,20 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const workouts = sqliteTable("workouts", {
+export const workout = sqliteTable("workouts", {
     id: integer("id").primaryKey({ autoIncrement: true }),
     title: text("title").notNull(),
-    backgroundColor: text("background_color").notNull(),
+    avatarColor: text("avatarColor").notNull(),
     exercises: text("exercises", { mode: "json" }).notNull().$type<string[]>(),
-    time: text("time", { mode: "json" }).notNull().$type<{
+    timers: text("timers", { mode: "json" }).notNull().$type<{
+        "warm up": number;
+        "get ready": number;
         work: number;
         rest: number;
-        intervals: number;
-        "get ready": number;
-        cycles: number;
+        sets: number;
         break: number;
-        "warm up": number;
+        cycles: number;
         "cool down": number;
     }>(),
 });
 
-export type Workouts = typeof workouts.$inferSelect;
+export type Workout = typeof workout.$inferSelect;
