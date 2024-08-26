@@ -8,16 +8,18 @@ interface IconButtonProps {
     darkColor?: string;
     iconName: keyof typeof Ionicons.glyphMap;
     size: number;
-    onPress: PressableProps["onPress"];
+    onPress?: PressableProps["onPress"];
+    onLongPress?: PressableProps["onLongPress"];
 }
 
-const IconButton: React.FC<IconButtonProps & ViewProps> = ({ style, lightColor, darkColor, iconName, size, onPress }) => {
+const IconButton: React.FC<IconButtonProps & ViewProps> = ({ style, lightColor, darkColor, iconName, size, onPress, onLongPress }) => {
     const ripple = useThemeColor({ light: lightColor, dark: darkColor }, "ripple");
     const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
 
     return (
         <Pressable
             onPress={onPress}
+            onLongPress={onLongPress}
             // hitSlop={36}
             android_ripple={{ color: ripple, radius: size }}
             style={[style, styles.headerButton, { height: size * 2, width: size * 2 }]}

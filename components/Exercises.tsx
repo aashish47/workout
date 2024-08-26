@@ -4,14 +4,16 @@ import { Workout } from "@/db/schema";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import useWorkoutContext from "@/hooks/useWorkoutContext";
 import React, { Dispatch, memo, SetStateAction } from "react";
-import { FlatList, NativeSyntheticEvent, Pressable, StyleSheet, TextInput, TextInputEndEditingEventData, View } from "react-native";
+import { NativeSyntheticEvent, Pressable, StyleSheet, TextInput, TextInputEndEditingEventData, View } from "react-native";
+import DraggableFlatList, { RenderItemParams } from "react-native-draggable-flatlist";
 
 interface ExercisesComponentProps {
+    dragColor: string;
     exercises: Workout["exercises"];
     setWorkoutData: Dispatch<SetStateAction<Workout>>;
 }
 
-const ExercisesComponent = memo(({ exercises, setWorkoutData }: ExercisesComponentProps) => {
+const ExercisesComponent = memo(({ dragColor, exercises, setWorkoutData }: ExercisesComponentProps) => {
     const backgroundColor = useThemeColor({}, "secondary");
     const ripple = useThemeColor({}, "ripple");
     const border = useThemeColor({}, "primary");
@@ -34,31 +36,44 @@ const ExercisesComponent = memo(({ exercises, setWorkoutData }: ExercisesCompone
         }));
     };
 
+    const renderItem = ({ item, getIndex, drag, isActive }: RenderItemParams<string>) => {
+        const index = getIndex();
+        if (index === undefined) {
+            console.log("index undefined");
+            return;
+        }
+        return (
+            <View style={[styles.exerciseContainer, isActive ? { backgroundColor: dragColor } : { backgroundColor }]}>
+                <IconButton
+                    iconName={"paw-sharp"}
+                    size={28}
+                    onLongPress={drag}
+                />
+                <TextInput
+                    style={{ flexGrow: 1 }}
+                    defaultValue={item}
+                    placeholder="Exercise..."
+                    onEndEditing={(e) => handleEndEditing(e, index)}
+                />
+                <IconButton
+                    iconName={"trash-outline"}
+                    size={28}
+                    onPress={() => handleDelete(index)}
+                />
+            </View>
+        );
+    };
+
     return (
         <View style={styles.container}>
-            <FlatList
+            <DraggableFlatList
                 data={exercises}
                 initialNumToRender={10}
                 maxToRenderPerBatch={10}
                 windowSize={10}
-                renderItem={({ item, index }) => {
-                    const currIndex = index;
-                    return (
-                        <View style={[styles.exerciseContainer, { backgroundColor }]}>
-                            <TextInput
-                                style={{ flexGrow: 1 }}
-                                defaultValue={item}
-                                placeholder="Exercise..."
-                                onEndEditing={(e) => handleEndEditing(e, currIndex)}
-                            />
-                            <IconButton
-                                iconName={"trash-outline"}
-                                size={28}
-                                onPress={() => handleDelete(currIndex)}
-                            />
-                        </View>
-                    );
-                }}
+                keyExtractor={(_, index) => String(index)}
+                onDragEnd={({ data }) => setWorkoutData((prev) => ({ ...prev, exercises: data }))}
+                renderItem={renderItem}
             />
             <View style={styles.wrapper}>
                 <Pressable
@@ -75,10 +90,11 @@ const ExercisesComponent = memo(({ exercises, setWorkoutData }: ExercisesCompone
 
 const Exercises = memo(() => {
     const { workoutData, setWorkoutData } = useWorkoutContext();
-    const exercises = workoutData["exercises"];
+    const { avatarColor, exercises } = workoutData;
 
     return (
         <ExercisesComponent
+            dragColor={avatarColor}
             exercises={exercises}
             setWorkoutData={setWorkoutData}
         />
@@ -92,7 +108,6 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     exerciseContainer: {
-        paddingHorizontal: 16,
         marginTop: 8,
         flexDirection: "row",
         justifyContent: "space-between",

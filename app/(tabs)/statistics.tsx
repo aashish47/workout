@@ -1,5 +1,9 @@
+// import { namedColors } from "@/constants/Colors";
+// import React, { memo } from "react";
+// import { FlatList, StyleSheet, Text, View } from "react-native";
+
 import { namedColors } from "@/constants/Colors";
-import React, { memo } from "react";
+import { memo } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 
 const ColorItem = memo(({ colorName, colorValue }: { colorName: keyof typeof namedColors; colorValue: string }) => (
@@ -46,3 +50,18 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
 });
+
+// const statistics = () => {
+//     return (
+//         <SegmentedCircle
+//             remainingSets={2}
+//             sets={4}
+//             size={300}
+//             strokeColor="white"
+//         >
+//             <ThemedText>asd</ThemedText>
+//         </SegmentedCircle>
+//     );
+// };
+
+// export default statistics;

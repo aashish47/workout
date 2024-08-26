@@ -43,6 +43,8 @@ const StartComponent = memo(({ workoutData }: StartComponentProps) => {
     const [timeElapsed, setTimeElapsed] = useState(0);
 
     const { start, timer, timerValue, cycleNumber, exercise, exerciseNumber, timerNumber } = workoutOrder[index];
+    const currentSet = timerNumber || 0;
+    const remainingSets = timers["sets"] - currentSet;
     const formatedTimeElapsed = getFormatedTime(timeElapsed);
     const formatedTimeRemaining = getFormatedTime(targetTime - timeElapsed);
     const progressWidth = timeElapsed * (screenWidth / targetTime);
@@ -96,15 +98,17 @@ const StartComponent = memo(({ workoutData }: StartComponentProps) => {
                 <CountdownTimer
                     key={reset}
                     countDownColor={countDownColor}
-                    setTimeElapsed={setTimeElapsed}
-                    pause={pause}
-                    timerValue={timerValue}
-                    start={start}
-                    screenWidth={screenWidth}
+                    remainingSets={timer === "work" ? remainingSets + 1 : timer === "rest" ? remainingSets : 0}
                     index={index}
-                    workoutOrder={workoutOrder}
+                    pause={pause}
+                    screenWidth={screenWidth}
                     setIndex={setIndex}
+                    sets={timers["sets"]}
                     setReset={setReset}
+                    setTimeElapsed={setTimeElapsed}
+                    start={start}
+                    timerValue={timerValue}
+                    workoutOrder={workoutOrder}
                 />
             </View>
 

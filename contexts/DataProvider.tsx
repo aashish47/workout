@@ -10,9 +10,22 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export const DataContext = createContext<Workout[] | null>(null);
 
+const DataComponent = ({ children }: PropsWithChildren) => {
+    const { data, updatedAt, error } = useLiveQuery(db.select().from(workout));
+    if (error) {
+        return (
+            <SafeAreaView>
+                <View>
+                    <Text>Error Loading Data:{error.message}</Text>
+                </View>
+            </SafeAreaView>
+        );
+    }
+    return <DataContext.Provider value={data}>{children}</DataContext.Provider>;
+};
+
 const DataProvider = ({ children }: PropsWithChildren) => {
     const { success, error: migrationError } = useMigrations(db, migrations);
-    const { data, updatedAt, error } = useLiveQuery(db.select().from(workout));
     useDrizzleStudio(expoDb);
 
     if (migrationError) {
@@ -34,16 +47,7 @@ const DataProvider = ({ children }: PropsWithChildren) => {
         );
     }
 
-    if (error) {
-        return (
-            <SafeAreaView>
-                <View>
-                    <Text>Error Loading Data:{error.message}</Text>
-                </View>
-            </SafeAreaView>
-        );
-    }
-    return <DataContext.Provider value={data}>{children}</DataContext.Provider>;
+    return <DataComponent>{children}</DataComponent>;
 };
 
 export default DataProvider;

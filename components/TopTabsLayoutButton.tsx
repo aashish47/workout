@@ -8,8 +8,8 @@ import getTotalTime from "@/utils/getTotalTime";
 import { useTheme } from "@react-navigation/native";
 import { eq } from "drizzle-orm";
 import { router } from "expo-router";
-import React, { memo, useCallback, useMemo } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import React, { memo, useCallback, useEffect, useMemo } from "react";
+import { BackHandler, Pressable, StyleSheet, View } from "react-native";
 
 interface TopTabsLayoutButtonProps {
     name: "create" | "start";
@@ -20,9 +20,22 @@ const Button = memo(({ name, workoutData }: TopTabsLayoutButtonProps & { workout
     const ripple = useThemeColor({}, "ripple");
     const { colors } = useTheme();
     const { id, ...rest } = workoutData;
-    0;
     const { timers, exercises } = workoutData;
     const { formatedDuration, totalSeconds } = useMemo(() => getTotalTime(timers, exercises.length), [timers, exercises]);
+    const handleBackPress = useCallback(() => {
+        if (name === "create") {
+            createWorkout();
+        } else {
+            updateWorkout();
+        }
+        router.back();
+        return true;
+    }, [workoutData]);
+
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener("hardwareBackPress", handleBackPress);
+        return () => backHandler.remove();
+    }, [handleBackPress]);
 
     const handlePress = async () => {
         if (name === "create") {
@@ -47,15 +60,6 @@ const Button = memo(({ name, workoutData }: TopTabsLayoutButtonProps & { workout
             .set({ ...rest })
             .where(eq(workout.id, id));
     };
-
-    const handleBackPress = useCallback(() => {
-        if (name === "create") {
-            createWorkout();
-        } else {
-            updateWorkout();
-        }
-        router.back();
-    }, [workoutData]);
 
     return (
         <>

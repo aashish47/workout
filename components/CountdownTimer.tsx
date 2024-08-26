@@ -1,3 +1,4 @@
+import SegmentedCircle from "@/components/SegmentedCircle";
 import { ThemedText } from "@/components/ThemedText";
 import getFormatedTime from "@/utils/getFormatedTime";
 import { OrderType } from "@/utils/getWorkoutOrder";
@@ -7,26 +8,39 @@ import { ColorFormat, useCountdown } from "react-native-countdown-circle-timer";
 import Svg, { Path } from "react-native-svg";
 
 interface CountdownTimerProps {
-    setTimeElapsed: Dispatch<SetStateAction<number>>;
-    pause: boolean;
-    timerValue: number;
-    start: number;
-    screenWidth: number;
+    countDownColor: ColorFormat;
     index: number;
+    pause: boolean;
+    remainingSets: number;
+    screenWidth: number;
     setIndex: Dispatch<SetStateAction<number>>;
     setReset: Dispatch<SetStateAction<number>>;
+    sets: number;
+    setTimeElapsed: Dispatch<SetStateAction<number>>;
+    start: number;
+    timerValue: number;
     workoutOrder: OrderType[];
-    countDownColor: ColorFormat;
 }
 
 const CountdownTimer = memo(
-    ({ countDownColor, setTimeElapsed, pause, timerValue, start, screenWidth, index, workoutOrder, setIndex, setReset }: CountdownTimerProps) => {
+    ({
+        countDownColor,
+        index,
+        pause,
+        remainingSets,
+        screenWidth,
+        setIndex,
+        setReset,
+        setTimeElapsed,
+        sets,
+        start,
+        timerValue,
+        workoutOrder,
+    }: CountdownTimerProps) => {
         const { path, pathLength, stroke, strokeDashoffset, remainingTime, elapsedTime, size, strokeWidth } = useCountdown({
             isPlaying: !pause,
             duration: timerValue,
             colors: countDownColor,
-            // colors: ["#004777", "#F7B801", "#A30000", "#A30000"],
-            // colorsTime: [10, 5, 2, 0],
             size: screenWidth - 96,
             rotation: "counterclockwise",
         });
@@ -63,7 +77,14 @@ const CountdownTimer = memo(
                     />
                 </Svg>
                 <View style={styles.time}>
-                    <ThemedText style={[styles.timerValue, { color: stroke }]}>{getFormatedTime(remainingTime)}</ThemedText>
+                    <SegmentedCircle
+                        remainingSets={remainingSets}
+                        sets={sets}
+                        size={size - 48}
+                        strokeColor="silver"
+                    >
+                        <ThemedText style={[styles.timerValue, { color: stroke }]}>{getFormatedTime(remainingTime)}</ThemedText>
+                    </SegmentedCircle>
                 </View>
             </View>
         );
@@ -85,6 +106,6 @@ const styles = StyleSheet.create({
     timerValue: {
         textTransform: "capitalize",
         textAlign: "center",
-        fontSize: 64,
+        fontSize: 56,
     },
 });

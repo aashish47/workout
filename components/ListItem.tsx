@@ -56,7 +56,7 @@ const ListItem: React.FC<ListItemProps> = ({ lightColor, darkColor, workout, sel
                     </View>
                 ) : (
                     <View style={[styles.avatar, { backgroundColor: avatarColor }]}>
-                        <ThemedText style={{ textTransform: "uppercase" }}>{title.charAt(0)}</ThemedText>
+                        <ThemedText style={{ textTransform: "uppercase", color: "white" }}>{title.charAt(0)}</ThemedText>
                     </View>
                 )}
                 <View style={styles.metaData}>

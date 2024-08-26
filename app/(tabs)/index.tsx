@@ -39,7 +39,6 @@ export default function Index() {
                                 iconName="trash-sharp"
                                 size={24}
                             />
-                            {/* checkbox to select all */}
                         </View>
                     );
                 },
