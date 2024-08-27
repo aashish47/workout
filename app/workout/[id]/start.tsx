@@ -2,6 +2,7 @@ import CountdownTimer from "@/components/CountdownTimer";
 import IconButton from "@/components/IconButton";
 import Status from "@/components/Status";
 import { ThemedText } from "@/components/ThemedText";
+import WorkoutOrderModal from "@/components/WorkoutOrderModal";
 import { namedColors } from "@/constants/Colors";
 import { Workout } from "@/db/schema";
 import useWorkoutContext from "@/hooks/useWorkoutContext";
@@ -41,6 +42,7 @@ const StartComponent = memo(({ workoutData }: StartComponentProps) => {
     const [mute, setMute] = useState(false);
     const [reset, setReset] = useState(Date.now());
     const [timeElapsed, setTimeElapsed] = useState(0);
+    const [modalVisible, setModalVisible] = useState(false);
 
     const { start, timer, timerValue, cycleNumber, exercise, exerciseNumber, timerNumber } = workoutOrder[index];
     const currentSet = timerNumber || 0;
@@ -138,7 +140,7 @@ const StartComponent = memo(({ workoutData }: StartComponentProps) => {
                     <IconButton
                         iconName={"menu-sharp"}
                         size={32}
-                        onPress={undefined}
+                        onPress={() => setModalVisible(true)}
                     />
                     <IconButton
                         iconName={"play-skip-back-sharp"}
@@ -179,6 +181,17 @@ const StartComponent = memo(({ workoutData }: StartComponentProps) => {
                     )}
                 </View>
             </View>
+            {modalVisible && (
+                <WorkoutOrderModal
+                    activeColor={countDownColor}
+                    currIndex={index}
+                    modalVisible={modalVisible}
+                    setIndex={setIndex}
+                    setModalVisible={setModalVisible}
+                    setReset={setReset}
+                    workoutorder={workoutOrder}
+                />
+            )}
         </View>
     );
 });
