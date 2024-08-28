@@ -59,7 +59,7 @@ const WorkoutOrderModal = memo(({ activeColor, currIndex, modalVisible, setIndex
                                 type="subtitle"
                                 style={styles.text}
                             >
-                                order
+                                timeline
                             </ThemedText>
                         </View>
                         <View style={{ flex: 1, alignItems: "flex-end" }}>
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: "row",
         justifyContent: "space-between",
-        borderBottomColor: "grey",
+        borderBottomColor: "silver",
         borderBottomWidth: 2,
     },
     renderItemContainer: {
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
         height: 60,
         paddingHorizontal: 8,
         borderBottomWidth: 1,
-        borderBottomColor: "grey",
+        borderBottomColor: "silver",
     },
     renderItemView: {
         flexDirection: "row",
