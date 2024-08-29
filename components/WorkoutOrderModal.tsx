@@ -54,19 +54,19 @@ const WorkoutOrderModal = memo(({ activeColor, currIndex, modalVisible, setIndex
                 <View style={styles.modalView}>
                     <View style={styles.header}>
                         <View style={{ flex: 1 }} />
-                        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                            <ThemedText
-                                type="subtitle"
-                                style={styles.text}
-                            >
-                                timeline
-                            </ThemedText>
-                        </View>
+
+                        <ThemedText
+                            type="subtitle"
+                            style={styles.text}
+                        >
+                            timeline
+                        </ThemedText>
+
                         <View style={{ flex: 1, alignItems: "flex-end" }}>
                             <IconButton
                                 iconName={"close"}
                                 size={32}
-                                onPress={() => setModalVisible(!modalVisible)}
+                                onPress={() => setModalVisible(false)}
                             />
                         </View>
                     </View>
@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: "row",
         justifyContent: "space-between",
+        alignItems: "center",
         borderBottomColor: "silver",
         borderBottomWidth: 2,
     },

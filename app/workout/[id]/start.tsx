@@ -1,3 +1,4 @@
+import ConfirmModal from "@/components/ConfirmModal";
 import CountdownTimer from "@/components/CountdownTimer";
 import IconButton from "@/components/IconButton";
 import Status from "@/components/Status";
@@ -8,10 +9,11 @@ import { Workout } from "@/db/schema";
 import useWorkoutContext from "@/hooks/useWorkoutContext";
 import getFormatedTime from "@/utils/getFormatedTime";
 import getWorkoutOrder, { CountdownTimerType } from "@/utils/getWorkoutOrder";
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { ColorFormat } from "react-native-countdown-circle-timer";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface StartComponentProps {
     workoutData: Workout;
@@ -42,7 +44,8 @@ const StartComponent = memo(({ workoutData }: StartComponentProps) => {
     const [mute, setMute] = useState(false);
     const [reset, setReset] = useState(Date.now());
     const [timeElapsed, setTimeElapsed] = useState(0);
-    const [modalVisible, setModalVisible] = useState(false);
+    const [timelineModalVisible, setTimelineModalVisible] = useState(false);
+    const [quitModalVisible, setQuitModalVisible] = useState(false);
 
     const { start, timer, timerValue, cycleNumber, exercise, exerciseNumber, timerNumber } = workoutOrder[index];
     const currentSet = timerNumber || 0;
@@ -74,6 +77,26 @@ const StartComponent = memo(({ workoutData }: StartComponentProps) => {
 
     return (
         <View style={styles.container}>
+            <SafeAreaView />
+            <View style={styles.header}>
+                <View style={{ flex: 1 }} />
+                <ThemedText
+                    style={{ color: countDownColor }}
+                    type="subtitle"
+                >
+                    {timer.toUpperCase()}
+                </ThemedText>
+                <View style={{ flex: 1, alignItems: "flex-end" }}>
+                    <IconButton
+                        iconName={"close"}
+                        size={32}
+                        onPress={() => {
+                            setPause(true);
+                            setQuitModalVisible(true);
+                        }}
+                    />
+                </View>
+            </View>
             <View style={styles.number}>
                 {timers["cycles"] > 1 && cycleNumber && (
                     <Status
@@ -144,7 +167,7 @@ const StartComponent = memo(({ workoutData }: StartComponentProps) => {
                     <IconButton
                         iconName={"menu-sharp"}
                         size={32}
-                        onPress={() => setModalVisible(true)}
+                        onPress={() => setTimelineModalVisible(true)}
                     />
                     <IconButton
                         iconName={"play-skip-back-sharp"}
@@ -185,15 +208,28 @@ const StartComponent = memo(({ workoutData }: StartComponentProps) => {
                     )}
                 </View>
             </View>
-            {modalVisible && (
+            {timelineModalVisible && (
                 <WorkoutOrderModal
                     activeColor={countDownColor}
                     currIndex={index}
-                    modalVisible={modalVisible}
+                    modalVisible={timelineModalVisible}
                     setIndex={setIndex}
-                    setModalVisible={setModalVisible}
+                    setModalVisible={setTimelineModalVisible}
                     setReset={setReset}
                     workoutorder={workoutOrder}
+                />
+            )}
+            {quitModalVisible && (
+                <ConfirmModal
+                    title="Quit?"
+                    subtitle="Are you sure you want to quit this workout?"
+                    confirmText="quit"
+                    confirmTextColor="steelblue"
+                    confirmOnPressHandler={() => {
+                        router.navigate("/");
+                    }}
+                    modalVisible={quitModalVisible}
+                    setModalVisible={setQuitModalVisible}
                 />
             )}
         </View>
@@ -215,6 +251,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: "space-between",
+    },
+    header: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
     },
     number: {
         flexDirection: "row",

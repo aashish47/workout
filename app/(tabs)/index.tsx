@@ -1,3 +1,4 @@
+import ConfirmModal from "@/components/ConfirmModal";
 import IconButton from "@/components/IconButton";
 import ListItem from "@/components/ListItem";
 import { ThemedText } from "@/components/ThemedText";
@@ -15,6 +16,7 @@ export default function Index() {
     const navigation = useNavigation();
     const data = useDataContext();
     const float = useThemeColor({ light: undefined, dark: undefined }, "primary");
+    const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
         if (selected.length) {
@@ -28,9 +30,8 @@ export default function Index() {
                     />
                 ),
                 headerRight: () => {
-                    const deleteWorkouts = async () => {
-                        await db.delete(workout).where(inArray(workout.id, selected));
-                        setSelected([]);
+                    const deleteWorkouts = () => {
+                        setModalVisible(true);
                     };
                     return (
                         <View style={{ flexDirection: "row", gap: 2 }}>
@@ -52,6 +53,12 @@ export default function Index() {
         }
     }, [navigation, selected]);
 
+    const handleDelete = async () => {
+        await db.delete(workout).where(inArray(workout.id, selected));
+        setSelected([]);
+        setModalVisible(false);
+    };
+
     return (
         <View style={{ flex: 1 }}>
             <IconButton
@@ -71,6 +78,17 @@ export default function Index() {
                     />
                 )}
             />
+            {modalVisible && (
+                <ConfirmModal
+                    title="Delete this workout?"
+                    subtitle="This action cannot be undone."
+                    confirmText="delete"
+                    confirmTextColor="crimson"
+                    confirmOnPressHandler={handleDelete}
+                    modalVisible={modalVisible}
+                    setModalVisible={setModalVisible}
+                />
+            )}
         </View>
     );
 }

@@ -165,13 +165,6 @@ export const Colors = {
         ripple: "gainsboro",
         tabIconDefault: "#687076",
         tabIconSelected: tintColorLight,
-
-        "warm up": namedColors["lightsalmon"],
-        "get ready": namedColors["mediumpurple"],
-        work: namedColors["tomato"],
-        rest: namedColors["lightseagreen"],
-        break: namedColors["steelblue"],
-        "cool down": namedColors["hotpink"],
     },
     dark: {
         text: "#ECEDEE",
@@ -183,12 +176,5 @@ export const Colors = {
         ripple: "dimgrey",
         tabIconDefault: "#9BA1A6",
         tabIconSelected: tintColorDark,
-
-        "warm up": namedColors["orange"],
-        "get ready": namedColors["grey"],
-        work: namedColors["orangered"],
-        rest: namedColors["lightseagreen"],
-        break: namedColors["mediumorchid"],
-        "cool down": namedColors["steelblue"],
     },
 };

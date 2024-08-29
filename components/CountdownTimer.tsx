@@ -3,6 +3,7 @@ import { ThemedText } from "@/components/ThemedText";
 import getFormatedTime from "@/utils/getFormatedTime";
 import { CountdownTimerType, OrderType } from "@/utils/getWorkoutOrder";
 import { Audio } from "expo-av";
+import { router } from "expo-router";
 import React, { Dispatch, memo, SetStateAction, useEffect, useLayoutEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { ColorFormat, useCountdown } from "react-native-countdown-circle-timer";
@@ -78,6 +79,7 @@ const CountdownTimer = memo(
                 if (!mute) {
                     if (totalRemainingTime === 1) {
                         playSound("workout-over");
+                        router.navigate("/");
                     } else if (timer === "work") {
                         if (remainingSets > 1) {
                             playSound("set-over");
