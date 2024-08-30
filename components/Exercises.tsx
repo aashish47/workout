@@ -36,7 +36,7 @@ const ExercisesComponent = memo(({ dragColor, exercises, setWorkoutData }: Exerc
         }));
     };
 
-    const renderItem = ({ item, getIndex, drag, isActive }: RenderItemParams<string>) => {
+    const RenderItem = ({ item, getIndex, drag, isActive }: RenderItemParams<string>) => {
         const index = getIndex();
         if (index === undefined) {
             console.log("index undefined");
@@ -66,15 +66,18 @@ const ExercisesComponent = memo(({ dragColor, exercises, setWorkoutData }: Exerc
 
     return (
         <View style={styles.container}>
-            <DraggableFlatList
-                data={exercises}
-                initialNumToRender={10}
-                maxToRenderPerBatch={10}
-                windowSize={10}
-                keyExtractor={(_, index) => String(index)}
-                onDragEnd={({ data }) => setWorkoutData((prev) => ({ ...prev, exercises: data }))}
-                renderItem={renderItem}
-            />
+            <View style={styles.listContainer}>
+                <DraggableFlatList
+                    data={exercises}
+                    initialNumToRender={10}
+                    maxToRenderPerBatch={10}
+                    windowSize={10}
+                    keyExtractor={(_, index) => String(index)}
+                    onDragEnd={({ data }) => setWorkoutData((prev) => ({ ...prev, exercises: data }))}
+                    renderItem={RenderItem}
+                />
+            </View>
+
             <View style={styles.wrapper}>
                 <Pressable
                     android_ripple={{ color: ripple }}
@@ -105,6 +108,10 @@ export default Exercises;
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
+    },
+
+    listContainer: {
         flex: 1,
     },
     exerciseContainer: {

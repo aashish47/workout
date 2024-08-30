@@ -1,11 +1,13 @@
 import ConfirmModal from "@/components/ConfirmModal";
 import CountdownTimer from "@/components/CountdownTimer";
+import HeaderWithCloseButton from "@/components/HeaderWithCloseButton";
 import IconButton from "@/components/IconButton";
 import Status from "@/components/Status";
 import { ThemedText } from "@/components/ThemedText";
 import WorkoutOrderModal from "@/components/WorkoutOrderModal";
 import { namedColors } from "@/constants/Colors";
-import { Workout } from "@/db/schema";
+import { db } from "@/db/drizzle";
+import { record, Workout } from "@/db/schema";
 import useWorkoutContext from "@/hooks/useWorkoutContext";
 import getFormatedTime from "@/utils/getFormatedTime";
 import getWorkoutOrder, { CountdownTimerType } from "@/utils/getWorkoutOrder";
@@ -19,7 +21,7 @@ interface StartComponentProps {
     workoutData: Workout;
 }
 
-type CountdownColors = { [key in CountdownTimerType]: string };
+type CountdownColors = Record<CountdownTimerType, string>;
 
 const countdownColors: CountdownColors = {
     "warm up": namedColors["orange"],
@@ -71,32 +73,34 @@ const StartComponent = memo(({ workoutData }: StartComponentProps) => {
     }, [timeElapsed, start]);
 
     const handleForward = useCallback(() => {
-        setIndex((prevIndex) => Math.min(prevIndex + 1, workoutOrder.length - 1));
-        setReset(Date.now());
-    }, [workoutOrder]);
+        if (index === workoutOrder.length - 1) {
+            workoutOver();
+        } else {
+            setIndex((prevIndex) => prevIndex + 1);
+            setReset(Date.now());
+        }
+    }, [index]);
+
+    const workoutOver = useCallback(async () => {
+        const { id, avatarColor, ...rest } = workoutData;
+        try {
+            await db.insert(record).values({ ...rest, duration: targetTime });
+            router.navigate("/");
+        } catch (err) {
+            console.log(err);
+        }
+    }, []);
 
     return (
-        <View style={styles.container}>
-            <SafeAreaView />
-            <View style={styles.header}>
-                <View style={{ flex: 1 }} />
-                <ThemedText
-                    style={{ color: countDownColor }}
-                    type="subtitle"
-                >
-                    {timer.toUpperCase()}
-                </ThemedText>
-                <View style={{ flex: 1, alignItems: "flex-end" }}>
-                    <IconButton
-                        iconName={"close"}
-                        size={32}
-                        onPress={() => {
-                            setPause(true);
-                            setQuitModalVisible(true);
-                        }}
-                    />
-                </View>
-            </View>
+        <SafeAreaView style={styles.container}>
+            <HeaderWithCloseButton
+                title={timer}
+                titleStyle={{ color: countDownColor, textTransform: "uppercase" }}
+                onPressClose={() => {
+                    setPause(true);
+                    setQuitModalVisible(true);
+                }}
+            />
             <View style={styles.number}>
                 {timers["cycles"] > 1 && cycleNumber && (
                     <Status
@@ -124,20 +128,17 @@ const StartComponent = memo(({ workoutData }: StartComponentProps) => {
                 <CountdownTimer
                     key={reset}
                     countDownColor={countDownColor}
+                    handleForward={handleForward}
                     remainingSets={timer === "work" ? remainingSets + 1 : timer === "rest" ? remainingSets : 0}
-                    index={index}
                     mute={mute}
                     pause={pause}
                     screenWidth={screenWidth}
-                    setIndex={setIndex}
                     sets={timers["sets"]}
-                    setReset={setReset}
                     setTimeElapsed={setTimeElapsed}
                     start={start}
                     timer={timer}
                     timerValue={timerValue}
                     totalRemainingTime={totalRemainingTime}
-                    workoutOrder={workoutOrder}
                 />
             </View>
 
@@ -167,7 +168,10 @@ const StartComponent = memo(({ workoutData }: StartComponentProps) => {
                     <IconButton
                         iconName={"menu-sharp"}
                         size={32}
-                        onPress={() => setTimelineModalVisible(true)}
+                        onPress={() => {
+                            setPause(true);
+                            setTimelineModalVisible(true);
+                        }}
                     />
                     <IconButton
                         iconName={"play-skip-back-sharp"}
@@ -232,7 +236,7 @@ const StartComponent = memo(({ workoutData }: StartComponentProps) => {
                     setModalVisible={setQuitModalVisible}
                 />
             )}
-        </View>
+        </SafeAreaView>
     );
 });
 

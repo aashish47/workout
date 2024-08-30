@@ -80,7 +80,7 @@ export default function Index() {
             />
             {modalVisible && (
                 <ConfirmModal
-                    title="Delete this workout?"
+                    title="Delete the selected workouts?"
                     subtitle="This action cannot be undone."
                     confirmText="delete"
                     confirmTextColor="crimson"

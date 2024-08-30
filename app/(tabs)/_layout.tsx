@@ -31,18 +31,31 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
-                name="statistics"
+                name="history"
                 options={{
                     headerShown: true,
-                    title: "Statistics",
+                    title: "History",
                     tabBarIcon: ({ color, focused }) => (
                         <TabBarIcon
-                            name={focused ? "stats-chart" : "stats-chart-outline"}
+                            name={focused ? "file-tray-full" : "file-tray-full-outline"}
                             color={color}
                         />
                     ),
                 }}
             />
+            {/* <Tabs.Screen
+                name="colors"
+                options={{
+                    headerShown: true,
+                    title: "Colors",
+                    tabBarIcon: ({ color, focused }) => (
+                        <TabBarIcon
+                            name={focused ? "color-palette" : "color-palette-outline"}
+                            color={color}
+                        />
+                    ),
+                }}
+            /> */}
         </Tabs>
     );
 }

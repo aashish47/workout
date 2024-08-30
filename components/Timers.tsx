@@ -37,7 +37,7 @@ const TimersComponent = memo(({ timers, setWorkoutData }: TimersComponentProps) 
 
 const Timers = memo(() => {
     const { setWorkoutData, timersRef } = useWorkoutContext();
-    const timers = useMemo(() => Object.entries(timersRef.current) as [keyof Workout["timers"], number][], []);
+    const timers = useMemo(() => Object.entries(timersRef.current) as Timers, []);
 
     return (
         <TimersComponent

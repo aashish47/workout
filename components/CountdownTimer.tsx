@@ -1,9 +1,8 @@
 import SegmentedCircle from "@/components/SegmentedCircle";
 import { ThemedText } from "@/components/ThemedText";
 import getFormatedTime from "@/utils/getFormatedTime";
-import { CountdownTimerType, OrderType } from "@/utils/getWorkoutOrder";
+import { CountdownTimerType } from "@/utils/getWorkoutOrder";
 import { Audio } from "expo-av";
-import { router } from "expo-router";
 import React, { Dispatch, memo, SetStateAction, useEffect, useLayoutEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { ColorFormat, useCountdown } from "react-native-countdown-circle-timer";
@@ -11,20 +10,17 @@ import Svg, { Path } from "react-native-svg";
 
 interface CountdownTimerProps {
     countDownColor: ColorFormat;
-    index: number;
+    handleForward: () => void;
     mute: boolean;
     pause: boolean;
     remainingSets: number;
     screenWidth: number;
-    setIndex: Dispatch<SetStateAction<number>>;
-    setReset: Dispatch<SetStateAction<number>>;
     sets: number;
     setTimeElapsed: Dispatch<SetStateAction<number>>;
     start: number;
     timer: CountdownTimerType;
     timerValue: number;
     totalRemainingTime: number;
-    workoutOrder: OrderType[];
 }
 
 const audioPaths = {
@@ -40,22 +36,19 @@ const audioPaths = {
 const CountdownTimer = memo(
     ({
         countDownColor,
-        index,
+        handleForward,
         mute,
         pause,
         remainingSets,
         screenWidth,
-        setIndex,
-        setReset,
         setTimeElapsed,
         sets,
         start,
         timer,
         timerValue,
         totalRemainingTime,
-        workoutOrder,
     }: CountdownTimerProps) => {
-        const halfTime = timerValue / 2;
+        const halfTime = Math.ceil(timerValue / 2);
         const { path, pathLength, stroke, strokeDashoffset, remainingTime, elapsedTime, size, strokeWidth } = useCountdown({
             isPlaying: !pause,
             duration: timerValue,
@@ -79,7 +72,6 @@ const CountdownTimer = memo(
                 if (!mute) {
                     if (totalRemainingTime === 1) {
                         playSound("workout-over");
-                        router.navigate("/");
                     } else if (timer === "work") {
                         if (remainingSets > 1) {
                             playSound("set-over");
@@ -99,7 +91,6 @@ const CountdownTimer = memo(
             try {
                 const { sound } = await Audio.Sound.createAsync(audioPaths[music]);
                 setSound(sound);
-
                 await sound.playAsync();
             } catch (err) {
                 console.log(err);
@@ -115,11 +106,10 @@ const CountdownTimer = memo(
         }, [sound]);
 
         useLayoutEffect(() => {
-            if (remainingTime <= 0 && index < workoutOrder.length - 1) {
-                setIndex((prev) => prev + 1);
-                setReset(Date.now());
+            if (remainingTime <= 0) {
+                handleForward();
             }
-        }, [remainingTime, index]);
+        }, [remainingTime]);
 
         useEffect(() => {
             setTimeElapsed(start + Math.floor(elapsedTime));

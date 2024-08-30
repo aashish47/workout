@@ -1,4 +1,4 @@
-import IconButton from "@/components/IconButton";
+import HeaderWithCloseButton from "@/components/HeaderWithCloseButton";
 import { ThemedText } from "@/components/ThemedText";
 import getFormatedTime from "@/utils/getFormatedTime";
 import { OrderType } from "@/utils/getWorkoutOrder";
@@ -52,24 +52,12 @@ const WorkoutOrderModal = memo(({ activeColor, currIndex, modalVisible, setIndex
         >
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                    <View style={styles.header}>
-                        <View style={{ flex: 1 }} />
-
-                        <ThemedText
-                            type="subtitle"
-                            style={styles.text}
-                        >
-                            timeline
-                        </ThemedText>
-
-                        <View style={{ flex: 1, alignItems: "flex-end" }}>
-                            <IconButton
-                                iconName={"close"}
-                                size={32}
-                                onPress={() => setModalVisible(false)}
-                            />
-                        </View>
-                    </View>
+                    <HeaderWithCloseButton
+                        title={"timeline"}
+                        titleStyle={styles.text}
+                        borderBottom
+                        onPressClose={() => setModalVisible(false)}
+                    />
                     <FlatList
                         data={workoutorder}
                         keyExtractor={(item) => String(item["start"])}
