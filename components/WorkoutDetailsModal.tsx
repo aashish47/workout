@@ -4,7 +4,8 @@ import { Timers } from "@/components/Timers";
 import { Record } from "@/db/schema";
 import getFormatedTime from "@/utils/getFormatedTime";
 import React, { Dispatch, memo, SetStateAction } from "react";
-import { Modal, StyleSheet, View } from "react-native";
+import { Dimensions, Modal, StyleSheet, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 interface WorkoutDetailsModalProps {
     details: Record;
@@ -14,6 +15,7 @@ interface WorkoutDetailsModalProps {
 
 const WorkoutDetailsModal = memo(({ details, modalVisible, setModalVisible }: WorkoutDetailsModalProps) => {
     const { title, duration, createdAt, timers, exercises } = details;
+    const screenHeight = Dimensions.get("window").height;
     return (
         <Modal
             animationType="fade"
@@ -45,7 +47,6 @@ const WorkoutDetailsModal = memo(({ details, modalVisible, setModalVisible }: Wo
                         </View>
                         <View>
                             <ThemedText>Timers: </ThemedText>
-
                             {(Object.entries(timers) as Timers).map(([timer, value]) => (
                                 <View
                                     style={styles.rowView}
@@ -61,7 +62,7 @@ const WorkoutDetailsModal = memo(({ details, modalVisible, setModalVisible }: Wo
                                 </View>
                             ))}
                         </View>
-                        <View>
+                        <ScrollView style={{ maxHeight: screenHeight / 3 }}>
                             <ThemedText>Exercises: </ThemedText>
                             <ThemedText
                                 type="light"
@@ -69,7 +70,7 @@ const WorkoutDetailsModal = memo(({ details, modalVisible, setModalVisible }: Wo
                             >
                                 {exercises.join(", ")}
                             </ThemedText>
-                        </View>
+                        </ScrollView>
                     </View>
                 </View>
             </View>
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
     },
     detailsView: {
         padding: 16,
-        gap: 8,
+        gap: 12,
     },
     rowView: {
         flexDirection: "row",

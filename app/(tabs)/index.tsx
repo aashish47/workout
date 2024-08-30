@@ -1,63 +1,22 @@
 import ConfirmModal from "@/components/ConfirmModal";
 import IconButton from "@/components/IconButton";
-import ListItem from "@/components/ListItem";
-import { ThemedText } from "@/components/ThemedText";
+import WorkoutRenderItem from "@/components/WorkoutRenderItem";
 import { db } from "@/db/drizzle";
 import { workout } from "@/db/schema";
 import useDataContext from "@/hooks/useDataContext";
+import { useSelectionAndModals } from "@/hooks/useSelectionAndModals";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { inArray } from "drizzle-orm";
-import { router, useNavigation } from "expo-router";
-import { useEffect, useState } from "react";
+import { router } from "expo-router";
 import { FlatList, StyleSheet, View } from "react-native";
 
 export default function Index() {
-    const [selected, setSelected] = useState<number[]>([]);
-    const navigation = useNavigation();
     const data = useDataContext();
     const float = useThemeColor({ light: undefined, dark: undefined }, "primary");
-    const [modalVisible, setModalVisible] = useState(false);
-
-    useEffect(() => {
-        if (selected.length) {
-            navigation.setOptions({
-                headerTitle: () => <ThemedText>{selected.length}</ThemedText>,
-                headerLeft: () => (
-                    <IconButton
-                        onPress={() => setSelected([])}
-                        iconName="arrow-back-sharp"
-                        size={24}
-                    />
-                ),
-                headerRight: () => {
-                    const deleteWorkouts = () => {
-                        setModalVisible(true);
-                    };
-                    return (
-                        <View style={{ flexDirection: "row", gap: 2 }}>
-                            <IconButton
-                                onPress={deleteWorkouts}
-                                iconName="trash-sharp"
-                                size={24}
-                            />
-                        </View>
-                    );
-                },
-            });
-        } else {
-            navigation.setOptions({
-                headerTitle: () => <ThemedText>Logo</ThemedText>,
-                headerLeft: undefined,
-                headerRight: undefined,
-            });
-        }
-    }, [navigation, selected]);
-
-    const handleDelete = async () => {
+    const deleteHandler = async (selected: number[]) => {
         await db.delete(workout).where(inArray(workout.id, selected));
-        setSelected([]);
-        setModalVisible(false);
     };
+    const { selected, setSelected, modalVisible, setModalVisible, handleDelete } = useSelectionAndModals(deleteHandler);
 
     return (
         <View style={{ flex: 1 }}>
@@ -71,7 +30,7 @@ export default function Index() {
             <FlatList
                 data={data}
                 renderItem={({ item }) => (
-                    <ListItem
+                    <WorkoutRenderItem
                         workout={item}
                         selected={selected}
                         setSelected={setSelected}
