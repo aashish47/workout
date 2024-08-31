@@ -23,13 +23,12 @@ const history = memo(() => {
             );
         }
     }
-
     const [detailsModalVisible, setDetailsModalVisible] = useState(-1);
     const deleteHandler = async (selected: number[]) => {
         await db.delete(record).where(inArray(record.id, selected));
     };
 
-    const { selected, setSelected, modalVisible, setModalVisible, handleDelete } = useSelectionAndModals(deleteHandler);
+    const { setChecked, selected, setSelected, modalVisible, setModalVisible, handleDelete } = useSelectionAndModals(deleteHandler, data);
 
     return (
         <View style={{ flex: 1 }}>
@@ -42,6 +41,7 @@ const history = memo(() => {
                         selected={selected}
                         setSelected={setSelected}
                         setDetailsModalVisible={setDetailsModalVisible}
+                        setChecked={setChecked}
                     />
                 )}
                 initialNumToRender={10}

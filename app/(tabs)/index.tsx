@@ -16,7 +16,7 @@ export default function Index() {
     const deleteHandler = async (selected: number[]) => {
         await db.delete(workout).where(inArray(workout.id, selected));
     };
-    const { selected, setSelected, modalVisible, setModalVisible, handleDelete } = useSelectionAndModals(deleteHandler);
+    const { setChecked, selected, setSelected, modalVisible, setModalVisible, handleDelete } = useSelectionAndModals(deleteHandler, data);
 
     return (
         <View style={{ flex: 1 }}>
@@ -34,6 +34,7 @@ export default function Index() {
                         workout={item}
                         selected={selected}
                         setSelected={setSelected}
+                        setChecked={setChecked}
                     />
                 )}
             />

@@ -5,16 +5,17 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 import getTotalTime from "@/utils/getTotalTime";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React, { useMemo } from "react";
+import React, { Dispatch, SetStateAction, useMemo } from "react";
 import { StyleSheet, View } from "react-native";
 
 interface WorkoutRenderItemProps {
     workout: Workout;
     selected: number[];
     setSelected: React.Dispatch<React.SetStateAction<number[]>>;
+    setChecked: Dispatch<SetStateAction<boolean>>;
 }
 
-const WorkoutRenderItem = ({ workout, selected, setSelected }: WorkoutRenderItemProps) => {
+const WorkoutRenderItem = ({ workout, selected, setSelected, setChecked }: WorkoutRenderItemProps) => {
     const pressColor = useThemeColor({}, "secondary");
     const backgroundColor = useThemeColor({}, "primary");
     const { id, exercises, timers } = workout;
@@ -26,6 +27,7 @@ const WorkoutRenderItem = ({ workout, selected, setSelected }: WorkoutRenderItem
             item={workout}
             selected={selected}
             setSelected={setSelected}
+            setChecked={setChecked}
             onPress={() => router.navigate(`/workout/${id}`)}
             renderContent={(item, isSelected) => (
                 <View style={[styles.container, isSelected && { backgroundColor: pressColor }]}>

@@ -1,5 +1,5 @@
 import { useThemeColor } from "@/hooks/useThemeColor";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Pressable, StyleSheet } from "react-native";
 
 interface GenericRenderItemProps<T> {
@@ -7,17 +7,19 @@ interface GenericRenderItemProps<T> {
     item: T;
     selected: number[];
     setSelected: React.Dispatch<React.SetStateAction<number[]>>;
+    setChecked: Dispatch<SetStateAction<boolean>>;
     onPress: () => void;
     renderContent: (item: T, isSelected: boolean) => React.ReactNode;
     lightColor?: string;
     darkColor?: string;
 }
 
-function GenericRenderItem<T>({ id, item, selected, setSelected, onPress, renderContent, lightColor, darkColor }: GenericRenderItemProps<T>) {
+function GenericRenderItem<T>({ id, item, selected, setSelected, setChecked, onPress, renderContent, lightColor, darkColor }: GenericRenderItemProps<T>) {
     const ripple = useThemeColor({}, "ripple");
     const isSelected = selected.includes(id);
 
     const handlePress = () => {
+        setChecked(false);
         if (selected.length) {
             if (isSelected) {
                 setSelected(selected.filter((selectedId) => selectedId !== id));
