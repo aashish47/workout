@@ -1,50 +1,33 @@
-# Welcome to your Expo app 👋
+# Workout Timer App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Workout application created using expo to help you optimize your exercise routines with customizable intervals and rest periods. Whether you’re doing HIIT, strength training, or any other workout, our app will keep you on track and motivated.
 
-## Get started
+## Features
 
-1. Install dependencies
+- **Customizable Intervals:** Set your own work and rest periods.
+- **Easy-to-Use Interface:** Intuitive design for seamless navigation.
+- **Flexible Timing:** Adjust timers for various types of workouts.
+- **Notifications:** Alerts to keep you informed about your workout and rest periods.
+- **History Tracking:** Keep a record of your workout sessions.
 
-   ```bash
-   npm install
-   ```
+## Usage
 
-2. Start the app
+1. **Set Intervals:** Configure your workout and rest periods in the app’s settings.
+2. **Start Workout:** Begin your session by pressing the "Start" button.
+3. **Track Progress:** Monitor the timer and follow notifications for optimal performance.
+4. **Save & Review:** Save your workout and review your history for future reference.
 
-   ```bash
-    npx expo start
-   ```
+## Screenshots
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+<img src="https://github.com/user-attachments/assets/dec8504f-db0e-4a31-8c95-75da7004d8f1" width="400"/>
+<img src="https://github.com/user-attachments/assets/9b98fc0e-e78d-4c2b-a504-0d128062519d" width="400"/>
+<img src="https://github.com/user-attachments/assets/654185d7-b697-450a-af44-0570df157b4d" width="400"/>
+<img src="https://github.com/user-attachments/assets/2122da55-3f35-4e57-a47c-704353d3b498" width="400" />
+<img src="https://github.com/user-attachments/assets/a71157d0-600d-4a79-b0c7-aeb74c36edeb" width="400"/>
+<img src="https://github.com/user-attachments/assets/580edbb6-ba16-4b33-bd65-c7d203e8978a" width="400"/>
+<img src="https://github.com/user-attachments/assets/612b6e7e-bfe2-4ab1-8819-e81e4b12f6ed" width="400"/>
+<img src="https://github.com/user-attachments/assets/6c0d1f9a-5b4d-4113-9e94-c88ce17aa65a" width="400"/>
+<img src="https://github.com/user-attachments/assets/e299c883-f045-48fd-af15-d795cd30df3d" width="400" />
+<img src="https://github.com/user-attachments/assets/debcd17f-945e-4a0d-be34-976bb9fb5a97" width="400"/>
+<img src="https://github.com/user-attachments/assets/95bfa573-d538-4dd4-b089-b5362b909c61" width="400" />
+<img src="https://github.com/user-attachments/assets/df0d5dc4-2e12-48cd-915b-3914b37786f5" width="400" />
