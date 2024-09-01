@@ -1,12 +1,15 @@
 import { TabBarIcon } from "@/components/TabBarIcon";
-import { ThemedText } from "@/components/ThemedText";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { Tabs } from "expo-router";
 import React from "react";
+import { Image, useColorScheme } from "react-native";
 
 export default function TabLayout() {
     const tabBarActiveTintColor = useThemeColor({}, "tabIconSelected");
     const tabBarInactiveTintColor = useThemeColor({}, "tabIconDefault");
+    const colorScheme = useColorScheme();
+
+    const logo = colorScheme === "dark" ? require("@/assets/images/logo-dark.png") : require("@/assets/images/logo-light.png");
 
     return (
         <Tabs
@@ -14,7 +17,12 @@ export default function TabLayout() {
                 tabBarActiveTintColor,
                 tabBarInactiveTintColor,
                 headerShown: false,
-                headerTitle: () => <ThemedText>Logo</ThemedText>,
+                headerTitle: () => (
+                    <Image
+                        source={logo}
+                        style={{ width: 150, height: "100%", objectFit: "contain" }}
+                    />
+                ),
             }}
         >
             <Tabs.Screen
@@ -43,19 +51,6 @@ export default function TabLayout() {
                     ),
                 }}
             />
-            {/* <Tabs.Screen
-                name="colors"
-                options={{
-                    headerShown: true,
-                    title: "Colors",
-                    tabBarIcon: ({ color, focused }) => (
-                        <TabBarIcon
-                            name={focused ? "color-palette" : "color-palette-outline"}
-                            color={color}
-                        />
-                    ),
-                }}
-            /> */}
         </Tabs>
     );
 }

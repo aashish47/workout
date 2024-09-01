@@ -55,6 +55,7 @@ const CountdownTimer = memo(
             colors: countDownColor,
             size: screenWidth - 96,
             rotation: "counterclockwise",
+            updateInterval: 1,
             onUpdate(remainingTime) {
                 if (!mute) {
                     if ([1, 2, 3].includes(remainingTime)) {
@@ -87,15 +88,17 @@ const CountdownTimer = memo(
 
         const [sound, setSound] = useState<Audio.Sound>();
 
-        const playSound = async (music: keyof typeof audioPaths) => {
-            try {
-                const { sound } = await Audio.Sound.createAsync(audioPaths[music]);
-                setSound(sound);
-                await sound.playAsync();
-            } catch (err) {
-                console.log(err);
-            }
-        };
+        useEffect(() => {
+            const init = async () => {
+                try {
+                    const { sound } = await Audio.Sound.createAsync(audioPaths["countdown"]);
+                    setSound(sound);
+                } catch (err) {
+                    console.log(err);
+                }
+            };
+            init();
+        }, []);
 
         useEffect(() => {
             return sound
@@ -114,6 +117,16 @@ const CountdownTimer = memo(
         useEffect(() => {
             setTimeElapsed(start + Math.floor(elapsedTime));
         }, [elapsedTime]);
+
+        const playSound = async (music: keyof typeof audioPaths) => {
+            try {
+                const { sound } = await Audio.Sound.createAsync(audioPaths[music]);
+                setSound(sound);
+                await sound.playAsync();
+            } catch (err) {
+                console.log(err);
+            }
+        };
 
         return (
             <View style={{ width: size, height: size, position: "relative" }}>

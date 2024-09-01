@@ -1,17 +1,15 @@
 import DataProvider from "@/contexts/DataProvider";
-import { db, expoDb } from "@/db/drizzle";
+import { db } from "@/db/drizzle";
 import migrations from "@/db/migrations/migrations";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
-import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { SafeAreaView, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -19,7 +17,7 @@ export default function RootLayout() {
         SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     });
     const { success, error: migrationError } = useMigrations(db, migrations);
-    useDrizzleStudio(expoDb);
+    // useDrizzleStudio(expoDb);
     const colorScheme = useColorScheme();
 
     useEffect(() => {

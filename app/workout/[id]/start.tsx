@@ -11,6 +11,7 @@ import { record, Workout } from "@/db/schema";
 import useWorkoutContext from "@/hooks/useWorkoutContext";
 import getFormatedTime from "@/utils/getFormatedTime";
 import getWorkoutOrder, { CountdownTimerType } from "@/utils/getWorkoutOrder";
+import { useKeepAwake } from "expo-keep-awake";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
@@ -33,6 +34,7 @@ const countdownColors: CountdownColors = {
 };
 
 const StartComponent = memo(({ workoutData }: StartComponentProps) => {
+    useKeepAwake();
     const screenWidth = Dimensions.get("window").width;
     const navigation = useNavigation();
     const { totalSeconds = 0 } = useLocalSearchParams<{ formatedDuration: string; totalSeconds: string }>();

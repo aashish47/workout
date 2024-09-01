@@ -22,7 +22,7 @@ const getWorkoutOrder = (times: Workout["timers"], exercises: Workout["exercises
     let start = 0;
 
     const addTimer = (timer: CountdownTimerType, timerNumber?: number, exercise?: string, exerciseNumber?: number, cycleNumber?: number) => {
-        exercise
+        exerciseNumber
             ? order.push({ start, timer, timerValue: times[timer], timerNumber, exercise, exerciseNumber, cycleNumber })
             : order.push({ start, timer, timerValue: times[timer] });
         start += times[timer];

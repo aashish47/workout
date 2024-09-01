@@ -33,7 +33,10 @@ const TopTabsLayout = memo(() => {
                 name="index"
                 options={{ title: "timer" }}
             />
-            <MaterialTopTabs.Screen name="exercises" />
+            <MaterialTopTabs.Screen
+                name="exercises"
+                options={{ title: "exercises" }}
+            />
         </MaterialTopTabs>
     );
 });
