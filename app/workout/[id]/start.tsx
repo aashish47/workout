@@ -8,6 +8,7 @@ import WorkoutOrderModal from "@/components/WorkoutOrderModal";
 import { namedColors } from "@/constants/Colors";
 import { db } from "@/db/drizzle";
 import { record, Workout } from "@/db/schema";
+import { useSounds } from "@/hooks/useSounds";
 import useWorkoutContext from "@/hooks/useWorkoutContext";
 import getFormatedTime from "@/utils/getFormatedTime";
 import getWorkoutOrder, { CountdownTimerType } from "@/utils/getWorkoutOrder";
@@ -37,6 +38,7 @@ const StartComponent = memo(({ workoutData }: StartComponentProps) => {
     useKeepAwake();
     const screenWidth = Dimensions.get("window").width;
     const navigation = useNavigation();
+    const { playSound } = useSounds();
     const { totalSeconds = 0 } = useLocalSearchParams<{ formatedDuration: string; totalSeconds: string }>();
     const targetTime = Number(totalSeconds);
 
@@ -134,6 +136,7 @@ const StartComponent = memo(({ workoutData }: StartComponentProps) => {
                     remainingSets={timer === "work" ? remainingSets + 1 : timer === "rest" ? remainingSets : 0}
                     mute={mute}
                     pause={pause}
+                    playSound={playSound}
                     screenWidth={screenWidth}
                     sets={timers["sets"]}
                     setTimeElapsed={setTimeElapsed}

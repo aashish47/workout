@@ -1,9 +1,9 @@
 import SegmentedCircle from "@/components/SegmentedCircle";
 import { ThemedText } from "@/components/ThemedText";
+import { AudioKeys } from "@/hooks/useSounds";
 import getFormatedTime from "@/utils/getFormatedTime";
 import { CountdownTimerType } from "@/utils/getWorkoutOrder";
-import { Audio } from "expo-av";
-import React, { Dispatch, memo, SetStateAction, useEffect, useLayoutEffect, useState } from "react";
+import React, { Dispatch, memo, SetStateAction, useEffect, useLayoutEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { ColorFormat, useCountdown } from "react-native-countdown-circle-timer";
 import Svg, { Path } from "react-native-svg";
@@ -13,6 +13,7 @@ interface CountdownTimerProps {
     handleForward: () => void;
     mute: boolean;
     pause: boolean;
+    playSound: (music: AudioKeys) => Promise<void>;
     remainingSets: number;
     screenWidth: number;
     sets: number;
@@ -23,22 +24,13 @@ interface CountdownTimerProps {
     totalRemainingTime: number;
 }
 
-const audioPaths = {
-    "countdown": require(`../assets/sounds/countdown.mp3`),
-    "exercise-over": require(`../assets/sounds/exercise-over.mp3`),
-    "halftime": require(`../assets/sounds/halftime.mp3`),
-    "set-over": require(`../assets/sounds/set-over.mp3`),
-    "ten": require(`../assets/sounds/ten.mp3`),
-    "workout-over": require(`../assets/sounds/workout-over.mp3`),
-    "zero": require(`../assets/sounds/zero.mp3`),
-};
-
 const CountdownTimer = memo(
     ({
         countDownColor,
         handleForward,
         mute,
         pause,
+        playSound,
         remainingSets,
         screenWidth,
         setTimeElapsed,
@@ -86,28 +78,6 @@ const CountdownTimer = memo(
             },
         });
 
-        const [sound, setSound] = useState<Audio.Sound>();
-
-        useEffect(() => {
-            const init = async () => {
-                try {
-                    const { sound } = await Audio.Sound.createAsync(audioPaths["countdown"]);
-                    setSound(sound);
-                } catch (err) {
-                    console.log(err);
-                }
-            };
-            init();
-        }, []);
-
-        useEffect(() => {
-            return sound
-                ? () => {
-                      sound.unloadAsync();
-                  }
-                : undefined;
-        }, [sound]);
-
         useLayoutEffect(() => {
             if (remainingTime <= 0) {
                 handleForward();
@@ -117,16 +87,6 @@ const CountdownTimer = memo(
         useEffect(() => {
             setTimeElapsed(start + Math.floor(elapsedTime));
         }, [elapsedTime]);
-
-        const playSound = async (music: keyof typeof audioPaths) => {
-            try {
-                const { sound } = await Audio.Sound.createAsync(audioPaths[music]);
-                setSound(sound);
-                await sound.playAsync();
-            } catch (err) {
-                console.log(err);
-            }
-        };
 
         return (
             <View style={{ width: size, height: size, position: "relative" }}>
