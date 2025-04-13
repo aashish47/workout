@@ -1,5 +1,8 @@
 # Workout Timer App
 
+https://github.com/user-attachments/assets/152c8897-72aa-4a77-ac6a-104438c3993e
+
+
 Workout application created using expo to help you optimize your exercise routines with customizable intervals and rest periods. Whether you’re doing HIIT, strength training, or any other workout, our app will keep you on track and motivated.
 
 ## Features
