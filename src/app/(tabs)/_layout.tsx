@@ -62,6 +62,23 @@ export default function TabLayout() {
 					),
 				}}
 			/>
+			<Tabs.Screen
+				name="settings"
+				options={{
+					headerShown: true,
+					title: "Settings",
+					tabBarIcon: ({ color, focused }) => (
+						<TabBarIcon
+							name={
+								focused
+									? "file-tray-full"
+									: "file-tray-full-outline"
+							}
+							color={color}
+						/>
+					),
+				}}
+			/>
 		</Tabs>
 	);
 }
