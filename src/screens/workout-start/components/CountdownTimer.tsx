@@ -1,6 +1,6 @@
 import { ThemedText } from "@/components/theme/ThemedText";
 import { AudioKeys } from "@/hooks/useSounds";
-import SegmentedCircle from "@/screens/workout/SegmentedCircle";
+import SegmentedCircle from "@/screens/workout-start/components/SegmentedCircle";
 import getFormatedTime from "@/utils/getFormatedTime";
 import { CountdownTimerType } from "@/utils/getWorkoutOrder";
 import React, {

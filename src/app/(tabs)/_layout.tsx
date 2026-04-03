@@ -1,5 +1,5 @@
+import { TabBarIcon } from "@/components/TabBarIcon";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { TabBarIcon } from "@/screens/home/TabBarIcon";
 import { Tabs } from "expo-router";
 import React from "react";
 import { Image, useColorScheme } from "react-native";
@@ -69,11 +69,7 @@ export default function TabLayout() {
 					title: "Settings",
 					tabBarIcon: ({ color, focused }) => (
 						<TabBarIcon
-							name={
-								focused
-									? "file-tray-full"
-									: "file-tray-full-outline"
-							}
+							name={focused ? "settings" : "settings-outline"}
 							color={color}
 						/>
 					),
