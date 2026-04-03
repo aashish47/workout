@@ -106,8 +106,9 @@ const CountdownTimer = memo(
 		return (
 			<View style={{ width: size, height: size, position: "relative" }}>
 				<Svg
-					width={size + 500} // Renders properly without cuts in right & bottom. Don't know why?
-					height={size + 500} // Also fixes color mismatch issue when timers starts in dark mode.
+					width={size}
+					height={size}
+					viewBox={`0 0 ${size} ${size}`}
 				>
 					<Path
 						d={path}
