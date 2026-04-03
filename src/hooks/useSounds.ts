@@ -25,7 +25,6 @@ export const useSounds = () => {
 					loadedSounds[key] = sound;
 				}
 				soundsRef.current = loadedSounds;
-				console.log("sounds loaded");
 			} catch (err) {
 				console.error("Error loading sounds:", err);
 			}
@@ -42,7 +41,6 @@ export const useSounds = () => {
 							await sound.unloadAsync();
 						}
 					}
-					console.log("Sounds unloaded");
 				} catch (error) {
 					console.error("Error unloading sounds:", error);
 				}
