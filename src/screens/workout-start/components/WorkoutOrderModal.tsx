@@ -1,10 +1,15 @@
 import HeaderWithCloseButton from "@/components/HeaderWithCloseButton";
-import { ThemedText } from "@/components/theme/ThemedText";
-import getFormatedTime from "@/utils/getFormatedTime";
+import { ThemedView } from "@/components/theme/ThemedView";
+import RenderItem from "@/screens/workout-start/components/RenderItem";
 import { OrderType } from "@/utils/getWorkoutOrder";
-import React, { Dispatch, memo, SetStateAction } from "react";
-import { Modal, Pressable, StyleSheet, View } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
+import React, {
+	Dispatch,
+	memo,
+	SetStateAction,
+	useEffect,
+	useRef,
+} from "react";
+import { FlatList, Modal, StyleSheet, View } from "react-native";
 
 interface WorkoutOrderModalProps {
 	activeColor: string;
@@ -26,47 +31,26 @@ const WorkoutOrderModal = memo(
 		setReset,
 		workoutorder,
 	}: WorkoutOrderModalProps) => {
-		const RenderItem = memo(
-			({ index, item }: { index: number; item: OrderType }) => {
-				const { start, timer, timerValue, exercise } = item;
-				return (
-					<Pressable
-						onPress={() => {
-							setIndex(index);
-							setReset(Date.now());
-							setModalVisible(false);
-						}}
-					>
-						<View
-							style={[
-								styles.renderItemContainer,
-								{
-									backgroundColor:
-										currIndex === index
-											? activeColor
-											: undefined,
-								},
-							]}
-						>
-							<View style={styles.renderItemView}>
-								<ThemedText type="light">
-									{index + 1}.
-								</ThemedText>
-								<ThemedText style={styles.text}>
-									{timer === "work" ? exercise : timer}
-								</ThemedText>
-							</View>
-							<View style={styles.renderItemView}>
-								<ThemedText type="light">
-									{getFormatedTime(start)}-
-									{getFormatedTime(start + timerValue)}
-								</ThemedText>
-							</View>
-						</View>
-					</Pressable>
-				);
-			},
-		);
+		const flatListRef = useRef<FlatList>(null);
+
+		useEffect(() => {
+			if (modalVisible && workoutorder.length > 0) {
+				// Small delay to ensure layout is settled before scrolling
+				setTimeout(() => {
+					flatListRef.current?.scrollToIndex({
+						index: currIndex,
+						animated: false,
+					});
+				}, 100);
+			}
+		}, [modalVisible]);
+
+		const handleItemPress = (index: number) => {
+			setIndex(index);
+			setReset(Date.now());
+			setModalVisible(false);
+		};
+
 		return (
 			<Modal
 				animationType="slide"
@@ -77,7 +61,7 @@ const WorkoutOrderModal = memo(
 				}}
 			>
 				<View style={styles.centeredView}>
-					<View style={styles.modalView}>
+					<ThemedView style={styles.modalView}>
 						<HeaderWithCloseButton
 							title={"timeline"}
 							titleStyle={styles.text}
@@ -85,25 +69,33 @@ const WorkoutOrderModal = memo(
 							onPressClose={() => setModalVisible(false)}
 						/>
 						<FlatList
+							ref={flatListRef}
+							style={styles.list}
 							data={workoutorder}
 							keyExtractor={(item) => String(item["start"])}
 							renderItem={({ item, index }) => (
 								<RenderItem
 									index={index}
 									item={item}
+									currIndex={currIndex}
+									activeColor={activeColor}
+									onPress={handleItemPress}
 								/>
 							)}
-							initialScrollIndex={currIndex}
 							getItemLayout={(_, index) => ({
 								length: 60,
 								offset: 60 * index,
 								index,
 							})}
-							initialNumToRender={10}
-							maxToRenderPerBatch={5}
-							windowSize={10}
+							onScrollToIndexFailed={(info) => {
+								flatListRef.current?.scrollToOffset({
+									offset: info.averageItemLength * info.index,
+									animated: false,
+								});
+							}}
+							initialNumToRender={workoutorder.length} // Small list optimization
 						/>
-					</View>
+					</ThemedView>
 				</View>
 			</Modal>
 		);
@@ -119,9 +111,9 @@ const styles = StyleSheet.create({
 		backgroundColor: "rgba(0, 0, 0, 0.5)",
 	},
 	modalView: {
-		backgroundColor: "white",
 		borderTopLeftRadius: 10,
 		borderTopRightRadius: 10,
+		flex: 1,
 		marginTop: 150,
 		paddingBottom: 8,
 		shadowColor: "#000",
@@ -140,18 +132,8 @@ const styles = StyleSheet.create({
 		borderBottomColor: "silver",
 		borderBottomWidth: 2,
 	},
-	renderItemContainer: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		height: 60,
-		paddingHorizontal: 8,
-		borderBottomWidth: 1,
-		borderBottomColor: "silver",
-	},
-	renderItemView: {
-		flexDirection: "row",
-		gap: 8,
-		alignItems: "center",
+	list: {
+		flex: 1,
 	},
 	text: {
 		textTransform: "capitalize",
