@@ -32,6 +32,34 @@ Object.entries(audioPaths).forEach(([key, path]) => {
 
 SplashScreen.preventAutoHideAsync();
 
+const AppContent = () => {
+	return (
+		<DataProvider>
+			<Stack>
+				<Stack.Screen
+					name="(tabs)"
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name="workout/[id]"
+					options={{
+						animation: "slide_from_right",
+						headerShown: false,
+					}}
+				/>
+				<Stack.Screen
+					name="create"
+					options={{
+						animation: "slide_from_right",
+						headerShown: false,
+					}}
+				/>
+				<Stack.Screen name="+not-found" />
+			</Stack>
+		</DataProvider>
+	);
+};
+
 export default function RootLayout() {
 	const [loaded] = useFonts({
 		SpaceMono: require("@assets/fonts/SpaceMono-Regular.ttf"),
@@ -65,29 +93,7 @@ export default function RootLayout() {
 			<ThemeProvider
 				value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
 			>
-				<DataProvider>
-					<Stack>
-						<Stack.Screen
-							name="(tabs)"
-							options={{ headerShown: false }}
-						/>
-						<Stack.Screen
-							name="workout/[id]"
-							options={{
-								animation: "slide_from_right",
-								headerShown: false,
-							}}
-						/>
-						<Stack.Screen
-							name="create"
-							options={{
-								animation: "slide_from_right",
-								headerShown: false,
-							}}
-						/>
-						<Stack.Screen name="+not-found" />
-					</Stack>
-				</DataProvider>
+				<AppContent />
 			</ThemeProvider>
 		</GestureHandlerRootView>
 		// </StrictMode>

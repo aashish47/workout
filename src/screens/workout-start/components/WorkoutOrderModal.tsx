@@ -1,6 +1,6 @@
 import HeaderWithCloseButton from "@/components/HeaderWithCloseButton";
 import { ThemedView } from "@/components/theme/ThemedView";
-import RenderItem from "@/screens/workout-start/components/RenderItem";
+import WorkoutOrderRenderItem from "@/screens/workout-start/components/WorkoutOrderRenderItem";
 import { OrderType } from "@/utils/getWorkoutOrder";
 import React, { Dispatch, SetStateAction, useEffect, useRef } from "react";
 import { FlatList, Modal, StyleSheet, View } from "react-native";
@@ -69,7 +69,7 @@ const WorkoutOrderModal = ({
 						data={workoutorder}
 						keyExtractor={(item) => String(item["start"])}
 						renderItem={({ item, index }) => (
-							<RenderItem
+							<WorkoutOrderRenderItem
 								index={index}
 								item={item}
 								currIndex={currIndex}

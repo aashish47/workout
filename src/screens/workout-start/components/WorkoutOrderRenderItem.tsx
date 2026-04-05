@@ -4,7 +4,7 @@ import getFormatedTime from "@/utils/getFormatedTime";
 import { OrderType } from "@/utils/getWorkoutOrder";
 import { Pressable, StyleSheet, View } from "react-native";
 
-const RenderItem = ({
+const WorkoutOrderRenderItem = ({
 	index,
 	item,
 	currIndex,
@@ -52,7 +52,7 @@ const RenderItem = ({
 	);
 };
 
-export default RenderItem;
+export default WorkoutOrderRenderItem;
 
 const styles = StyleSheet.create({
 	renderItemContainer: {
