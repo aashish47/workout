@@ -34,7 +34,9 @@ const MultiModeCounterInput = ({
 	const [highlight, setHighlight] = useState<
 		"minutes" | "seconds" | "counter" | null
 	>(null);
-	const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
+	const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+		null,
+	);
 
 	// this will also run on inital render meaning the 8 timers on inital render will each run this once
 	useEffect(() => {

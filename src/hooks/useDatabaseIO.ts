@@ -1,6 +1,6 @@
 import { Workout } from "@/db/schema";
 import * as DocumentPicker from "expo-document-picker";
-import * as FileSystem from "expo-file-system";
+import { File, Paths } from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import { Alert } from "react-native";
 
@@ -14,17 +14,20 @@ export const useDatabaseIO = () => {
 				return;
 			}
 
-			const fileUri = `${FileSystem.cacheDirectory}${fileName}`;
+			// const fileUri = `${FileSystem.cacheDirectory}${fileName}`;
+			const file = new File(Paths.cache, fileName);
 			const content =
 				typeof data === "string" ? data : JSON.stringify(data);
 
 			// Write to temporary cache
-			await FileSystem.writeAsStringAsync(fileUri, content, {
-				encoding: FileSystem.EncodingType.UTF8,
-			});
+			// await FileSystem.writeAsStringAsync(file.uri, content, {
+			// 	encoding: FileSystem.EncodingType.UTF8,
+			// });
+
+			file.write(content);
 
 			// Open the "Save to Files" / Share popup
-			await Sharing.shareAsync(fileUri, {
+			await Sharing.shareAsync(file.uri, {
 				mimeType: "application/json",
 				dialogTitle: "Export Database Data",
 				UTI: "public.json", // Required for iOS to recognize the file type
@@ -50,11 +53,14 @@ export const useDatabaseIO = () => {
 			if (result.canceled) return null;
 
 			const { uri } = result.assets[0];
-
+			const file = new File(uri);
 			// Read the file content
-			const content = await FileSystem.readAsStringAsync(uri, {
-				encoding: FileSystem.EncodingType.UTF8,
-			});
+
+			// const content = await FileSystem.readAsStringAsync(uri, {
+			// 	encoding: FileSystem.EncodingType.UTF8,
+			// });
+
+			const content = file.textSync();
 
 			return JSON.parse(content);
 		} catch (error) {
