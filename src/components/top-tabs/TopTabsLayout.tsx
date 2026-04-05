@@ -6,7 +6,7 @@ import {
 } from "@react-navigation/material-top-tabs";
 import { ParamListBase, TabNavigationState } from "@react-navigation/native";
 import { withLayoutContext } from "expo-router";
-import React, { memo } from "react";
+import React from "react";
 import { StyleSheet } from "react-native";
 
 const { Navigator } = createMaterialTopTabNavigator();
@@ -18,7 +18,7 @@ export const MaterialTopTabs = withLayoutContext<
 	MaterialTopTabNavigationEventMap
 >(Navigator);
 
-const TopTabsLayout = memo(() => {
+const TopTabsLayout = () => {
 	const tabActiveColor = useThemeColor({}, "tint");
 	const tabIndicatorColor = useThemeColor({}, "primary");
 	const tabInactiveColor = useThemeColor({}, "tabIconDefault");
@@ -43,7 +43,7 @@ const TopTabsLayout = memo(() => {
 			/>
 		</MaterialTopTabs>
 	);
-});
+};
 
 export default TopTabsLayout;
 

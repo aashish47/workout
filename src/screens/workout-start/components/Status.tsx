@@ -1,27 +1,25 @@
 import { ThemedText } from "@/components/theme/ThemedText";
-import React, { memo } from "react";
+import React from "react";
 import { StyleSheet, View } from "react-native";
 
-const Status = memo(
-	({
-		name,
-		current,
-		total,
-	}: {
-		name: string;
-		current: number;
-		total: number;
-	}) => {
-		return (
-			<View style={styles.container}>
-				<ThemedText type="light">{name}:</ThemedText>
-				<ThemedText type="defaultSemiBold">
-					{current}/{total}
-				</ThemedText>
-			</View>
-		);
-	},
-);
+const Status = ({
+	name,
+	current,
+	total,
+}: {
+	name: string;
+	current: number;
+	total: number;
+}) => {
+	return (
+		<View style={styles.container}>
+			<ThemedText type="light">{name}:</ThemedText>
+			<ThemedText type="defaultSemiBold">
+				{current}/{total}
+			</ThemedText>
+		</View>
+	);
+};
 
 export default Status;
 

@@ -1,35 +1,34 @@
 import { ThemedText } from "@/components/theme/ThemedText";
 import TopTabsLayoutHeader from "@/components/top-tabs/TopTabsLayoutHeader";
 import { db } from "@/db/drizzle";
-import { Workout, workout } from "@/db/schema";
+import { workout } from "@/db/schema";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import useWorkoutContext from "@/hooks/useWorkoutContext";
 import getTotalTime from "@/utils/getTotalTime";
 import { useTheme } from "@react-navigation/native";
 import { eq } from "drizzle-orm";
 import { router } from "expo-router";
-import React, { memo, useCallback, useEffect, useMemo } from "react";
+import React, { memo, useEffect } from "react";
 import { BackHandler, Pressable, StyleSheet, View } from "react-native";
 
 interface TopTabsLayoutButtonProps {
 	name: "create" | "start";
 }
 
-const Button = memo(
-	({
-		name,
-		workoutData,
-	}: TopTabsLayoutButtonProps & { workoutData: Workout }) => {
+const TopTabsLayoutButton: React.FC<TopTabsLayoutButtonProps> = memo(
+	({ name }) => {
+		const { workoutData } = useWorkoutContext();
 		const btnColor = useThemeColor({}, "primary");
 		const ripple = useThemeColor({}, "ripple");
 		const { colors } = useTheme();
 		const { id, ...rest } = workoutData;
 		const { timers, exercises } = workoutData;
-		const { formatedDuration, totalSeconds } = useMemo(
-			() => getTotalTime(timers, exercises.length),
-			[timers, exercises],
+		const { formatedDuration, totalSeconds } = getTotalTime(
+			timers,
+			exercises.length,
 		);
-		const handleBackPress = useCallback(() => {
+
+		const handleBackPress = () => {
 			if (name === "create") {
 				createWorkout();
 			} else {
@@ -37,7 +36,7 @@ const Button = memo(
 			}
 			router.back();
 			return true;
-		}, [workoutData]);
+		};
 
 		useEffect(() => {
 			const backHandler = BackHandler.addEventListener(
@@ -91,20 +90,6 @@ const Button = memo(
 					</View>
 				</View>
 			</>
-		);
-	},
-);
-
-const TopTabsLayoutButton: React.FC<TopTabsLayoutButtonProps> = memo(
-	({ name }) => {
-		const { workoutData: data } = useWorkoutContext();
-		const workoutData = useMemo(() => data, [data]);
-
-		return (
-			<Button
-				name={name}
-				workoutData={workoutData}
-			/>
 		);
 	},
 );

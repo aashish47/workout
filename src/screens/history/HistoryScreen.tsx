@@ -6,11 +6,11 @@ import HistoryRenderItem from "@/screens/history/components/HistoryRenderItem";
 import WorkoutDetailsModal from "@/screens/history/components/WorkoutDetailsModal";
 import { desc, inArray } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
-import React, { memo, useState } from "react";
+import React, { useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const History = memo(() => {
+const History = () => {
 	const { data, error } = useLiveQuery(
 		db.select().from(record).orderBy(desc(record.createdAt)),
 	);
@@ -77,7 +77,7 @@ const History = memo(() => {
 			)}
 		</View>
 	);
-});
+};
 
 export default History;
 

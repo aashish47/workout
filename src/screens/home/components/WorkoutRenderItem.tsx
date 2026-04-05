@@ -5,7 +5,7 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 import getTotalTime from "@/utils/getTotalTime";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React, { Dispatch, SetStateAction, useMemo } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { StyleSheet, View } from "react-native";
 
 interface WorkoutRenderItemProps {
@@ -24,10 +24,7 @@ const WorkoutRenderItem = ({
 	const pressColor = useThemeColor({}, "secondary");
 	const backgroundColor = useThemeColor({}, "primary");
 	const { id, exercises, timers } = workout;
-	const { formatedDuration } = useMemo(
-		() => getTotalTime(timers, exercises.length),
-		[timers, exercises],
-	);
+	const { formatedDuration } = getTotalTime(timers, exercises.length);
 
 	return (
 		<GenericRenderItem<Workout>

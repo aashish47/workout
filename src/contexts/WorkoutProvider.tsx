@@ -25,11 +25,9 @@ const WorkoutProvider = ({
 	const [workoutData, setWorkoutData] = useState(currentWorkout);
 	const timersRef = useRef(currentWorkout["timers"]);
 	return (
-		<WorkoutContext.Provider
-			value={{ workoutData, setWorkoutData, timersRef }}
-		>
+		<WorkoutContext value={{ workoutData, setWorkoutData, timersRef }}>
 			{children}
-		</WorkoutContext.Provider>
+		</WorkoutContext>
 	);
 };
 

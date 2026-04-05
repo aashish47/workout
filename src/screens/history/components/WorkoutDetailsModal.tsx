@@ -3,7 +3,7 @@ import { Timers } from "@/components/input-timers/Timers";
 import { ThemedText } from "@/components/theme/ThemedText";
 import { Record } from "@/db/schema";
 import getFormatedTime from "@/utils/getFormatedTime";
-import React, { Dispatch, memo, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Dimensions, Modal, StyleSheet, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -13,85 +13,87 @@ interface WorkoutDetailsModalProps {
 	setModalVisible: Dispatch<SetStateAction<number>>;
 }
 
-const WorkoutDetailsModal = memo(
-	({ details, modalVisible, setModalVisible }: WorkoutDetailsModalProps) => {
-		const { title, duration, createdAt, timers, exercises } = details;
-		const screenHeight = Dimensions.get("window").height;
-		return (
-			<Modal
-				animationType="fade"
-				transparent={true}
-				visible={modalVisible !== -1}
-				onRequestClose={() => {
-					setModalVisible(-1);
-				}}
-			>
-				<View style={styles.centeredView}>
-					<View style={styles.modalView}>
-						<HeaderWithCloseButton
-							title={title}
-							borderBottom
-							onPressClose={() => setModalVisible(-1)}
-						/>
-						<View style={styles.detailsView}>
-							<View style={styles.rowView}>
-								<ThemedText>Duration: </ThemedText>
-								<ThemedText type="light">
-									{getFormatedTime(duration)}
-								</ThemedText>
-							</View>
-							<View style={styles.rowView}>
-								<ThemedText>Date: </ThemedText>
-								<ThemedText type="light">
-									{new Date(createdAt).toLocaleDateString()}
-								</ThemedText>
-							</View>
-							<View style={styles.rowView}>
-								<ThemedText>Time: </ThemedText>
-								<ThemedText type="light">
-									{new Date(createdAt).toLocaleTimeString()}
-								</ThemedText>
-							</View>
-							<View>
-								<ThemedText>Timers: </ThemedText>
-								{(Object.entries(timers) as Timers).map(
-									([timer, value]) => (
-										<View
-											style={styles.rowView}
-											key={timer}
-										>
-											<ThemedText
-												type="light"
-												style={styles.text}
-											>
-												{timer}:{" "}
-											</ThemedText>
-											<ThemedText type="light">
-												{timer === "sets" ||
-												timer === "cycles"
-													? value
-													: getFormatedTime(value)}
-											</ThemedText>
-										</View>
-									),
-								)}
-							</View>
-							<ScrollView style={{ maxHeight: screenHeight / 3 }}>
-								<ThemedText>Exercises: </ThemedText>
-								<ThemedText
-									type="light"
-									style={styles.text}
-								>
-									{exercises.join(", ")}
-								</ThemedText>
-							</ScrollView>
+const WorkoutDetailsModal = ({
+	details,
+	modalVisible,
+	setModalVisible,
+}: WorkoutDetailsModalProps) => {
+	const { title, duration, createdAt, timers, exercises } = details;
+	const screenHeight = Dimensions.get("window").height;
+	return (
+		<Modal
+			animationType="fade"
+			transparent={true}
+			visible={modalVisible !== -1}
+			onRequestClose={() => {
+				setModalVisible(-1);
+			}}
+		>
+			<View style={styles.centeredView}>
+				<View style={styles.modalView}>
+					<HeaderWithCloseButton
+						title={title}
+						borderBottom
+						onPressClose={() => setModalVisible(-1)}
+					/>
+					<View style={styles.detailsView}>
+						<View style={styles.rowView}>
+							<ThemedText>Duration: </ThemedText>
+							<ThemedText type="light">
+								{getFormatedTime(duration)}
+							</ThemedText>
 						</View>
+						<View style={styles.rowView}>
+							<ThemedText>Date: </ThemedText>
+							<ThemedText type="light">
+								{new Date(createdAt).toLocaleDateString()}
+							</ThemedText>
+						</View>
+						<View style={styles.rowView}>
+							<ThemedText>Time: </ThemedText>
+							<ThemedText type="light">
+								{new Date(createdAt).toLocaleTimeString()}
+							</ThemedText>
+						</View>
+						<View>
+							<ThemedText>Timers: </ThemedText>
+							{(Object.entries(timers) as Timers).map(
+								([timer, value]) => (
+									<View
+										style={styles.rowView}
+										key={timer}
+									>
+										<ThemedText
+											type="light"
+											style={styles.text}
+										>
+											{timer}:{" "}
+										</ThemedText>
+										<ThemedText type="light">
+											{timer === "sets" ||
+											timer === "cycles"
+												? value
+												: getFormatedTime(value)}
+										</ThemedText>
+									</View>
+								),
+							)}
+						</View>
+						<ScrollView style={{ maxHeight: screenHeight / 3 }}>
+							<ThemedText>Exercises: </ThemedText>
+							<ThemedText
+								type="light"
+								style={styles.text}
+							>
+								{exercises.join(", ")}
+							</ThemedText>
+						</ScrollView>
 					</View>
 				</View>
-			</Modal>
-		);
-	},
-);
+			</View>
+		</Modal>
+	);
+};
 
 export default WorkoutDetailsModal;
 

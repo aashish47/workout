@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useMemo } from "react";
+import React, { PropsWithChildren } from "react";
 import { View } from "react-native";
 import Svg, { Circle } from "react-native-svg";
 
@@ -17,20 +17,14 @@ const SegmentedCircle = ({
 	children,
 }: SegmentedCircleProps & PropsWithChildren) => {
 	const strokeWidth = 10;
-	const radius = useMemo(() => (size - strokeWidth) / 2, [size]);
-	const circumference = useMemo(() => 2 * Math.PI * radius, [radius]);
+	const radius = (size - strokeWidth) / 2;
+	const circumference = 2 * Math.PI * radius;
 	const gap = 40;
 
-	const dash = useMemo(
-		() => circumference / sets - gap,
-		[circumference, sets],
-	);
-	const dashoffset = useMemo(
-		() => circumference / 4 - gap / 2,
-		[circumference],
-	);
+	const dash = circumference / sets - gap;
+	const dashoffset = circumference / 4 - gap / 2;
 
-	const dashArray = useMemo(() => {
+	const dashArray = () => {
 		if (!remainingSets || sets <= 1) return [];
 		const result = [];
 		const setsCompleted = sets - remainingSets;
@@ -43,7 +37,7 @@ const SegmentedCircle = ({
 			result.push(dash, (setsCompleted + 1) * gap + setsCompleted * dash);
 		}
 		return result;
-	}, [sets, remainingSets, dash]);
+	};
 
 	return (
 		<View style={{ width: size, height: size, position: "relative" }}>
@@ -59,7 +53,7 @@ const SegmentedCircle = ({
 					strokeWidth={strokeWidth}
 					strokeLinecap="round"
 					fill="none"
-					strokeDasharray={dashArray}
+					strokeDasharray={dashArray()}
 					strokeDashoffset={dashoffset}
 				/>
 			</Svg>

@@ -2,7 +2,7 @@ import MultiModeCounterInput from "@/components/input-timers/MultiModeCounterInp
 import { ThemedText } from "@/components/theme/ThemedText";
 import { Workout } from "@/db/schema";
 import useWorkoutContext from "@/hooks/useWorkoutContext";
-import React, { Dispatch, memo, SetStateAction, useMemo } from "react";
+import React from "react";
 import {
 	Keyboard,
 	StyleSheet,
@@ -12,56 +12,35 @@ import {
 
 export type Timers = [keyof Workout["timers"], number][];
 
-interface TimersComponentProps {
-	timers: Timers;
-	setWorkoutData: Dispatch<SetStateAction<Workout>>;
-}
-
-const TimersComponent = memo(
-	({ timers, setWorkoutData }: TimersComponentProps) => {
-		return (
-			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-				<View style={{ flex: 1 }}>
-					{timers.map(([timer, value], index: number) => (
-						<View
-							key={index}
-							style={styles.input}
-						>
-							<ThemedText style={styles.label}>
-								{timer}
-							</ThemedText>
-							<MultiModeCounterInput
-								setWorkoutData={setWorkoutData}
-								timer={timer}
-								timerValue={value}
-								mode={
-									timer === "sets" || timer === "cycles"
-										? "counter"
-										: "timer"
-								}
-							/>
-						</View>
-					))}
-				</View>
-			</TouchableWithoutFeedback>
-		);
-	},
-);
-
-const Timers = memo(() => {
+const Timers = () => {
 	const { setWorkoutData, timersRef } = useWorkoutContext();
-	const timers = useMemo(
-		() => Object.entries(timersRef.current) as Timers,
-		[],
-	);
+	const timers = Object.entries(timersRef.current) as Timers;
 
 	return (
-		<TimersComponent
-			setWorkoutData={setWorkoutData}
-			timers={timers}
-		/>
+		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+			<View style={{ flex: 1 }}>
+				{timers.map(([timer, value], index: number) => (
+					<View
+						key={index}
+						style={styles.input}
+					>
+						<ThemedText style={styles.label}>{timer}</ThemedText>
+						<MultiModeCounterInput
+							setWorkoutData={setWorkoutData}
+							timer={timer}
+							timerValue={value}
+							mode={
+								timer === "sets" || timer === "cycles"
+									? "counter"
+									: "timer"
+							}
+						/>
+					</View>
+				))}
+			</View>
+		</TouchableWithoutFeedback>
 	);
-});
+};
 
 export default Timers;
 

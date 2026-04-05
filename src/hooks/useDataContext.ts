@@ -1,8 +1,8 @@
 import { DataContext } from "@/contexts/DataProvider";
-import { useContext } from "react";
+import { use } from "react";
 
 const useDataContext = () => {
-	const context = useContext(DataContext);
+	const context = use(DataContext);
 	if (context === null) {
 		throw Error("Null Data at useDataContext");
 	}

@@ -1,7 +1,7 @@
 import IconButton from "@/components/IconButton";
 import { Workout } from "@/db/schema";
 import { Ionicons } from "@expo/vector-icons";
-import React, { Dispatch, memo, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Modal, Pressable, StyleSheet, View } from "react-native";
 
 interface ColorSelectorModalProps {
@@ -11,78 +11,76 @@ interface ColorSelectorModalProps {
 	setWorkoutData: Dispatch<SetStateAction<Workout>>;
 }
 
-const ColorSelectorModal = memo(
-	({
-		modalVisible,
-		setModalVisible,
-		backgroundColor,
-		setWorkoutData,
-	}: ColorSelectorModalProps) => {
-		const colorOptions = [
-			"coral",
-			"tomato",
-			"crimson",
-			"gold",
-			"mediumseagreen",
-			"olivedrab",
-			"olive",
-			"powderblue",
-			"steelblue",
-			"midnightblue",
-			"lightslategrey",
-			"plum",
-			"hotpink",
-			"mediumorchid",
-			"indigo",
-		];
-		return (
-			<Modal
-				animationType="fade"
-				transparent={true}
-				visible={modalVisible}
-				onRequestClose={() => {
-					setModalVisible(!modalVisible);
-				}}
-			>
-				<View style={styles.centeredView}>
-					<View style={styles.modalView}>
-						<IconButton
-							iconName={"close"}
-							size={24}
-							style={{ alignSelf: "flex-end" }}
-							onPress={() => setModalVisible(!modalVisible)}
-						/>
-						<View style={styles.colorContainer}>
-							{colorOptions.map((color) => (
-								<Pressable
-									key={color}
-									style={[
-										styles.colorOption,
-										{ backgroundColor: color },
-									]}
-									onPress={() =>
-										setWorkoutData((prev) => ({
-											...prev,
-											avatarColor: color,
-										}))
-									}
-								>
-									{color === backgroundColor && (
-										<Ionicons
-											name="checkmark"
-											size={24}
-											color="black"
-										/>
-									)}
-								</Pressable>
-							))}
-						</View>
+const ColorSelectorModal = ({
+	modalVisible,
+	setModalVisible,
+	backgroundColor,
+	setWorkoutData,
+}: ColorSelectorModalProps) => {
+	const colorOptions = [
+		"coral",
+		"tomato",
+		"crimson",
+		"gold",
+		"mediumseagreen",
+		"olivedrab",
+		"olive",
+		"powderblue",
+		"steelblue",
+		"midnightblue",
+		"lightslategrey",
+		"plum",
+		"hotpink",
+		"mediumorchid",
+		"indigo",
+	];
+	return (
+		<Modal
+			animationType="fade"
+			transparent={true}
+			visible={modalVisible}
+			onRequestClose={() => {
+				setModalVisible(!modalVisible);
+			}}
+		>
+			<View style={styles.centeredView}>
+				<View style={styles.modalView}>
+					<IconButton
+						iconName={"close"}
+						size={24}
+						style={{ alignSelf: "flex-end" }}
+						onPress={() => setModalVisible(!modalVisible)}
+					/>
+					<View style={styles.colorContainer}>
+						{colorOptions.map((color) => (
+							<Pressable
+								key={color}
+								style={[
+									styles.colorOption,
+									{ backgroundColor: color },
+								]}
+								onPress={() =>
+									setWorkoutData((prev) => ({
+										...prev,
+										avatarColor: color,
+									}))
+								}
+							>
+								{color === backgroundColor && (
+									<Ionicons
+										name="checkmark"
+										size={24}
+										color="black"
+									/>
+								)}
+							</Pressable>
+						))}
 					</View>
 				</View>
-			</Modal>
-		);
-	},
-);
+			</View>
+		</Modal>
+	);
+};
 
 export default ColorSelectorModal;
 

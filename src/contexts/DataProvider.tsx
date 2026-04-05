@@ -18,7 +18,7 @@ const DataProvider = ({ children }: PropsWithChildren) => {
 			</SafeAreaView>
 		);
 	}
-	return <DataContext.Provider value={data}>{children}</DataContext.Provider>;
+	return <DataContext value={data}>{children}</DataContext>;
 };
 
 export default DataProvider;

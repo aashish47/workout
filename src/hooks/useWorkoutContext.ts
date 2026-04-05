@@ -1,8 +1,8 @@
 import { WorkoutContext } from "@/contexts/WorkoutProvider";
-import { useContext } from "react";
+import { use } from "react";
 
 const useWorkoutContext = () => {
-	const context = useContext(WorkoutContext);
+	const context = use(WorkoutContext);
 	if (context === null) {
 		throw Error("Workout context Null");
 	}
