@@ -1,7 +1,7 @@
 import ColorSelectorModal from "@/components/ColorSelectorModal";
 import IconButton from "@/components/IconButton";
+import { useWorkoutContext } from "@/contexts/WorkoutProvider";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import useWorkoutContext from "@/hooks/useWorkoutContext";
 import { Stack } from "expo-router";
 import React, { useState } from "react";
 import { Pressable, StyleSheet, TextInput } from "react-native";

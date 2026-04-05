@@ -1,7 +1,7 @@
 import MultiModeCounterInput from "@/components/input-timers/MultiModeCounterInput";
 import { ThemedText } from "@/components/theme/ThemedText";
+import { useWorkoutContext } from "@/contexts/WorkoutProvider";
 import { Workout } from "@/db/schema";
-import useWorkoutContext from "@/hooks/useWorkoutContext";
 import React from "react";
 import {
 	Keyboard,

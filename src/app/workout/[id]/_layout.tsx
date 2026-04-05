@@ -1,5 +1,5 @@
+import { useDataContext } from "@/contexts/DataProvider";
 import WorkoutProvider from "@/contexts/WorkoutProvider";
-import useDataContext from "@/hooks/useDataContext";
 import { Stack, useLocalSearchParams } from "expo-router";
 import React from "react";
 

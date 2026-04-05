@@ -1,8 +1,8 @@
 import { ThemedView } from "@/components/theme/ThemedView";
+import { useDataContext } from "@/contexts/DataProvider";
 import { db } from "@/db/drizzle";
 import { workout } from "@/db/schema";
 import { useDatabaseIO } from "@/hooks/useDatabaseIO";
-import useDataContext from "@/hooks/useDataContext";
 import DataButton from "@/screens/settings/components/DataButton";
 import React from "react";
 import { StyleSheet } from "react-native";

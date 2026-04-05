@@ -1,8 +1,8 @@
 import ConfirmModal from "@/components/ConfirmModal";
 import IconButton from "@/components/IconButton";
+import { useDataContext } from "@/contexts/DataProvider";
 import { db } from "@/db/drizzle";
 import { workout } from "@/db/schema";
-import useDataContext from "@/hooks/useDataContext";
 import { useSelectionAndModals } from "@/hooks/useSelectionAndModals";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import WorkoutRenderItem from "@/screens/home/components/WorkoutRenderItem";

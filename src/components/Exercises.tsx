@@ -1,8 +1,8 @@
 import IconButton from "@/components/IconButton";
 import { ThemedText } from "@/components/theme/ThemedText";
+import { useWorkoutContext } from "@/contexts/WorkoutProvider";
 import { Workout } from "@/db/schema";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import useWorkoutContext from "@/hooks/useWorkoutContext";
 import React, { Dispatch, SetStateAction } from "react";
 import {
 	NativeSyntheticEvent,

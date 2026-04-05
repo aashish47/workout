@@ -1,9 +1,9 @@
 import { ThemedText } from "@/components/theme/ThemedText";
 import TopTabsLayoutHeader from "@/components/top-tabs/TopTabsLayoutHeader";
+import { useWorkoutContext } from "@/contexts/WorkoutProvider";
 import { db } from "@/db/drizzle";
 import { workout } from "@/db/schema";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import useWorkoutContext from "@/hooks/useWorkoutContext";
 import getTotalTime from "@/utils/getTotalTime";
 import { useTheme } from "@react-navigation/native";
 import { eq } from "drizzle-orm";
