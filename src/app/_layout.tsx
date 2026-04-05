@@ -8,12 +8,27 @@ import {
 	ThemeProvider,
 } from "@react-navigation/native";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
+import { preload } from "expo-audio";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+export const audioPaths = {
+	"countdown": require(`@assets/sounds/countdown.mp3`),
+	"exercise-over": require(`@assets/sounds/exercise-over.mp3`),
+	"halftime": require(`@assets/sounds/halftime.mp3`),
+	"set-over": require(`@assets/sounds/set-over.mp3`),
+	"ten": require(`@assets/sounds/ten.mp3`),
+	"workout-over": require(`@assets/sounds/workout-over.mp3`),
+	"zero": require(`@assets/sounds/zero.mp3`),
+};
+
+Object.entries(audioPaths).forEach(([key, path]) => {
+	preload(path);
+});
 
 SplashScreen.preventAutoHideAsync();
 
