@@ -10,7 +10,7 @@ import {
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
-import { StrictMode, useEffect } from "react";
+import { useEffect } from "react";
 import { Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -45,36 +45,36 @@ export default function RootLayout() {
 	}
 
 	return (
-		<StrictMode>
-			<GestureHandlerRootView style={{ flex: 1 }}>
-				<ThemeProvider
-					value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-				>
-					<DataProvider>
-						<Stack>
-							<Stack.Screen
-								name="(tabs)"
-								options={{ headerShown: false }}
-							/>
-							<Stack.Screen
-								name="workout/[id]"
-								options={{
-									animation: "slide_from_right",
-									headerShown: false,
-								}}
-							/>
-							<Stack.Screen
-								name="create"
-								options={{
-									animation: "slide_from_right",
-									headerShown: false,
-								}}
-							/>
-							<Stack.Screen name="+not-found" />
-						</Stack>
-					</DataProvider>
-				</ThemeProvider>
-			</GestureHandlerRootView>
-		</StrictMode>
+		// <StrictMode>
+		<GestureHandlerRootView style={{ flex: 1 }}>
+			<ThemeProvider
+				value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+			>
+				<DataProvider>
+					<Stack>
+						<Stack.Screen
+							name="(tabs)"
+							options={{ headerShown: false }}
+						/>
+						<Stack.Screen
+							name="workout/[id]"
+							options={{
+								animation: "slide_from_right",
+								headerShown: false,
+							}}
+						/>
+						<Stack.Screen
+							name="create"
+							options={{
+								animation: "slide_from_right",
+								headerShown: false,
+							}}
+						/>
+						<Stack.Screen name="+not-found" />
+					</Stack>
+				</DataProvider>
+			</ThemeProvider>
+		</GestureHandlerRootView>
+		// </StrictMode>
 	);
 }

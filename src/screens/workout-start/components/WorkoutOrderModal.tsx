@@ -4,6 +4,7 @@ import RenderItem from "@/screens/workout-start/components/RenderItem";
 import { OrderType } from "@/utils/getWorkoutOrder";
 import React, { Dispatch, SetStateAction, useEffect, useRef } from "react";
 import { FlatList, Modal, StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface WorkoutOrderModalProps {
 	activeColor: string;
@@ -25,6 +26,7 @@ const WorkoutOrderModal = ({
 	workoutorder,
 }: WorkoutOrderModalProps) => {
 	const flatListRef = useRef<FlatList>(null);
+	const insets = useSafeAreaInsets();
 
 	useEffect(() => {
 		if (modalVisible && workoutorder.length > 0) {
@@ -53,7 +55,7 @@ const WorkoutOrderModal = ({
 				setModalVisible(!modalVisible);
 			}}
 		>
-			<View style={styles.centeredView}>
+			<View style={[styles.centeredView, { bottom: insets.bottom }]}>
 				<ThemedView style={styles.modalView}>
 					<HeaderWithCloseButton
 						title={"timeline"}
@@ -107,7 +109,6 @@ const styles = StyleSheet.create({
 		borderTopRightRadius: 10,
 		flex: 1,
 		marginTop: 150,
-		paddingBottom: 8,
 		shadowColor: "#000",
 		shadowOffset: {
 			width: 0,

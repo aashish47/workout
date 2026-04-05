@@ -24,7 +24,7 @@ const SegmentedCircle = ({
 	const dash = circumference / sets - gap;
 	const dashoffset = circumference / 4 - gap / 2;
 
-	const dashArray = () => {
+	const dashArray = (() => {
 		if (!remainingSets || sets <= 1) return [];
 		const result = [];
 		const setsCompleted = sets - remainingSets;
@@ -37,7 +37,7 @@ const SegmentedCircle = ({
 			result.push(dash, (setsCompleted + 1) * gap + setsCompleted * dash);
 		}
 		return result;
-	};
+	})();
 
 	return (
 		<View style={{ width: size, height: size, position: "relative" }}>
@@ -49,11 +49,11 @@ const SegmentedCircle = ({
 					cx={radius + strokeWidth / 2}
 					cy={radius + strokeWidth / 2}
 					r={radius}
-					stroke={remainingSets && sets > 1 ? strokeColor : ""}
+					stroke={remainingSets && sets > 1 ? strokeColor : undefined}
 					strokeWidth={strokeWidth}
 					strokeLinecap="round"
 					fill="none"
-					strokeDasharray={dashArray()}
+					strokeDasharray={dashArray}
 					strokeDashoffset={dashoffset}
 				/>
 			</Svg>
