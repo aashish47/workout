@@ -36,4 +36,13 @@ export default ({ config }) => ({
 		...config.android,
 		package: getUniqueIdentifier(),
 	},
+
+	"plugins": [
+		"expo-asset",
+		"expo-audio",
+		"expo-font",
+		"expo-router",
+		"expo-sharing",
+		"expo-web-browser",
+	],
 });

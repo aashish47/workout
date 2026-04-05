@@ -1,5 +1,4 @@
-import { Audio } from "expo-av";
-import { useEffect, useRef } from "react";
+import { useAudioPlayer } from "expo-audio";
 
 const audioPaths = {
 	"countdown": require(`@assets/sounds/countdown.mp3`),
@@ -14,51 +13,35 @@ const audioPaths = {
 export type AudioKeys = keyof typeof audioPaths;
 
 export const useSounds = () => {
-	const soundsRef = useRef<{ [key: string]: Audio.Sound | null }>({});
+	const countdownPlayer = useAudioPlayer(audioPaths["countdown"]);
+	const exerciseOverPlayer = useAudioPlayer(audioPaths["exercise-over"]);
+	const halftimePlayer = useAudioPlayer(audioPaths["halftime"]);
+	const setOverPlayer = useAudioPlayer(audioPaths["set-over"]);
+	const tenPlayer = useAudioPlayer(audioPaths["ten"]);
+	const workoutOverPlayer = useAudioPlayer(audioPaths["workout-over"]);
+	const zeroPlayer = useAudioPlayer(audioPaths["zero"]);
 
-	useEffect(() => {
-		const loadSounds = async () => {
-			const loadedSounds: { [key: string]: Audio.Sound } = {};
-			try {
-				for (const [key, path] of Object.entries(audioPaths)) {
-					const { sound } = await Audio.Sound.createAsync(path);
-					loadedSounds[key] = sound;
-				}
-				soundsRef.current = loadedSounds;
-			} catch (err) {
-				console.error("Error loading sounds:", err);
-			}
-		};
-
-		loadSounds();
-
-		return () => {
-			// Cleanup sounds on unmount
-			const unloadSounds = async () => {
-				try {
-					for (const sound of Object.values(soundsRef.current)) {
-						if (sound) {
-							await sound.unloadAsync();
-						}
-					}
-				} catch (error) {
-					console.error("Error unloading sounds:", error);
-				}
-			};
-
-			setTimeout(() => unloadSounds(), 5000);
-		};
-	}, []);
+	const players = {
+		"countdown": countdownPlayer,
+		"exercise-over": exerciseOverPlayer,
+		"halftime": halftimePlayer,
+		"set-over": setOverPlayer,
+		"ten": tenPlayer,
+		"workout-over": workoutOverPlayer,
+		"zero": zeroPlayer,
+	};
 
 	const playSound = async (music: AudioKeys) => {
-		const sound = soundsRef.current[music];
-		if (sound) {
+		const player = players[music];
+		if (player) {
 			try {
-				await sound.replayAsync();
+				await player.seekTo(0); // Reset to beginning
+				player.play();
 			} catch (err) {
 				console.error("Error playing sound:", err);
 			}
 		}
 	};
+
 	return { playSound };
 };
