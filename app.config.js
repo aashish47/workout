@@ -44,5 +44,6 @@ export default ({ config }) => ({
 		"expo-router",
 		"expo-sharing",
 		"expo-web-browser",
+		...(config.plugins || []),
 	],
 });
