@@ -1,5 +1,4 @@
-import TopTabsLayout from "@/components/top-tabs/TopTabsLayout";
-import TopTabsLayoutButton from "@/components/top-tabs/TopTabsLayoutButton";
+import { TopTabs } from "@/components/top-tabs";
 import WorkoutProvider from "@/contexts/WorkoutProvider";
 import React from "react";
 
@@ -23,8 +22,7 @@ const CreateLayout = () => {
 
 	return (
 		<WorkoutProvider workoutData={workoutData}>
-			<TopTabsLayout />
-			<TopTabsLayoutButton name={"create"} />
+			<TopTabs name="create" />
 		</WorkoutProvider>
 	);
 };

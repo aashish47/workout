@@ -1,23 +1,50 @@
-import ColorSelectorModal from "@/components/ColorSelectorModal";
 import IconButton from "@/components/IconButton";
+import ColorSelectorModal from "@/components/top-tabs/ColorSelectorModal";
+import { nameType } from "@/components/top-tabs/TopTabsButton";
 import { useWorkoutContext } from "@/contexts/WorkoutProvider";
+import { db } from "@/db/drizzle";
+import { workout } from "@/db/schema";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { Stack } from "expo-router";
-import React, { useState } from "react";
-import { Pressable, StyleSheet, TextInput } from "react-native";
+import { eq } from "drizzle-orm";
+import { router, Stack } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { BackHandler, Pressable, StyleSheet, TextInput } from "react-native";
 
-interface TopTabsHeaderProps {
-	handleBackPress: () => void;
+interface TopTabsButtonProps {
+	name: nameType;
 }
 
-const TopTabsLayoutHeader: React.FC<TopTabsHeaderProps> = ({
-	handleBackPress,
-}) => {
+const TopTabsHeader: React.FC<TopTabsButtonProps> = ({ name }) => {
 	const { workoutData, setWorkoutData } = useWorkoutContext();
 	const { title, avatarColor: backgroundColor } = workoutData;
+	const { id, ...rest } = workoutData;
 	const text = useThemeColor({}, "text");
 	const ripple = useThemeColor({}, "ripple");
 	const [modalVisible, setModalVisible] = useState(false);
+
+	const handleBackPress = () => {
+		if (name === "start") {
+			updateWorkout();
+		}
+		router.back();
+		return true;
+	};
+
+	useEffect(() => {
+		const backHandler = BackHandler.addEventListener(
+			"hardwareBackPress",
+			handleBackPress,
+		);
+		return () => backHandler.remove();
+	}, [handleBackPress]);
+
+	const updateWorkout = async () => {
+		await db
+			.update(workout)
+			.set({ ...rest })
+			.where(eq(workout.id, id));
+	};
+
 	return (
 		<>
 			<Stack.Screen
@@ -47,18 +74,23 @@ const TopTabsLayoutHeader: React.FC<TopTabsHeaderProps> = ({
 							onPress={handleBackPress}
 						/>
 					),
-					headerRight: () => (
-						<Pressable
-							android_ripple={{
-								color: ripple,
-								radius: 24,
-								borderless: true,
-							}}
-							hitSlop={20}
-							onPress={() => setModalVisible(true)}
-							style={[styles.currentColor, { backgroundColor }]}
-						/>
-					),
+					headerRight: () => {
+						return (
+							<Pressable
+								android_ripple={{
+									color: ripple,
+									radius: 24,
+									borderless: true,
+								}}
+								hitSlop={20}
+								onPress={() => setModalVisible(true)}
+								style={[
+									styles.currentColor,
+									{ backgroundColor },
+								]}
+							/>
+						);
+					},
 				}}
 			/>
 			<ColorSelectorModal
@@ -71,7 +103,7 @@ const TopTabsLayoutHeader: React.FC<TopTabsHeaderProps> = ({
 	);
 };
 
-export default TopTabsLayoutHeader;
+export default TopTabsHeader;
 
 const styles = StyleSheet.create({
 	currentColor: {

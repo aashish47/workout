@@ -35,7 +35,7 @@ const TopTabsLayout = () => {
 		>
 			<MaterialTopTabs.Screen
 				name="index"
-				options={{ title: "Timer" }}
+				options={{ title: "Timers" }}
 			/>
 			<MaterialTopTabs.Screen
 				name="exercises"
