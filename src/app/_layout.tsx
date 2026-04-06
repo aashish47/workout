@@ -99,3 +99,6 @@ export default function RootLayout() {
 		// </StrictMode>
 	);
 }
+function useDrizzleStudio(expoDb: any) {
+	throw new Error("Function not implemented.");
+}

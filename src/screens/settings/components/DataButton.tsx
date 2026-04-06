@@ -28,10 +28,10 @@ const DataButton = ({
 					opacity: pressed ? 0.8 : 1,
 				},
 			]}
-			android_ripple={{ color: rippleColor }}
+			android_ripple={{ color: rippleColor, foreground: true }}
 			onPress={onPress}
 		>
-			<ThemedText style={styles.buttonText}>{buttonText}</ThemedText>
+			<ThemedText>{buttonText}</ThemedText>
 		</Pressable>
 	);
 };
@@ -39,9 +39,6 @@ const DataButton = ({
 export default DataButton;
 
 const styles = StyleSheet.create({
-	title: {
-		marginBottom: 8,
-	},
 	button: {
 		padding: 16,
 		borderRadius: 10,
@@ -51,10 +48,5 @@ const styles = StyleSheet.create({
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.25,
 		shadowRadius: 3.84,
-	},
-	buttonText: {
-		color: "white",
-		fontWeight: "bold",
-		fontSize: 16,
 	},
 });

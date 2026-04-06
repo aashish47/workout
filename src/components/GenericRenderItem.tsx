@@ -47,7 +47,11 @@ function GenericRenderItem<T>({
 
 	return (
 		<Pressable
-			android_ripple={{ color: ripple, borderless: false }}
+			android_ripple={{
+				color: ripple,
+				borderless: false,
+				foreground: true,
+			}}
 			onLongPress={handleLongPress}
 			onPress={handlePress}
 		>

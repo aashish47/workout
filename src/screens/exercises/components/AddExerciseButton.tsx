@@ -20,7 +20,7 @@ const AddExerciseButton = () => {
 	return (
 		<View style={styles.wrapper}>
 			<Pressable
-				android_ripple={{ color: ripple }}
+				android_ripple={{ color: ripple, foreground: true }}
 				style={[styles.button, { borderColor: border }]}
 				onPress={addExercise}
 			>

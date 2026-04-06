@@ -1,4 +1,4 @@
-import TopTabsButton, { nameType } from "@/components/top-tabs/TopTabsButton";
+import TopTabsFooter, { nameType } from "@/components/top-tabs/TopTabsFooter";
 import TopTabsHeader from "@/components/top-tabs/TopTabsHeader";
 import TopTabsLayout from "@/components/top-tabs/TopTabsLayout";
 import React from "react";
@@ -11,9 +11,9 @@ interface TopTabsProps {
 const TopTabs: React.FC<TopTabsProps> = ({ name }) => {
 	return (
 		<>
-			<TopTabsLayout />
 			<TopTabsHeader name={name} />
-			<TopTabsButton name={name} />
+			<TopTabsLayout />
+			<TopTabsFooter name={name} />
 		</>
 	);
 };

@@ -1,6 +1,6 @@
 import IconButton from "@/components/IconButton";
 import ColorSelectorModal from "@/components/top-tabs/ColorSelectorModal";
-import { nameType } from "@/components/top-tabs/TopTabsButton";
+import { nameType } from "@/components/top-tabs/TopTabsFooter";
 import { useWorkoutContext } from "@/contexts/WorkoutProvider";
 import { db } from "@/db/drizzle";
 import { workout } from "@/db/schema";
@@ -53,8 +53,6 @@ const TopTabsHeader: React.FC<TopTabsButtonProps> = ({ name }) => {
 					headerTitle: () => (
 						<TextInput
 							defaultValue={title}
-							// selectionColor={"plum"}
-
 							selectTextOnFocus
 							style={[styles.title, { color: text }]}
 							onEndEditing={(e) =>
@@ -77,10 +75,12 @@ const TopTabsHeader: React.FC<TopTabsButtonProps> = ({ name }) => {
 					headerRight: () => {
 						return (
 							<Pressable
+								key={backgroundColor}
 								android_ripple={{
 									color: ripple,
-									radius: 24,
-									borderless: true,
+									radius: 8,
+									borderless: false,
+									foreground: true,
 								}}
 								hitSlop={20}
 								onPress={() => setModalVisible(true)}

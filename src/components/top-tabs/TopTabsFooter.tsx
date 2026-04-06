@@ -13,11 +13,11 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export type nameType = "create" | "start";
 
-interface TopTabsButtonProps {
+interface TopTabsFooterProps {
 	name: nameType;
 }
 
-const TopTabsButton: React.FC<TopTabsButtonProps> = ({ name }) => {
+const TopTabsFooter: React.FC<TopTabsFooterProps> = ({ name }) => {
 	const insets = useSafeAreaInsets();
 	const { workoutData } = useWorkoutContext();
 	const btnColor = useThemeColor({}, "primary");
@@ -58,7 +58,7 @@ const TopTabsButton: React.FC<TopTabsButtonProps> = ({ name }) => {
 		<View style={{ backgroundColor: colors.card }}>
 			<View style={[styles.container, { marginBottom: insets.bottom }]}>
 				<Pressable
-					android_ripple={{ color: ripple }}
+					android_ripple={{ color: ripple, foreground: true }}
 					style={[styles.button, { backgroundColor: btnColor }]}
 					onPress={handlePress}
 				>
@@ -71,7 +71,7 @@ const TopTabsButton: React.FC<TopTabsButtonProps> = ({ name }) => {
 	);
 };
 
-export default TopTabsButton;
+export default TopTabsFooter;
 
 const styles = StyleSheet.create({
 	container: {

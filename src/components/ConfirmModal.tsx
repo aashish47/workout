@@ -68,7 +68,7 @@ const Button = ({ color, name, onPress }: ButtonProps) => {
 
 	return (
 		<Pressable
-			android_ripple={{ color: ripple }}
+			android_ripple={{ color: ripple, foreground: true }}
 			onPress={onPress}
 		>
 			<ThemedText

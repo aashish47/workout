@@ -158,7 +158,7 @@ const MultiModeCounterInput = ({
 		<View style={[styles.container, { backgroundColor }]}>
 			<View style={[styles.wrapper, styles.minusWrapper]}>
 				<Pressable
-					android_ripple={{ color: highlightColor }}
+					android_ripple={{ color: highlightColor, foreground: true }}
 					onPress={() =>
 						handlePress(
 							mode === "timer" ? decrementTime : decrementCounter,
@@ -191,7 +191,7 @@ const MultiModeCounterInput = ({
 			)}
 			<View style={[styles.wrapper, styles.plusWrapper]}>
 				<Pressable
-					android_ripple={{ color: highlightColor }}
+					android_ripple={{ color: highlightColor, foreground: true }}
 					onPress={() =>
 						handlePress(
 							mode === "timer" ? incrementTime : incrementCounter,

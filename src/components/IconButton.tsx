@@ -32,7 +32,7 @@ const IconButton: React.FC<IconButtonProps & ViewProps> = ({
 			onPress={onPress}
 			onLongPress={onLongPress}
 			// hitSlop={36}
-			android_ripple={{ color: ripple, radius: size }}
+			android_ripple={{ color: ripple, radius: size, foreground: true }}
 			style={[
 				style,
 				styles.headerButton,
