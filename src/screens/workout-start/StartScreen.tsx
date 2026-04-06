@@ -197,7 +197,7 @@ const StartScreen = () => {
 								exerciseNumber
 									? exerciseNumber % exercises.length
 									: 0
-							]
+							].name
 						: exercise}
 				</ThemedText>
 			</View>

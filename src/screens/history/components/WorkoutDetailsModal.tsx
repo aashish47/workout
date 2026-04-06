@@ -84,7 +84,9 @@ const WorkoutDetailsModal = ({
 								type="light"
 								style={styles.text}
 							>
-								{exercises.join(", ")}
+								{exercises
+									.map((exercise) => exercise.name)
+									.join(", ")}
 							</ThemedText>
 						</ScrollView>
 					</View>

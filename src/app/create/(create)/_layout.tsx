@@ -1,5 +1,6 @@
 import { TopTabs } from "@/components/top-tabs";
 import WorkoutProvider from "@/contexts/WorkoutProvider";
+import { generateUID } from "@/utils/generateUID";
 import React from "react";
 
 const CreateLayout = () => {
@@ -7,7 +8,10 @@ const CreateLayout = () => {
 		id: 0,
 		title: "Timer",
 		avatarColor: "plum",
-		exercises: new Array(10).fill(""),
+		exercises: Array.from({ length: 10 }, () => ({
+			id: generateUID(),
+			name: "",
+		})),
 		timers: {
 			"warm up": 590,
 			"get ready": 10,

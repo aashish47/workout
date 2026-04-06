@@ -25,7 +25,6 @@ const WorkoutRenderItem = ({
 	const backgroundColor = useThemeColor({}, "primary");
 	const { id, exercises, timers } = workout;
 	const { formatedDuration } = getTotalTime(timers, exercises.length);
-
 	return (
 		<GenericRenderItem<Workout>
 			id={id}
@@ -79,7 +78,9 @@ const WorkoutRenderItem = ({
 							type="light"
 							darkColor="darkgrey"
 						>
-							{item.exercises?.join(", ")}
+							{item.exercises
+								?.map((exercise) => exercise.name)
+								.join(", ")}
 						</ThemedText>
 					</View>
 				</View>

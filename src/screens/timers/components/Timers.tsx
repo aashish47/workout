@@ -1,7 +1,7 @@
 import { ThemedText } from "@/components/theme/ThemedText";
 import { ThemedView } from "@/components/theme/ThemedView";
 import { useWorkoutContext } from "@/contexts/WorkoutProvider";
-import { Timers } from "@/db/schema";
+import { Timers as TimersType } from "@/db/schema";
 import MultiModeCounterInput from "@/screens/timers/components/MultiModeCounterInput";
 import React from "react";
 import {
@@ -13,7 +13,7 @@ import {
 
 const Timers = () => {
 	const { setWorkoutData, timersRef } = useWorkoutContext();
-	const timers = Object.entries(timersRef.current) as Timers;
+	const timers = Object.entries(timersRef.current) as TimersType;
 
 	return (
 		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>

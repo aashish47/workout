@@ -54,17 +54,29 @@ const getWorkoutOrder = (
 	for (let cycle = 1; cycle <= times["cycles"]; cycle++) {
 		exercises.forEach((exercise, exerciseIndex) => {
 			for (let interval = 1; interval < times["sets"]; interval++) {
-				addTimer("work", interval, exercise, exerciseIndex + 1, cycle);
+				addTimer(
+					"work",
+					interval,
+					exercise.name,
+					exerciseIndex + 1,
+					cycle,
+				);
 				if (times["rest"])
 					addTimer(
 						"rest",
 						interval,
-						exercise,
+						exercise.name,
 						exerciseIndex + 1,
 						cycle,
 					);
 			}
-			addTimer("work", times["sets"], exercise, exerciseIndex + 1, cycle);
+			addTimer(
+				"work",
+				times["sets"],
+				exercise.name,
+				exerciseIndex + 1,
+				cycle,
+			);
 
 			if (
 				times["break"] &&
@@ -74,7 +86,7 @@ const getWorkoutOrder = (
 				addTimer(
 					"break",
 					times["sets"],
-					exercise,
+					exercise.name,
 					exerciseIndex + 1,
 					cycle,
 				);

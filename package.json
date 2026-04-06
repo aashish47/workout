@@ -12,7 +12,8 @@
 		"test": "jest --watchAll",
 		"lint": "expo lint",
 		"db:migrate": "drizzle-kit generate",
-		"build:dev:android": "eas build --platform android --profile development"
+		"build:dev:android": "eas build --platform android --profile development",
+		"build:preview:android": "eas build --platform android --profile preview"
 	},
 	"jest": {
 		"preset": "jest-expo"
