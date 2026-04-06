@@ -70,7 +70,7 @@ export default function RootLayout() {
 
 	useEffect(() => {
 		if (loaded && success) {
-			SplashScreen.hideAsync();
+			SplashScreen.hide();
 		}
 	}, [loaded, success]);
 
