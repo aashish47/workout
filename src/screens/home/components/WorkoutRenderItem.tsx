@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
 		padding: 8,
 		height: 100,
 		flexDirection: "row",
-		alignItems: "center",
+		alignItems: "flex-start",
 		gap: 16,
 	},
 	avatar: {

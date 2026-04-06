@@ -2,6 +2,7 @@ import ConfirmModal from "@/components/ConfirmModal";
 import HeaderWithCloseButton from "@/components/HeaderWithCloseButton";
 import IconButton from "@/components/IconButton";
 import { ThemedText } from "@/components/theme/ThemedText";
+import { ThemedView } from "@/components/theme/ThemedView";
 import { namedColors } from "@/constants/Colors";
 import { useWorkoutContext } from "@/contexts/WorkoutProvider";
 import { db } from "@/db/drizzle";
@@ -17,7 +18,7 @@ import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { ColorFormat } from "react-native-countdown-circle-timer";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type CountdownColors = Record<CountdownTimerType, string>;
 
@@ -31,6 +32,7 @@ const countdownColors: CountdownColors = {
 };
 
 const StartScreen = () => {
+	const insets = useSafeAreaInsets();
 	const { workoutData } = useWorkoutContext();
 	useKeepAwake();
 	const screenWidth = Dimensions.get("window").width;
@@ -108,7 +110,12 @@ const StartScreen = () => {
 	};
 
 	return (
-		<SafeAreaView style={styles.container}>
+		<ThemedView
+			style={[
+				styles.container,
+				{ paddingBottom: insets.bottom, paddingTop: insets.top },
+			]}
+		>
 			<HeaderWithCloseButton
 				title={timer}
 				titleStyle={{
@@ -280,7 +287,7 @@ const StartScreen = () => {
 					setModalVisible={setQuitModalVisible}
 				/>
 			)}
-		</SafeAreaView>
+		</ThemedView>
 	);
 };
 
