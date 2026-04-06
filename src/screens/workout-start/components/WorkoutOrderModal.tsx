@@ -1,5 +1,4 @@
 import HeaderWithCloseButton from "@/components/HeaderWithCloseButton";
-import { ThemedView } from "@/components/theme/ThemedView";
 import WorkoutOrderRenderItem from "@/screens/workout-start/components/WorkoutOrderRenderItem";
 import { OrderType } from "@/utils/getWorkoutOrder";
 import React, { Dispatch, SetStateAction, useEffect, useRef } from "react";
@@ -56,7 +55,7 @@ const WorkoutOrderModal = ({
 			}}
 		>
 			<View style={[styles.centeredView, { bottom: insets.bottom }]}>
-				<ThemedView style={styles.modalView}>
+				<View style={styles.modalView}>
 					<HeaderWithCloseButton
 						title={"timeline"}
 						titleStyle={styles.text}
@@ -90,7 +89,7 @@ const WorkoutOrderModal = ({
 						}}
 						initialNumToRender={workoutorder.length} // Small list optimization
 					/>
-				</ThemedView>
+				</View>
 			</View>
 		</Modal>
 	);
@@ -105,6 +104,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "rgba(0, 0, 0, 0.5)",
 	},
 	modalView: {
+		backgroundColor: "white",
 		borderTopLeftRadius: 10,
 		borderTopRightRadius: 10,
 		flex: 1,

@@ -1,4 +1,5 @@
 import ConfirmModal from "@/components/ConfirmModal";
+import { ThemedView } from "@/components/theme/ThemedView";
 import { db } from "@/db/drizzle";
 import { record } from "@/db/schema";
 import { useSelectionAndModals } from "@/hooks/useSelectionAndModals";
@@ -40,7 +41,7 @@ const History = () => {
 	} = useSelectionAndModals(deleteHandler, data);
 
 	return (
-		<View style={{ flex: 1 }}>
+		<ThemedView style={{ flex: 1 }}>
 			<FlatList
 				data={data}
 				renderItem={({ item, index }) => (
@@ -75,7 +76,7 @@ const History = () => {
 					setModalVisible={setModalVisible}
 				/>
 			)}
-		</View>
+		</ThemedView>
 	);
 };
 

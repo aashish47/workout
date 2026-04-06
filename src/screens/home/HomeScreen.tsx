@@ -1,5 +1,6 @@
 import ConfirmModal from "@/components/ConfirmModal";
 import IconButton from "@/components/IconButton";
+import { ThemedView } from "@/components/theme/ThemedView";
 import { useDataContext } from "@/contexts/DataProvider";
 import { db } from "@/db/drizzle";
 import { workout } from "@/db/schema";
@@ -8,7 +9,7 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 import WorkoutRenderItem from "@/screens/home/components/WorkoutRenderItem";
 import { inArray } from "drizzle-orm";
 import { router } from "expo-router";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 
 export default function HomeScreen() {
 	const data = useDataContext();
@@ -29,7 +30,7 @@ export default function HomeScreen() {
 	} = useSelectionAndModals(deleteHandler, data);
 
 	return (
-		<View style={{ flex: 1 }}>
+		<ThemedView style={{ flex: 1 }}>
 			<IconButton
 				iconName="add"
 				size={32}
@@ -59,7 +60,7 @@ export default function HomeScreen() {
 					setModalVisible={setModalVisible}
 				/>
 			)}
-		</View>
+		</ThemedView>
 	);
 }
 
