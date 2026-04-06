@@ -1,7 +1,7 @@
 import { ThemedText } from "@/components/theme/ThemedText";
 import { ThemedView } from "@/components/theme/ThemedView";
 import { useWorkoutContext } from "@/contexts/WorkoutProvider";
-import { Workout } from "@/db/schema";
+import { Timers } from "@/db/schema";
 import MultiModeCounterInput from "@/screens/timers/components/MultiModeCounterInput";
 import React from "react";
 import {
@@ -10,8 +10,6 @@ import {
 	TouchableWithoutFeedback,
 	View,
 } from "react-native";
-
-export type Timers = [keyof Workout["timers"], number][];
 
 const Timers = () => {
 	const { setWorkoutData, timersRef } = useWorkoutContext();
