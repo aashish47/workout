@@ -1,8 +1,8 @@
-import Exercises from "@/components/Exercises";
+import { ExercisesScreen } from "@/screens/exercises";
 import React from "react";
 
 const exercises = () => {
-	return <Exercises />;
+	return <ExercisesScreen />;
 };
 
 export default exercises;

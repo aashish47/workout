@@ -1,26 +1,19 @@
 import IconButton from "@/components/IconButton";
 import { ThemedText } from "@/components/theme/ThemedText";
+import { ThemedView } from "@/components/theme/ThemedView";
 import { useWorkoutContext } from "@/contexts/WorkoutProvider";
-import { Workout } from "@/db/schema";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 import {
-	NativeSyntheticEvent,
 	Pressable,
 	StyleSheet,
 	TextInput,
-	TextInputEndEditingEventData,
+	TextInputEndEditingEvent,
 	View,
 } from "react-native";
 import DraggableFlatList, {
 	RenderItemParams,
 } from "react-native-draggable-flatlist";
-
-interface ExercisesComponentProps {
-	dragColor: string;
-	exercises: Workout["exercises"];
-	setWorkoutData: Dispatch<SetStateAction<Workout>>;
-}
 
 const Exercises = () => {
 	const { workoutData, setWorkoutData } = useWorkoutContext();
@@ -30,7 +23,7 @@ const Exercises = () => {
 	const border = useThemeColor({}, "primary");
 
 	const handleEndEditing = (
-		e: NativeSyntheticEvent<TextInputEndEditingEventData>,
+		e: TextInputEndEditingEvent,
 		currIndex: number,
 	) => {
 		setWorkoutData((prev) => ({
@@ -96,7 +89,7 @@ const Exercises = () => {
 	};
 
 	return (
-		<View style={styles.container}>
+		<ThemedView style={styles.container}>
 			<View style={styles.listContainer}>
 				<DraggableFlatList
 					data={exercises}
@@ -123,7 +116,7 @@ const Exercises = () => {
 					<ThemedText>Add Exercise</ThemedText>
 				</Pressable>
 			</View>
-		</View>
+		</ThemedView>
 	);
 };
 export default Exercises;

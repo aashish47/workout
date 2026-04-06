@@ -1,7 +1,8 @@
-import MultiModeCounterInput from "@/components/input-timers/MultiModeCounterInput";
 import { ThemedText } from "@/components/theme/ThemedText";
+import { ThemedView } from "@/components/theme/ThemedView";
 import { useWorkoutContext } from "@/contexts/WorkoutProvider";
 import { Workout } from "@/db/schema";
+import MultiModeCounterInput from "@/screens/timers/components/MultiModeCounterInput";
 import React from "react";
 import {
 	Keyboard,
@@ -18,7 +19,7 @@ const Timers = () => {
 
 	return (
 		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-			<View style={{ flex: 1 }}>
+			<ThemedView style={{ flex: 1 }}>
 				{timers.map(([timer, value], index: number) => (
 					<View
 						key={index}
@@ -37,7 +38,7 @@ const Timers = () => {
 						/>
 					</View>
 				))}
-			</View>
+			</ThemedView>
 		</TouchableWithoutFeedback>
 	);
 };

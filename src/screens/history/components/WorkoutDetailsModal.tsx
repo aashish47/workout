@@ -1,7 +1,7 @@
 import HeaderWithCloseButton from "@/components/HeaderWithCloseButton";
-import { Timers } from "@/components/input-timers/Timers";
 import { ThemedText } from "@/components/theme/ThemedText";
 import { Record } from "@/db/schema";
+import { Timers } from "@/screens/timers/components/Timers";
 import getFormatedTime from "@/utils/getFormatedTime";
 import React, { Dispatch, SetStateAction } from "react";
 import { Dimensions, Modal, StyleSheet, View } from "react-native";

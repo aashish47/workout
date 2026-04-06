@@ -1,8 +1,8 @@
-import Timers from "@/components/input-timers/Timers";
+import { TimersScreen } from "@/screens/timers";
 import React from "react";
 
-const Index = () => {
-	return <Timers />;
+const timers = () => {
+	return <TimersScreen />;
 };
 
-export default Index;
+export default timers;
